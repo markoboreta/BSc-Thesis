@@ -74,7 +74,7 @@ class NBApp(Service):
                 predict_pa = PredictPA()
                 
                 if not data:
-                    return jsonify(error="Invalid input. Please provide a 'message' field in JSON format."), 400
+                    return jsonify(error="Error: Invalid input. Please provide a 'message' field in JSON format."), 400
                 try:
                     pa_response = predict_pa.post({"message" : data})
                     lr_response = predict_lr.post({"message" : data})
