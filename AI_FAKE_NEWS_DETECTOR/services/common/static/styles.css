@@ -1,0 +1,291 @@
+html,
+body {
+  margin: 5%;
+  font-family: Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  background-color: rgb(104, 105, 104);
+}
+
+
+#char
+{
+  color: rgb(74, 71, 172);
+  font-weight:bolder;
+  font-size: larger;
+
+}
+
+p {
+  font-size: 18px;
+  font-weight: 4;
+}
+
+li {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 4%;
+  height: device-height;
+  background-color: rgb(90, 90, 90);
+  padding: 15px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 40px;
+}
+
+.menu {
+  width: 4ch;
+  height: 4ch;
+  object-fit: cover;
+}
+
+.dataImage {
+  margin-top: 1ch;
+  width: 3ch;
+  height: 3ch;
+  object-fit: cover;
+}
+
+h1 {
+  margin-bottom: 200px;
+  position: relative;
+  text-align: center;
+  color: rgb(74, 71, 172);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+
+ul {
+  list-style: none;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+.popup-content {
+  margin-bottom: 1ch;
+  font-size: 18px;
+  font-weight: 400;
+  margin-left: 1ch;
+
+  .description {
+    flex-grow: 1;
+    padding: 40px;
+    max-width: 50%;
+
+    h2 {
+      letter-spacing: normal;
+      padding: 40px;
+      max-width: 50%;
+      color: rgb(74, 71, 172);
+    }
+  }
+
+  .attention {
+    flex-grow: 1;
+    padding: 40px;
+    max-width: 33.33%;
+    color: royalblue;
+  }
+}
+
+
+textarea {
+  width: 40%;
+  height: 200px;
+  background-color: rgb(74, 75, 74);
+  color: white;
+  padding: 10px;
+  border-radius: 7px;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin-top: 15px;
+}
+
+dialog
+{
+  background-color: rgb(108, 109, 109);
+  color:rgb(74, 71, 172);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.submit-button {
+  background-color: rgb(74, 71, 172);
+  color: white;
+  padding: 13px;
+  border-radius: 13px;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+  margin-inline-start: 20%;
+  font-size: 15px;
+}
+.active, .submit-button:hover {
+  background-color: rgb(43, 41, 97);
+}
+
+.expand-result
+{
+  background-color: rgb(74, 71, 172);
+  color: white;
+  padding: 15px;
+  border-radius: 13px;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+  margin-inline-start: 20%;
+  font-size: 15px;
+}
+
+.active, .expand-result:hover {
+  background-color: rgb(43, 41, 97);
+}
+
+.other-results
+{
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+}
+
+.main-content
+{
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+.optional-content {
+  display: none; /* Hide the collapsible content by default */
+}
+
+.collapsed .optional-content {
+  display: none; /* Hide the content when collapsed */
+}
+
+.expanded .optional-content {
+  display: block; /* Show the content when expanded */
+}
+
+
+
+#optional-graphs {
+  display: none; 
+}
+
+.collapsed #optional-graphs {
+  display: none; 
+}
+
+.expanded #optional-graphs {
+  display: block; 
+}
+
+
+#optional-mean {
+  display: none; 
+}
+
+.collapsed #optional-mean {
+  display: none; 
+}
+
+.expanded #optional-mean {
+  display: block; 
+}
+
+.graph
+{
+  display: inline-block;
+  vertical-align: middle;
+}
+.alert-warning {
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+  color: #856404;
+  position: relative;
+  padding: 1rem;
+  size-adjust: 16px;
+  width: 300px;
+  height: fit-content;
+
+  border-radius: 0.5rem; /* Add border radius for rounded corners */
+}
+
+/* Customize close button */
+.alert-warning .close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.5rem;
+  color: #856404;
+  transition: transform 0.3s ease; /* Add transition for smooth animation */
+  cursor: pointer;
+}
+
+/* Adjust close button hover effect */
+.alert-warning .close:hover {
+  color: #6c757d;
+  transform: scale(1.1); /* Add scale effect on hover */
+}
+
+/* Fade out animation for alert */
+@keyframes fadeOut {
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
+  }
+}
+
+.alert.fade-out {
+  animation: fadeOut 0.5s ease forwards; /* Apply fade-out animation */
+}
+
+.navButton
+{
+  background-color: rgb(74, 71, 172);
+  color: rgb(228, 88, 209);
+  padding: 10px;
+  border-radius: 13px;
+  border: 3px;
+  margin-top: 10px;
+  cursor: pointer;
+  margin-inline-start: 7%;
+  font-size: 15px;
+  initial-letter-align:inherit;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+
+}
+
+.active, .navButton:hover
+{
+  background-color: rgb(43, 41, 97);
+}

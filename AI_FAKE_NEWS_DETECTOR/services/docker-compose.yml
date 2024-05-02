@@ -1,0 +1,81 @@
+#version: "3.11"
+
+services:
+  service1:
+    build:
+      context: ./mainApp
+    container_name: app
+    ports:
+      - "5000:5000"  
+    networks:
+      - main_network
+    volumes:
+      - ./common:/app/common  # Mount common directory into the container
+    environment:
+      PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
+      COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory
+      COMMON_STATIC_DIR: "/app/common/static"  # Set path to common static directory
+    deploy:
+      resources:
+        limits:
+          memory: 150M
+
+  service2:
+    build:
+      context: ./prediciton_services_LR
+    container_name: LRapp
+    ports:
+      - "5001:5001"  
+    networks:
+      - main_network
+    volumes:
+      - ./common:/app/common  # Mount common directory into the container
+    environment:
+      PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
+      COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory
+      COMMON_STATIC_DIR: "/app/common/static"  # Set path to common static directory
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+
+  service3:
+    build:
+      context: ./prediction_services_NB
+    container_name: NBapp
+    ports:
+      - "5002:5002"  
+    networks:
+      - main_network
+    volumes:
+      - ./common:/app/common  # Mount common directory into the container
+    environment:
+      PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
+      COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory
+      COMMON_STATIC_DIR: "/app/common/static"  # Set path to common static directory
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+  service4:
+    build:
+      context: ./prediction_services_PA
+    container_name: PAapp
+    ports:
+      - "5003:5003"  
+    networks:
+      - main_network
+    volumes:
+      - ./common:/app/common  # Mount common directory into the container
+    environment:
+      PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
+      COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory
+      COMMON_STATIC_DIR: "/app/common/static"  # Set path to common static directory
+    deploy:
+      resources:
+        limits:
+          memory: 250M
+
+networks:
+  main_network:
+    driver: bridge

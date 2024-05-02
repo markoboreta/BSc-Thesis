@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Exploration</title>
+    <style>
+        body {
+            background-color: rgb(104, 105, 104);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static_bp.get_styles', filename='styles.css') }}">
+</head>
+
+<body>
+    <!-- Scripts which are necessay for the page -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type='text/javascript' src="{{ url_for('static_bp.get_styles', filename='ajaxScript.js') }}"></script>
+    <script type='text/javascript' src="{{ url_for('static', filename='page.js') }}"></script>
+    <script type='text/javascript' src="{{ url_for('static_bp.get_styles', filename='ChartScripts.js') }}"></script>
+
+    <div class="container">
+
+        <!-- Sidebar navigation -->
+        <div class="sidebar">
+            <!-- Navigation buttons -->
+            <form class="SVM_Button">
+                <button class="navButton" id="mainPageBtn">Home</button>
+                <button class="navButton" id="lrPageBtn">LR</button>
+                <button class="navButton" id="nbPageBtn">NB</button>
+                <button class="navButton" id="paPageBtn">PA</button>
+        </div>
+
+        <div class="main-content">
+            <h1>Naive Bayes</h1>
+            <h2>Dataset</h2>
+            <p>This dataset was used for the process of training this model. It has both real and fake news articles and
+                titles carefully labelled.</p>
+            <p>If you wish to explore this dataset link is <a
+                    href="https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification">Here</a></p>
+            <h3>Enter your text below:</h3>
+            <form id="nbForm" method="post">
+                <textarea name="message" id="area" placeholder="Enter your suspicious article here..." maxlength="3000"
+                    minlength="900"></textarea>
+                <div class="result">
+                    <span id="char">0 Characters</span>
+                    <input type="submit" id="submitBtn" class="submit-button" value="Submit">
+                    <div id="error-message"></div>
+                </div>
+            </form>
+            <dialog class="popup" id="resultPopup">
+                <div class="popup-content">
+                    <a class="close-popup" href="#">&times;</a>
+                    <h2>Result</h2>
+                    <div id="main-result" class="content"></div>
+                    <!--Optional to view-->
+                    <button class="expand-result" id="expand-result">View how other models have responded</button>
+                    <div id="optional">
+                        <div id="optional1" class="optional-content"></div>
+                        <div id="optional2" class="optional-content"></div>
+                        <p></p>
+                        <div id="error-message-optional"></div>
+                    </div>
+                </div>
+            </dialog>
+
+
+            <dialog class="popup" id="resultPopup">
+                <div class="popup-content">
+                    <a class="close-popup" href="#">&times;</a>
+                    <h2>Result</h2>
+                    <div id="main-result" class="content"></div>
+                    <!--Optional to view-->
+                    <button class="expand-result" id="expand-result">View how other models have responded</button>
+                    <div id="optional">
+                        <div id="optional1" class="optional-content">NB PREDICTION: </div>
+                        <div id="optional2" class="optional-content">SV PREDICTION: </div>
+                    </div>
+                </div>
+            </dialog>
+
+
+            <div clas="additional">
+                <p> </p>
+                <h3>About the model:</h3>
+                <p>The basis of the Naive Bayes classifier is in Bayes' Theorem, an example of probabilistic theory.
+                    This theorem calculates the likelihood of an event based on past knowledge of possible event-related
+                    situations. </p>
+                <p>To utilize this model in the best way possible, the input article should be between 4000 and 6000
+                    characters. It will work on the smaller or bigger number of character but not as accurately, and if
+                    possible provide articles title speratated with "-".</p>
+                <p>This means that, in terms of text classification, the likelihood that a given text belongs in a
+                    specific category (in our case, "fake" or "real" news) is ascertained by looking at its frequency
+                    and word distribution. </p>
+                <p>The word "naive" is employed since it is thought that the features that comprise the model are
+                    independent of one other. Put differently, modifying the value of a single feature does not directly
+                    affect the values of any other features that the algorithm utilizes. </p>
+                <div class="dataRep">
+                    <h3>DATA REPRESENTATION</h3>
+                    <p>This visual representation shows the data used to train the model. The x-axis represents the
+                        number of words in the article, and the y-axis represents the label (0 for FAKE NEWS, 1 for REAL
+                        NEWS).</p>
+                    <button type="button" id="countPlotBtn" class="submit-button" id="tfGraph">Generate
+                        Graph</button>
+                    <button type="button" id="wordCountBtn" class="submit-button" id="wcBtn">Generate Word
+                        Cloud</button>
+                    <p></p>
+                    <div id="optional-graphs">
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                        <p id="data-context"></p>
+                    </div>
+                    <div id="optional-mean">
+                        <canvas id="wcChart" width="400" height="400"></canvas>
+                        <p id="data-context"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let area = document.getElementById('area');
+        let char = document.getElementById('char');
+
+        area.addEventListener('input', function () {
+            // count characters  
+            let content = this.value;
+            char.textContent = content.length;
+            content.trim();
+            console.log(content);
+        });
+    </script>
+</body>
+</html>

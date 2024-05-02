@@ -1,0 +1,86 @@
+import pytest
+import json
+import os
+from unittest.mock import mock_open, patch, Mock
+#from pytest_mock import mocker
+from app import app
+
+
+@pytest.fixture
+def client():
+    app.config['TESTING'] = True
+    app.config['DEBUG'] = False
+    with app.test_client() as client:
+        yield client
+
+@pytest.fixture
+def mock_predict_lr():
+    mock_obj = Mock()
+    mock_obj.post.return_value = ({'result': 'LR prediction'}, 200)
+    return mock_obj
+
+@pytest.fixture
+def mock_predict_pa():
+    mock_obj = Mock()
+    mock_obj.post.return_value = ({'result': 'PA prediction'}, 200)
+    return mock_obj
+
+def test_predict_PA_valid_data(client):
+    data = {'message': 'Some news article content'}
+    response = client.post('/predict_NB', data=data)
+    assert response.status_code == 200
+    result = json.loads(response.data)
+    assert 'NB' in result['result']
+
+def test_predict_nb_empty_data(client):
+    data = {'message': ''}
+    response = client.post('/predict_NB', data=data)
+    assert response.status_code == 400
+    result = json.loads(response.data)
+    assert 'error' in result
+
+def test_predict_together_valid_data(client, mock_predict_lr, mock_predict_pa):
+    data = {'message': 'Some text data'}
+
+    # Make a request to the Flask route
+    response = client.post("/NB/get_result", json=data)
+
+    # Validate the response status code and content
+    assert response.status_code == 200
+    result = response.json
+    assert 'result' in result
+    assert 'LR' in result['result']['result1'] 
+    assert 'PA' in result['result']['result2']
+
+# unsupported media type test
+def test_predict_together_empty_data(client):
+    data = {'message': ''}
+    response = client.post('/NB/get_result', data=data)
+    assert response.status_code == 415
+    assert b'error' in response.data
+
+def test_handle_error_404(client):
+    response = client.get('/random_route_101')
+    assert response.status_code == 404
+    assert b'You have reached the error 404 page' in response.data
+
+"""def test_get_styles(client):
+    response = client.get('..common/static/styles.css')
+    assert response.status_code == 200
+    assert b'body' in response.data"""
+
+def test_get_graph_data(client):
+    with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:
+        response = client.get('/getNBData')
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        assert data == {'data': [1, 2, 3]}
+
+def test_get_wc_data(client):
+    with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:
+        response = client.get('/getWCData')
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        assert data == {'data': [1, 2, 3]}
+
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+         body {
+            background-color: rgb(104, 105, 104);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static_bp.get_styles', filename='styles.css') }}">
+
+</head>
+
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type='text/javascript' src="{{ url_for('static_bp.get_styles', filename='ajaxScript.js') }}"></script>
+    <div class="container">
+        <div class="sidebar">
+            <!-- Navigation buttons -->
+            <form class="SVM_Button">
+                <button class="navButton" id="mainPageBtn">Home</button>
+                <button class="navButton" id="lrPageBtn">LR</button>
+                <button class="navButton" id="nbPageBtn">NB</button>
+                <button class="navButton" id="paPageBtn">PA</button>
+        </div>
+
+        <div class="main-content">
+            <h1>Fake News Detector</h1>
+            
+            <div class="description">
+                <h2 class="error">{{ data }}</h2>    
+            </div>
+        </div>
+    </div>
+</body>
+</html>
