@@ -5,6 +5,8 @@ from unittest.mock import mock_open, patch, Mock
 from app import app
 from app import create_app
 
+# Reminder for the testing
+
 
 @pytest.fixture
 def client():
@@ -29,7 +31,7 @@ def test_predict_LR_empty_data(client):
 def test_predict_together_valid_data(client):
     data = {'message': 'Some text data'}
 
-    # Make a request to the Flask route
+    # Make a request to route
     response = client.post("/LR/get_result", data=data)
 
     # Validate the response status code and content
@@ -46,11 +48,14 @@ def test_predict_together_empty_data(client):
     assert response.status_code == 400
     assert b'error' in response.data
 
+
+# non-existant page test
 def test_handle_error_404(client):
     response = client.get('/random_route_101')
     assert response.status_code == 404
     assert b'You have reached the error 404 page' in response.data
 
+# Test whether the backend for graph data is handled well
 def test_get_graph_data(client):
     with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:
         response = client.get('/getLRData')
@@ -58,6 +63,7 @@ def test_get_graph_data(client):
         data = json.loads(response.data)
         assert data == {'data': [1, 2, 3]}
 
+# the same test for the word count
 def test_get_wc_data(client):
     with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:
         response = client.get('/getWCData')

@@ -10,7 +10,7 @@ services:
     networks:
       - main_network
     volumes:
-      - ./common:/app/common  # Mount common directory into the container
+      - ./common:/app/common 
     environment:
       PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
       COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory
@@ -29,7 +29,7 @@ services:
     networks:
       - main_network
     volumes:
-      - ./common:/app/common  # Mount common directory into the container
+      - ./common:/app/common  
     environment:
       PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
       COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory
@@ -48,7 +48,7 @@ services:
     networks:
       - main_network
     volumes:
-      - ./common:/app/common  # Mount common directory into the container
+      - ./common:/app/common 
     environment:
       PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
       COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory

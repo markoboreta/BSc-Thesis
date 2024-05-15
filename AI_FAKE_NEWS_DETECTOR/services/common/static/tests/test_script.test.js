@@ -10,7 +10,6 @@ const path = require('path');
 const { navigateToPage, fetchDataAndDrawChart, makePrediction } = require('../ajaxScript');
 
 
-
 describe('navigateToPage function', () => {
   test('should call $.ajax with the correct URL LR', () => {
     // Mock the $.ajax function
@@ -25,7 +24,6 @@ describe('navigateToPage function', () => {
     );
   });
 });
-
 
 describe('navigateToPage function', () => {
   test('should call $.ajax with the correct URL NB', () => {
@@ -81,33 +79,61 @@ describe('navigateToPage function error handling', () => {
   });
 });
 
+// testing the data sent to the makePrediciton
 
-describe('makePrediction', () => {
-   test('should call $.ajax with the correct arguments on success', async () => {
-    const endpointUrl = "http://127.0.0.1:5001/predict_LR";
+// Mocking $.ajax within the test suite
+describe('makePrediction function', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test('should call $.ajax with the correct url and data', async () => {
+    const data = `The law earmarks roughly $60 billion in aid for Ukraine, $26 billion for Israel and $8 billion for security in Taiwan and the Indo-Pacific. It also requires ByteDance to sell TikTok within nine months — or a year, if Biden invokes a 90-day extension — or else face a nationwide ban in the U.S. TikTok has already vowed to fight the measure. “This unconstitutional law is a TikTok ban, and we will challenge it in court,” the company wrote in a Wednesday statement on X following Biden’s signing. “This ban would devastate seven million businesses and silence 170 million Americans,” the company added in its statement. TikTok CEO Shou Zi Chew posted a video response to the enactment of the TikTok bill, calling it a “disappointing moment” and reiterating the company’s commitment to challenge it. Despite Biden’s official support of the TikTok bill, his 2024 reelection campaign told NBC News Wednesday that it would continue using the social media platform to reach voters for at least the next year. Notably, the nine-month to one-year deadline for ByteDance allows it to maintain ownership of TikTok through the November election.`;
+
+
     const formData = new FormData();
-    formData.append('message', "The law earmarks roughly $60 billion in aid for Ukraine, $26 billion for Israel and $8 billion for security in Taiwan and the Indo-Pacific. It also requires ByteDance to sell TikTok within nine months — or a year, if Biden invokes a 90-day extension — or else face a nationwide ban in the U.S. TikTok has already vowed to fight the measure. “This unconstitutional law is a TikTok ban, and we will challenge it in court,” the company wrote in a Wednesday statement on X following Biden’s signing. “This ban would devastate seven million businesses and silence 170 million Americans,” the company added in its statement. TikTok CEO Shou Zi Chew posted a video response to the enactment of the TikTok bill, calling it a “disappointing moment” and reiterating the company’s commitment to challenge it. Despite Biden’s official support of the TikTok bill, his 2024 reelection campaign told NBC News Wednesday that it would continue using the social media platform to reach voters for at least the next year. Notably, the nine-month to one-year deadline for ByteDance allows it to maintain ownership of TikTok through the November election.");
-    const mockResponse = { result: "The news article is highly likely to be fake according to LR." };
+    formData.append('message', data.trim());
 
-    // Mock the $.ajax function to resolve
-    //$.ajax.mockResolvedValue(mockResponse);
+    // Mock $.ajax to resolve successfully
+    const successResponse = { result: "success" };
+    $.ajax = jest.fn(() => Promise.resolve(successResponse));
 
-    const result = await makePrediction(event,endpointUrl, formData);
+    const result = await makePrediction("http://127.0.0.1:5001/predict_LR", formData);
+
     expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({
-      url: endpointUrl,
+      url: "http://127.0.0.1:5001/predict_LR",
       type: 'POST',
       data: formData,
+      contentType: false,
+      processData: false,
+      timeout: 15000
     }));
-    expect(result).toEqual(mockResponse);
+
+    expect(result).toEqual(successResponse);
+  });
+
+  test('should handle timeout error correctly', async () => {
+    const errorMessage = "Request timed out after 15 seconds. Please try again.";
+    // Mock $.ajax to simulate a timeout error
+    $.ajax = jest.fn().mockImplementation(() => Promise.reject({
+      statusText: "timeout"
+    }));
+
+    await expect(makePrediction("http://127.0.0.1:5001/predict_LR", new FormData()))
+      .rejects.toThrow(errorMessage);
+  });
+
+  test('should handle generic error correctly', async () => {
+    const genericErrorMessage = "Prediction request failed: Error occurred";
+    // Mock $.ajax to simulate a generic error
+    $.ajax = jest.fn().mockImplementation(() => Promise.reject({
+      statusText: "error",
+      status: 500,
+      responseText: "Error occurred"
+    }));
+
+    await expect(makePrediction("http://127.0.0.1:5001/predict_LR", new FormData()))
+      .rejects.toThrow(genericErrorMessage);
   });
 });
-
-/// REVIEW this test later
-
-
-
-
-
-
-
 

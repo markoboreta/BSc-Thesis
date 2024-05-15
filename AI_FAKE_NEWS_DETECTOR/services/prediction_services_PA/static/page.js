@@ -16,25 +16,25 @@ $(document).ready(function () {
     formData = new FormData();
     formData.append("message", area.val());
     console.log(formData);
-    const dialog = document.getElementById("resultPopup");
+    const dialog = $("#resultPopup")[0];
     if (
       await handleSubmit(event, "http://127.0.0.1:5003/predict_PA", formData)
     ) {
       console.log("Here should open pop up");
-      const dialog = document.getElementById("resultPopup");
+      const dialog = $("#resultPopup")[0];
       handleOpenPopUp(dialog);
     }
   });
 
   // Event listener for close button click
   closePopupBtn.on("click", function () {
-    const dialog = document.getElementById("resultPopup");
+    const dialog = $("#resultPopup")[0];
     handleCLosePopUp(dialog, optionalContent, expandResultBtn);
   });
 
   // Event listener for dialog close event
   resultPopup.on("close", function () {
-    const dialog = document.getElementById("resultPopup");
+    const dialog = $("#resultPopup")[0];
     handleCLosePopUp(dialog, optionalContent, expandResultBtn);
   });
 

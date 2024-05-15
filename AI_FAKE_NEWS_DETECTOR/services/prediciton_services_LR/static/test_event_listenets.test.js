@@ -4,19 +4,17 @@ const $ = require('jquery');
 global.$ = $; 
 const { JSDOM } = require('jsdom');
 const { handleOpenPopUp, handleCLosePopUp, handleOptional, handleSubmit} = require('../../common/static/ajaxScript');
+const {drawChart} = require('../../common/static/ChartScripts');
 const fs = require('fs');
 const path = require('path');
 
 // Load and evaluate the page.js
 const pageJsPath = path.resolve(__dirname, './page.js');
 const pageJsContent = fs.readFileSync(pageJsPath, 'utf-8');
-eval(pageJsContent);
-
-
+eval(pageJsContent); // what??? 
 
 // Mocks and setups specific to jQuery
 $.ajax = jest.fn().mockResolvedValue({ success: true });
-
 describe('Event Listeners with jQuery', () => {
   beforeEach(() => {
     // Set up the HTML structure for the tests
@@ -36,10 +34,21 @@ describe('Event Listeners with jQuery', () => {
         </div>
       </dialog>
       <div id="error-message"></div>
+      <button type="button" id="countPlotBtn" class="submit-button">Generate Class Ratio</button>
+      <div id="optional-graphs" class="graph">
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <p id="data-context"></p>
+      </div>
     `);
     const dialogElement = $('#resultPopup')[0];
+    fetchDataAndDrawChart: jest.fn(() => Promise.resolve({ Fake: 10, Real: 20 }))
     dialogElement.showModal = jest.fn(); // Mock showModal
     dialogElement.close = jest.fn(); // Mock close
+    global.Chart = function() {
+      return {
+        destroy: jest.fn()
+      };
+    };
 
     $('#submitBtn').on('click', function() {
       handleOpenPopUp($('#resultPopup')[0]); 
@@ -66,6 +75,9 @@ describe('Event Listeners with jQuery', () => {
     const formData = new FormData();
     formData.append('message', $('#area').val().trim());
 
+    const mockResponse = { result: "Predicted Result" }; // why does this work ? 
+    $.ajax = jest.fn().mockResolvedValue(mockResponse);
+    
     $('#submitBtn').on('click', (e) => {
       handleSubmit(e, "http://127.0.0.1:5001/predict_LR", formData);
     });
@@ -77,6 +89,8 @@ describe('Event Listeners with jQuery', () => {
       type: 'POST',
       data: formData
     }));
+    expect($("#main-result").text()).toBe(mockResponse.result); // correct rendering
+    
   });
 
 
@@ -104,7 +118,7 @@ describe('Event Listeners with jQuery', () => {
   
     await new Promise(r => setTimeout(r, 100)); 
   
-    expect($('#resultPopup')[0].showModal).toHaveBeenCalled(); 
+    expect($('#resultPopup')[0].showModal).toHaveBeenCalled();
   });
   
   test('handleCLosePopUp is triggered when close button is clicked', async () => {
@@ -139,6 +153,29 @@ describe('Event Listeners with jQuery', () => {
   });
 
 
+  test('Toggle the visibility of the graph section and update button text', async () => {
+    const mockChartInstance = { destroy: jest.fn() };
+    //drawChart.mockReturnValue(mockChartInstance); 
+
+    // First click is supposed to expand and show chart
+    $('#countPlotBtn').trigger('click');
+    await new Promise(r => setTimeout(r, 100));
+
+    // Expectations after expansion
+    expect($('#optional-graphs').css('display')).not.toBe('none');
+    //expect($('#countPlotBtn').text()).toBe('Hide graph');
+    expect(fetchDataAndDrawChart("http://127.0.0.1:5001/getTFData"));
+    expect(drawChart).toHaveBeenCalledTimes(1);
+
+    // Second click is supposed to hide and destroy chart
+    $('#countPlotBtn').trigger('click');
+    await new Promise(r => setTimeout(r, 100)); // Wait for asynchronous actions to complete
+
+    // Expect after collapsing
+    expect($('#optional-graphs').css('display')).toBe('none');
+    //expect($('#countPlotBtn').text()).toBe('Generate Class Ratio');
+    expect(mockChartInstance.destroy).toHaveBeenCalledTimes(1); // Check if the chart destroy method was called
+  });
 });
 
 

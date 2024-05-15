@@ -29,13 +29,13 @@ $(document).ready(function () {
 
 // Event listener for close button click
 closePopupBtn.on("click", function () {
-  const dialog = document.getElementById("resultPopup");
+  const dialog = $("#resultPopup")[0];
   handleCLosePopUp(dialog, optionalContent, expandResultBtn);
 });
 
 // Event listener for dialog close event
 resultPopup.on("close", function () {
-  const dialog = document.getElementById("resultPopup");
+  const dialog = $("#resultPopup")[0];
   handleCLosePopUp(dialog, optionalContent, expandResultBtn);
 });
 

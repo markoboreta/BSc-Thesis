@@ -77,7 +77,6 @@ class LRApp(Service):
                 if not data:
                     return jsonify(error="Invalid input. Please provide a message."), 400
                 try:
-                    # Make a request to the PredictNB class
                     pa_response = predict_pa.post({"message" : data})
                     nb_response = predict_nb.post({"message" : data})
                     if nb_response[1] != 200:

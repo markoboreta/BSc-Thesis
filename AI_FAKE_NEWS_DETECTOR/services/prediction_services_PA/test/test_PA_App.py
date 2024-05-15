@@ -60,11 +60,6 @@ def test_handle_error_404(client):
     assert response.status_code == 404
     assert b'You have reached the error 404 page' in response.data
 
-"""def test_get_styles(client):
-    response = client.get('/static/styles.css') 
-    assert response.status_code == 200
-    assert response.content_type == 'text/css; charset=utf-8'
-    assert b'body' in response.data"""
 
 def test_get_graph_data(client):
     with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:

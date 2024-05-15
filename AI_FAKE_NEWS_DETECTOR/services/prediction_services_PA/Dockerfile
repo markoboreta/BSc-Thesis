@@ -1,4 +1,3 @@
-# Use a Python 3.8 slim base image for the build stage
 FROM python:3.8-slim AS builder
 
 # Set working directory
@@ -35,7 +34,7 @@ ENV PATH=/root/.local/bin:$PATH
 COPY . .
 EXPOSE 5003
 # Set PYTHONPATH environment variable
-ENV PYTHONPATH /NBapp
+ENV PYTHONPATH /PAapp
 
 # Run the application
 CMD ["python", "app.py"]

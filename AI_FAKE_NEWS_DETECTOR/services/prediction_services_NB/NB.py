@@ -30,8 +30,8 @@ class NB(Model):
             return "The news article is highly likely to be fake according to NB."
         
 # Set up LR model below
-model_path = 'LR_model.pkl'
-vect_path = 'LR_vect.pkl'
+model_path = 'naive_model_new.pkl'
+vect_path = 'count_vectorizer.pkl'
 
 NBModel = NB(model_path, vect_path)
 

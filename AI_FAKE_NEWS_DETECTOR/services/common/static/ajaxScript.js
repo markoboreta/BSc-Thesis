@@ -53,16 +53,16 @@ async function makePrediction(endpointUrl, formData) {
     processData: false,
     timeout: timeout,
     success: function (data) {
-      //resolve(data);
       return data;
     },
-    error: function (xhr, status, error) {
+    error: function (xhr, status, errorThrown) {
+      console.log("AJAX Error:", status, errorThrown, xhr.responseText);
       if (status === "timeout") {
         throw new Error(
           "Request timed out after 15 seconds. Please try again."
         );
       } else {
-        throw new Error("Prediction request failed: " + error);
+        throw new Error("Prediction request failed: " + (xhr.responseText || errorThrown || "Unknown error"));
       }
     },
   });
@@ -193,6 +193,7 @@ async function handleSubmit(event, mainurl, formData) {
   try {
     const [lrResult] = await Promise.all([makePrediction(mainurl, formData)]);
     $("#main-result").text(lrResult.result);
+    console.log(lrResult)
     return 1;
   } catch (error) {
     displayAlert(

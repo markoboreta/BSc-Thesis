@@ -1,12 +1,10 @@
 function drawChart(data, canvasID) {
   const labels = Object.keys(data);
   const values = Object.values(data).map(Number); // Convert values to numbers
-
   // Get canvas element
   const canvas = document.getElementById(canvasID);
   const ctx = document.getElementById(canvasID).getContext("2d");
-  //ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // Create datasets array based on labels
+
   const datasets = labels.map((label) => {
     // Determine color based on label
     let backgroundColor =
@@ -22,7 +20,6 @@ function drawChart(data, canvasID) {
       borderWidth: 1,
     };
   });
-
   // Create new chart instance
   const myChart = new Chart(ctx, {
     type: "bar",
@@ -39,9 +36,6 @@ function drawChart(data, canvasID) {
             text: "Label",
             color: "black",
           },
-          //ticks: {
-          // color: "black",
-          // },
         },
         y: {
           title: {

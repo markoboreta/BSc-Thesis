@@ -10,9 +10,9 @@ class PredictNB(Resource):
 
         try:
             # test env
-            url = "http://127.0.0.1:5002/predict_NB"
+            #url = "http://127.0.0.1:5002/predict_NB"
             # Docker env for production
-            #url = 'http://NBapp:5002/predict_NB'
+            url = 'http://NBapp:5002/predict_NB'
             payload = {'message': message}
             response = requests.post(url, data=payload)
             response.raise_for_status()  # Raise an exception if the request fails
@@ -31,8 +31,8 @@ class PredictPA(Resource):
 
         try:
             # test env
-            url = "http://127.0.0.1:5003/predict_PA"
-            #url = 'http://PAapp:5003/predict_PA'
+            #url = "http://127.0.0.1:5003/predict_PA"
+            url = 'http://PAapp:5003/predict_PA'
             payload = {'message': message}
             response = requests.post(url, data=payload)
             response.raise_for_status()  # Raise an exception if the request fails
@@ -50,8 +50,8 @@ class PredictLR(Resource):
 
         try:
             # test env
-            url = "http://127.0.0.1:5001/predict_LR"
-            #url = 'http://LRapp:5001/predict_LR'
+            #url = "http://127.0.0.1:5001/predict_LR"
+            url = 'http://LRapp:5001/predict_LR'
             payload = {'message': message}
             response = requests.post(url, data=payload)
             response.raise_for_status()  # Raise an exception if the request fails

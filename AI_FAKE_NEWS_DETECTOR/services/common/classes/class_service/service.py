@@ -30,8 +30,8 @@ class Service(Flask):
     
     # Configuration for the error handler Blueprint 
     def configure_error_handlers(self):
-        #common_templates_dir = os.getenv('COMMON_TEMPLATES_DIR')
-        common_templates_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'common', 'templates')
+        common_templates_dir = os.getenv('COMMON_TEMPLATES_DIR')
+        #common_templates_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'common', 'templates')
         self.logger.info(f"Templates directory: {common_templates_dir}")
         errors_bp = Blueprint('errors', __name__, template_folder=common_templates_dir)
         @errors_bp.app_errorhandler(400)
@@ -46,8 +46,8 @@ class Service(Flask):
 
     # Configuration for the styles Blueprint
     def configure_blueprint_for_templates(self):
-        #common_static_dir = os.getenv('COMMON_STATIC_DIR')
-        common_static_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'common', 'static')
+        common_static_dir = os.getenv('COMMON_STATIC_DIR')
+        #common_static_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'common', 'static')
         self.logger.info(f"Static directory: {common_static_dir}")
         static_bp = Blueprint('static_bp', __name__, static_folder=common_static_dir)
         @static_bp.route('/<path:filename>')

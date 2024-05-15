@@ -14,7 +14,7 @@ class PA(Model):
         
 
 
-model_path = 'LR_model.pkl'
-vect_path = 'LR_vect.pkl'
+model_path = 'PA_model.pkl'
+vect_path = 'PA_Tfidf.pkl'
 
 PAModel = PA(model_path, vect_path)

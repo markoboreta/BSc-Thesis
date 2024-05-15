@@ -21,20 +21,20 @@ $(document).ready(function () {
     if(await handleSubmit(event, "http://127.0.0.1:5001/predict_LR", formData))
    { 
       console.log("Here should open pop up")
-      const dialog = document.getElementById("resultPopup");
+      const dialog = $("#resultPopup")[0];
       handleOpenPopUp(dialog);
     } 
   });
 
   // Event listener for close button click
   closePopupBtn.on("click", function () {
-    const dialog = document.getElementById("resultPopup");
+    const dialog = $("#resultPopup")[0];
     handleCLosePopUp(dialog, optionalContent, expandResultBtn);
   });
   
   // Event listener for dialog close event
   resultPopup.on("close", function () {
-    const dialog = document.getElementById("resultPopup");
+    const dialog = $("#resultPopup")[0];
     handleCLosePopUp(dialog, optionalContent, expandResultBtn);
   });
 
@@ -70,7 +70,7 @@ $(document).ready(function () {
       // Draw new chart
       myChart = drawChart(data, "myChart");
     } else {
-      countPlotBtn.text("Generate graph");
+      countPlotBtn.text("Generate Class Ratio");
       // Hide the canvas when collapsing
       optionalContent.hide();
       // Destroy chart when collapsing (optional)
@@ -78,6 +78,7 @@ $(document).ready(function () {
         myChart.destroy();
         myChart = null;
         console.log("Chart destroyed");
+        countPlotBtn.text("Generate Class Ratio");
       }
     }
   });
