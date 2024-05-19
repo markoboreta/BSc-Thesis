@@ -10,16 +10,16 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.24.4",
     "@babel/preset-env": "^7.24.4",
-    "jest": "^28.0.0",
-    "babel-jest": "^28.0.0",
     "@types/jest": "^28.0.0",
+    "axios": "^1.6.8",
+    "babel-jest": "^28.0.0",
+    "jest": "^28.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "jquery": "^3.7.1",
     "jsdom": "^24.0.0"
@@ -27,5 +27,4 @@
   "jest": {
     "testEnvironment": "jsdom"
   }
-  
 }

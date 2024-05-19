@@ -24,6 +24,10 @@ class NBApp(Service):
         self.api.add_resource(PredictLR, '/api/predict_lr')
   
     def set_up_routes(self):
+
+        @self.route('/favicon.ico')
+        def favicon():
+            return '', 204
         # route for the main page of the 
         @self.route("/NB_page", methods=["GET", "POST"])
         def NB_page():
@@ -34,7 +38,7 @@ class NBApp(Service):
         def predict_NB():
             if request.method == "POST":
                 data = request.form.get("message", "")
-                print('here')
+                print("Data:\n", data);
                 if not data:
                     # If message data is missing or invalid, return an error response
                     return jsonify(error="Invalid input. Please provide a message."), 400

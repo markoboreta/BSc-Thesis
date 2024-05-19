@@ -42,23 +42,25 @@
             <p>If you wish to explore this dataset link is <a
                     href="https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification">Here</a></p>
             <h3>Enter your text below:</h3>
+            
             <form id="nbForm" method="post">
-                <textarea name="message" id="area" placeholder="Enter your suspicious article here..." maxlength="3000"
-                    minlength="900"></textarea>
+                <textarea name="message" id="NB_area" placeholder="Enter your suspicious article here..." maxlength="3000" minlength="900"></textarea>
                 <div class="result">
                     <span id="char">0 Characters</span>
                     <input type="submit" id="submitBtn" class="submit-button" value="Submit">
                     <div id="error-message"></div>
                 </div>
             </form>
-            <dialog class="popup" id="resultPopup">
+            
+            <dialog class="popup" id="NB_resultPopup">
                 <div class="popup-content">
                     <a class="close-popup" href="#">&times;</a>
                     <h2>Result</h2>
-                    <div id="main-result" class="content"></div>
+                    <div id="NB-main-result" class="content"></div>
                     <!--Optional to view-->
                     <button class="expand-result" id="expand-result">View how other models have responded</button>
                     <div id="optional">
+                        <p></p>
                         <div id="optional1" class="optional-content"></div>
                         <div id="optional2" class="optional-content"></div>
                         <p></p>
@@ -67,20 +69,6 @@
                 </div>
             </dialog>
 
-
-            <dialog class="popup" id="resultPopup">
-                <div class="popup-content">
-                    <a class="close-popup" href="#">&times;</a>
-                    <h2>Result</h2>
-                    <div id="main-result" class="content"></div>
-                    <!--Optional to view-->
-                    <button class="expand-result" id="expand-result">View how other models have responded</button>
-                    <div id="optional">
-                        <div id="optional1" class="optional-content">NB PREDICTION: </div>
-                        <div id="optional2" class="optional-content">SV PREDICTION: </div>
-                    </div>
-                </div>
-            </dialog>
 
 
             <div clas="additional">
@@ -121,7 +109,7 @@
         </div>
     </div>
     <script>
-        let area = document.getElementById('area');
+        let area = document.getElementById('NB_area');
         let char = document.getElementById('char');
 
         area.addEventListener('input', function () {

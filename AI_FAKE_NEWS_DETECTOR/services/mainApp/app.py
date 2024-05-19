@@ -10,7 +10,6 @@ class mainPage(Service):
         super().__init__(import_name, **kwargs)
         self.set_up_routes()
 
-
     def set_up_routes(self):
         @self.route("/", methods=["GET", "POST"])  # home page
         def main():

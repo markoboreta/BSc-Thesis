@@ -2,49 +2,35 @@ import pytest
 import json
 import os
 from unittest.mock import mock_open, patch, Mock
-#from pytest_mock import mocker
-from app import app
-from app import create_app
+from prediction_services_NB.app import app, NBApp
 
 
 @pytest.fixture
 def client():
-    app = create_app({'TESTING': True})  
+    app = NBApp(__name__)
+    app.config['TESTING'] = True
+    app.config['DEBUG'] = False
     with app.test_client() as client:
         yield client
 
-@pytest.fixture
-def mock_predict_lr():
-    mock_obj = Mock()
-    mock_obj.post.return_value = ({'result': 'LR prediction'}, 200)
-    return mock_obj
-
-@pytest.fixture
-def mock_predict_pa():
-    mock_obj = Mock()
-    mock_obj.post.return_value = ({'result': 'PA prediction'}, 200)
-    return mock_obj
-
-def test_predict_PA_valid_data(client):
+def test_predict_NB_valid_data(client):
     data = {'message': 'Some news article content'}
     response = client.post('/predict_NB', data=data)
     assert response.status_code == 200
     result = json.loads(response.data)
     assert 'NB' in result['result']
 
-def test_predict_nb_empty_data(client):
+def test_predict_NB_empty_data(client):
     data = {'message': ''}
     response = client.post('/predict_NB', data=data)
     assert response.status_code == 400
     result = json.loads(response.data)
     assert 'error' in result
 
-def test_predict_together_valid_data(client, mock_predict_lr, mock_predict_pa):
+def test_predict_together_valid_data(client):
     data = {'message': 'Some text data'}
-
     # Make a request to the Flask route
     response = client.post("/NB/get_result", data=data)
-
     # Validate the response status code and content
     assert response.status_code == 200
     result = response.json
@@ -53,7 +39,7 @@ def test_predict_together_valid_data(client, mock_predict_lr, mock_predict_pa):
     assert 'PA' in result['result']['result2']['result']
 
 # unsupported media type test
-def test_predict_together_empty_data(client, mock_predict_lr, mock_predict_pa):
+def test_predict_together_empty_data(client):
     data = {'message': ''}
     response = client.post("/NB/get_result", data=data)
     assert response.status_code == 400

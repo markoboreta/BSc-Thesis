@@ -5,6 +5,8 @@ body {
   height: 100%;
   margin: 0;
   background-color: rgb(104, 105, 104);
+  color: white;
+  font-family: Arial, sans-serif;
 }
 
 
@@ -223,6 +225,7 @@ dialog
   display: inline-block;
   vertical-align: middle;
 }
+
 .alert-warning {
   background-color: #fff3cd;
   border-color: #ffeeba;
@@ -233,27 +236,24 @@ dialog
   width: 300px;
   height: fit-content;
 
-  border-radius: 0.5rem; /* Add border radius for rounded corners */
+  border-radius: 0.5rem; 
 }
 
-/* Customize close button */
 .alert-warning .close {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
   font-size: 1.5rem;
   color: #856404;
-  transition: transform 0.3s ease; /* Add transition for smooth animation */
+  transition: transform 0.3s ease; 
   cursor: pointer;
 }
 
-/* Adjust close button hover effect */
 .alert-warning .close:hover {
   color: #6c757d;
-  transform: scale(1.1); /* Add scale effect on hover */
+  transform: scale(1.1);
 }
 
-/* Fade out animation for alert */
 @keyframes fadeOut {
   from {
       opacity: 1;

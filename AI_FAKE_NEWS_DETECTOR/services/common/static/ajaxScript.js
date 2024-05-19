@@ -10,7 +10,6 @@ function navigateToPage(url) {
     },
     error: function () {
       console.error("Error occurred while making the request.");
-      // Handle error gracefully, e.g., show an error message
     },
   });
 }
@@ -18,70 +17,87 @@ function navigateToPage(url) {
 
 // Event listeners for navigation buttons, same on every html page
 $(document).ready(function () {
-  $("#mainPageBtn").click(async function (event) {
-    event.preventDefault();
-     navigateToPage("http://127.0.0.1:5000/");
-  });
 
+  try {
+    $("#mainPageBtn").click(async function (event) {
+      event.preventDefault();
+       navigateToPage("http://127.0.0.1:5000/");
+    });
+  } catch (error) {
+    console.log(error)
+  }
+  
   // Event listener for LR page navigation
-  $("#lrPageBtn").click(async function (event) {
-    event.preventDefault();
-    navigateToPage("http://127.0.0.1:5001/LR_page");
-  });
-
+  try {
+    $("#lrPageBtn").click(async function (event) {
+      event.preventDefault();
+      navigateToPage("http://127.0.0.1:5001/LR_page");
+    });
+  } catch (error) {
+    console.log(error)
+  }
+  
   // Event listener for NB page navigation
-  $("#nbPageBtn").click(async function (event) {
-    event.preventDefault();
-     navigateToPage("http://127.0.0.1:5002/NB_page");
-  });
-
-  $("#paPageBtn").click(async function (event) {
-    event.preventDefault();
-    navigateToPage("http://127.0.0.1:5003/PA_page");
-  });
+  try {
+    $("#nbPageBtn").click(async function (event) {
+      event.preventDefault();
+       navigateToPage("http://127.0.0.1:5002/NB_page");
+    });
+  } catch (error) {
+    console.log(error)
+  }
+  
+  try {
+    $("#paPageBtn").click(async function (event) {
+      event.preventDefault();
+      navigateToPage("http://127.0.0.1:5003/PA_page");
+    });
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 
 // Function to handle prediction button, this will send artticle and get result
 async function makePrediction(endpointUrl, formData) {
   const timeout = 15000; // 15 seconds
-  return $.ajax({
-    url: endpointUrl,
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-    timeout: timeout,
-    success: function (data) {
-      return data;
-    },
-    error: function (xhr, status, errorThrown) {
-      console.log("AJAX Error:", status, errorThrown, xhr.responseText);
-      if (status === "timeout") {
-        throw new Error(
-          "Request timed out after 15 seconds. Please try again."
-        );
-      } else {
-        throw new Error("Prediction request failed: " + (xhr.responseText || errorThrown || "Unknown error"));
-      }
-    },
-  });
+  try {
+    return $.ajax({
+      url: endpointUrl,
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      timeout: timeout,
+      success: function (data) {
+        console.log("Response returned!")
+        return data;
+      },
+      error: function (xhr, status, errorThrown) {
+        console.log("AJAX Error:", status, errorThrown, xhr.responseText);
+        if (status === "timeout") {
+          throw new Error(
+            "Request timed out after 15 seconds. Please try again."
+          );
+        } 
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+  
 }
 
 // Function to display error message
 function displayAlert(message, alertClass, divString) {
-  // Create alert element
   const alertElement = $("<div>").addClass("alert " + alertClass).text(message);
   const closeButton = $("<strong>").addClass("close").html("&times;");
-  // Append close button to alert element
   alertElement.append(closeButton);
 
   // Append alert element to error message div
   const errorMessageDiv = $(divString);
   errorMessageDiv.empty().append(alertElement);
 
-  // Event listener for close button click
-  // Maybe remove the timer???? 
   closeButton.on("click", function () {
     alertElement.addClass("fade-out"); // Apply fade-out animation
     setTimeout(function () {
@@ -110,6 +126,25 @@ async function fetchDataAndDrawChart(endpointUrl) {
 }
 
 
+
+async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData,optOne, optTwo)
+{
+  try{
+    optionalContent.toggleClass("expanded");
+    if (optionalContent.hasClass("expanded")) {
+      expandResultBtn.text("Hide other model responses");
+      await handleOptional(event, URL, formData);
+    } else {
+      expandResultBtn.text("View how other models have responded");
+      
+    }
+  }
+  catch(error)
+  {
+    console.log("Issue showing data, check your button again.")
+  }
+  
+}
 
 // Function to open a PopUp windows(HTML Dialog)
 function openDialog(dialogElement) {
@@ -140,6 +175,7 @@ function closeDialog(dialogElement) {
 
 // Function to reset dialog content
 function resetDialogContent(idName) {
+  console.log("resetting diagonal");
   $(idName).text(""); 
 
 }
@@ -148,9 +184,9 @@ function resetDialogContent(idName) {
 async function handleOptional(event, optionalURL, formData) {
   event.preventDefault();
   let activeRequests = 0;
-
+  console.log(formData);
   if (activeRequests > 0) {
-    console.log("A request is already in progress. Please wait.");
+    
     return; 
   }
   activeRequests += 1;
@@ -166,7 +202,6 @@ async function handleOptional(event, optionalURL, formData) {
       "alert-warning",
       "#error-message-optional"
     );
-    console.error("Error:", error);
   } finally {
     activeRequests -= 1;
   }
@@ -174,13 +209,11 @@ async function handleOptional(event, optionalURL, formData) {
 }
 
 // Fucntion to handle submit button 
-async function handleSubmit(event, mainurl, formData) {
+async function handleSubmit(event, mainurl, formData, mainResult) {
   event.preventDefault();
-  const textarea = $("#area");
-  const text = textarea.val().trim();
   const minLength = 900;
   const maxLength = 3000;
-
+  const text = formData.get("message");
   if (text.length < minLength || text.length > maxLength) {
     event.preventDefault();
     displayAlert(
@@ -191,9 +224,9 @@ async function handleSubmit(event, mainurl, formData) {
     return;
   }
   try {
-    const [lrResult] = await Promise.all([makePrediction(mainurl, formData)]);
-    $("#main-result").text(lrResult.result);
-    console.log(lrResult)
+    const [newResult] = await Promise.all([makePrediction(mainurl, formData)]);
+    $(mainResult).text(newResult.result);
+    console.log("Result ", newResult)
     return 1;
   } catch (error) {
     displayAlert(
@@ -207,7 +240,7 @@ async function handleSubmit(event, mainurl, formData) {
 
 
 
-function handleCLosePopUp(dialog, optionalContent, expandResultBtn)
+function handleCLosePopUp(dialog, optionalContent, expandResultBtn, mainResult, optOne, optTwo)
 {
   if (dialog && typeof dialog.close === "function") {
     
@@ -216,14 +249,13 @@ function handleCLosePopUp(dialog, optionalContent, expandResultBtn)
     {
       optionalContent.toggleClass("expanded");
       expandResultBtn.text("View how other models have responded")
-      resetDialogContent("#main-result");
-      resetDialogContent("#optional1");
-      resetDialogContent("#optional2");
+      resetDialogContent(mainResult);
+      resetDialogContent(optOne);
+      resetDialogContent(optTwo);
     }
     dialog.close();
   } else {
     console.error("The close method is not supported.");
-    // Fallback to hide the dialog
     if (dialog) {
       dialog.style.display = "none";
     }
@@ -237,7 +269,6 @@ function handleOpenPopUp(dialog)
     dialog.showModal(); // Show the dialog as a modal
   } else {
     console.error("The showModal method is not supported.");
-    // Fallback to display the dialog
     if (dialog) {
       dialog.style.display = "block";
     }
@@ -245,4 +276,43 @@ function handleOpenPopUp(dialog)
 }
 
 
-//export {handleSubmit,handleOptional,fetchDataAndDrawChart,makePrediction,navigateToPage,handleCLosePopUp,handleOpenPopUp};
+async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generateText, hideText) {
+  const countPlotBtn = $(buttonId);
+  const optionalContent = $(contentId);
+  let myChart = null;
+
+    try {
+      optionalContent.toggleClass("expanded");
+      if (optionalContent.hasClass("expanded")) {
+        countPlotBtn.text(hideText);
+        const data = await fetchDataAndDrawChart(fetchUrl);
+        optionalContent.show();
+        if (myChart) {
+          myChart.destroy();
+        }
+        myChart = drawChart(data, chartId);
+      } else {
+        countPlotBtn.text(generateText);
+        optionalContent.hide();
+        if (myChart) {
+          myChart.destroy();
+          myChart = null;
+        }
+      }
+    } catch (error) {
+      console.error("Error occurred while toggling chart:", error);
+    }
+}
+
+/*export {
+  handleSubmit,
+  handleOptional,
+  fetchDataAndDrawChart,
+  makePrediction,
+  navigateToPage,
+  handleCLosePopUp,
+  handleOpenPopUp,
+  setupChartToggle,
+  showOptionalResults,
+  
+};*/

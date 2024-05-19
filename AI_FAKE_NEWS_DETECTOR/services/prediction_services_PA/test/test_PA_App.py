@@ -3,28 +3,7 @@ import json
 import os
 from unittest.mock import mock_open, patch
 from app import app
-
-
-@pytest.fixture
-def client():
-    app.config['TESTING'] = True
-    app.config['DEBUG'] = False
-    with app.test_client() as client:
-        yield client
-
-@pytest.fixture
-def mock_predict_lr(mocker):
-    mock_response = mocker.Mock()
-    mock_response.json.return_value = {'result1': 'The news are likely to be fake'}
-    mocker.patch('requests.post', return_value=mock_response)
-    return mock_response
-
-@pytest.fixture
-def mock_predict_nb(mocker):
-    mock_response = mocker.Mock()
-    mock_response.json.return_value = {'result2': 'The news are unlikely to be fake'}
-    mocker.patch('requests.post', return_value=mock_response)
-    return mock_response
+from flask_cors import CORS
 
 def test_predict_PA_valid_data(client):
     data = {'message': 'Some news article content'}
@@ -33,20 +12,21 @@ def test_predict_PA_valid_data(client):
     result = json.loads(response.data)
     assert 'PA' in result['result']
 
-def test_predict_nb_empty_data(client):
+def test_predict_PA_empty_data(client):
     data = {'message': ''}
     response = client.post('/predict_PA', data=data)
     assert response.status_code == 400
     result = json.loads(response.data)
     assert 'error' in result
 
-def test_predict_together_valid_data(client, mock_predict_lr, mock_predict_nb):
+def test_predict_together_valid_data(client):
     data = {'message': 'Some text data'}
     response = client.post('/PA/get_result', data=data)
     assert response.status_code == 200
     result = json.loads(response.data)
-    assert 'result1' in result['result']
-    assert 'result2' in result['result']
+    assert 'result' in result
+    assert 'LR' in result['result']['result1']['result']
+    assert 'NB' in result['result']['result2']['result']
 
 def test_predict_together_empty_data(client, mock_predict_lr, mock_predict_nb):
     data = {'message': ''}
@@ -69,7 +49,7 @@ def test_get_graph_data(client):
         assert data == {'data': [1, 2, 3]}
 
 
-def test_get_graph_data(client):
+def test_get_wc_graph_data(client):
     with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:
         response = client.get('/getWCData')
         assert response.status_code == 200

@@ -25,6 +25,11 @@ class PA_App(Service):
         self.api.add_resource(PredictLR, '/api/predict_lr')
   
     def set_up_routes(self):
+
+        @self.route('/favicon.ico')
+        def favicon():
+            return '', 204
+
         # route for the main page of the 
         @self.route("/PA_page", methods=["GET", "POST"])
         def PA_page():
@@ -35,6 +40,7 @@ class PA_App(Service):
         def predict_PA():
             if request.method == "POST":
                 data = request.form.get("message", "")
+                print(data);
                 if not data:
                     # If message data is missing or invalid, return an error response
                     return jsonify(error="Invalid input. Please provide a message."), 400

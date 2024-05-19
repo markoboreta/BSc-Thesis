@@ -44,8 +44,8 @@
             <p>If you wish to explore this dataset link is <a
                     href="https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification">Here</a></p>
             <h3>Enter your text below:</h3>
-            <form id="myForm" method="post">
-                <textarea name="message" id="area" placeholder="Enter your suspicious article here..." maxlength="3000" minlength="900"></textarea>
+            <form id="paForm" method="post">
+                <textarea name="message" id="PA_area" placeholder="Enter your suspicious article here..." maxlength="3000" minlength="900"></textarea>
                 <div class="result">
                     <span id="char">0 Characters</span>
                     <button type="submit" id="submitBtn" class="submit-button">Submit</button>
@@ -53,13 +53,13 @@
                 </div>
             </form>
 
-            <dialog class="popup" id="resultPopup">
+            <dialog class="popup" id="PA_resultPopup">
                 <div class="popup-content">
                     <a class="close-popup" href="#">&times;</a>
                     <h2>Result</h2>
-                    <div id="main-result" class="content"></div>
+                    <div id="PA-main-result" class="content"></div>
                     <!--Optional to view-->
-                    <button class="expand-result" id="expand-result">View how other models have responded</button>
+                    <button class="expand-result" id="PA_expand_result">View how other models have responded</button>
                     <div id="optional">
                         <div id="optional1" class="optional-content"></div>
                         <div id="optional2" class="optional-content"></div>
@@ -100,9 +100,9 @@
     </div>
     <script>
         // Character count script
-        let area = document.getElementById('area');
-        let char = document.getElementById('char');
-        area.addEventListener('input', function () {
+        let area = $('#PA_area');
+        let char = $('#char')[0];
+        area.on('input', function () {
             let content = this.value.trim();
             char.textContent = content.length + " Characters";
         });

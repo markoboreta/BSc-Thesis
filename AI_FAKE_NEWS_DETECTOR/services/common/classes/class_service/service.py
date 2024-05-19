@@ -1,8 +1,9 @@
 import os, logging
 from flask_cors import CORS
-from flask import  render_template, send_from_directory
+from flask import  render_template, send_from_directory,request, jsonify
 from flask import Flask, render_template, Blueprint
 from flask_restful import Api, Resource
+import re
 
 # Flask class for the apps
 class Service(Flask):
@@ -14,9 +15,9 @@ class Service(Flask):
         self.configure_error_handlers()
         self.configure_blueprint_for_templates()
         
+
     def configure_app(self):
-        # Set the secret key for the Flask app, this is just for development purposes
-        self.secret_key = "your_secret_key"
+        self.secret_key = "secret_key"
 
     def configure_cors(self):
         # Configure CORS, enabling cross communication
@@ -44,15 +45,22 @@ class Service(Flask):
             return render_template("error.html", data=error_message), getattr(e, 'code', 500)
         self.register_blueprint(errors_bp)
 
-    # Configuration for the styles Blueprint
+    
     def configure_blueprint_for_templates(self):
         common_static_dir = os.getenv('COMMON_STATIC_DIR')
         #common_static_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'common', 'static')
         self.logger.info(f"Static directory: {common_static_dir}")
         static_bp = Blueprint('static_bp', __name__, static_folder=common_static_dir)
+
         @static_bp.route('/<path:filename>')
         def get_styles(filename):
+            file_path = os.path.join(static_bp.static_folder, filename)
+            self.logger.info(f"Request for file: {file_path}")
+            if not os.path.exists(file_path):
+                self.logger.error(f"File not found: {file_path}")
+                return "File not found", 404
             return send_from_directory(static_bp.static_folder, filename)
+
         self.register_blueprint(static_bp)
 
        

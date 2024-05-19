@@ -60,23 +60,33 @@ class Model:
     # Remove special characters, tokenize and remove stop words
     def preprocess_text(self, text):
         text = self.remove_special(text)
-        if text:
-            tokenized = word_tokenize(text)
-            stop_words = set(stopwords.words('english'))
-            return ' '.join([self.lemmatizer.lemmatize(w) for w in tokenized if w not in self.stop_words])
+        try:
+            if text:
+                tokenized = word_tokenize(text)
+                stop_words = set(stopwords.words('english'))
+                return ' '.join([self.lemmatizer.lemmatize(w) for w in tokenized if w not in self.stop_words])
+        except:
+            print("Error, data is not textual most likely")
+            return "Error, unable to proceed, data provided is not OK."
         return 
     
     # Return the verdcit of the models
     def verdict(self, text):
         if not text or text.isspace():
-            return "Invalid input - article is empty or not provided."
-
+            print("Here 1")
+            print("Invalid input - article is empty or not provided.")
+            return 1
+        
         preprocessed_article = self.preprocess_text(text)
+        print(preprocessed_article)
 
         if not preprocessed_article or preprocessed_article.isspace():
-            return "Invalid input - preprocessing resulted in empty content."
-
-        article_vector = self.vect.transform([preprocessed_article])
-        prediction = self.model.predict(article_vector)
-
-        return prediction # return the verdict model has made, numerical value 1 or 0
+            print("Here 2")
+            print("Invalid input - preprocessing resulted in empty content.")
+            return 1
+        else:
+            print("Here 3")
+            article_vector = self.vect.transform([preprocessed_article])
+            prediction = self.model.predict(article_vector)
+            return prediction # return the verdict model has made, numerical value 1 or 0
+    

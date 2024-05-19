@@ -1,113 +1,49 @@
 $(document).ready(function () {
-  const submitBtn = $("#submitBtn");
-  const nbForm = $('#lrForm');
-  const resultPopup = $("#resultPopup");
+  const resultPopup = $("#NB_resultPopup");
   const closePopupBtn = $(".close-popup");
-  const countPlotBtn = $("#countPlotBtn");
-  const area = $("#area");
   const expandResultBtn = $("#expand-result");
   const optionalContent = $("#optional");
-  let activeRequests = 0;
-
+  const dialog = $("#NB_resultPopup")[0];
+  optOne = "#optional1";
+  optTwo = "#optional2";
+  mainResult = "#NB-main-result";
   
   // Event listener for submit button click
   $("#submitBtn").on("click", async function (event) {
     event.preventDefault();
+    const area = $("#NB_area");
+    NBformData = new FormData();
+    NBformData.append('message', area.val().trim());
+    console.log(NBformData);
 
-    formData = new FormData();
-    formData.append('message', area.val());
-    console.log(formData);
-
-    if(await handleSubmit(event, "http://127.0.0.1:5002/predict_NB", formData))
+    if(await handleSubmit(event, "http://127.0.0.1:5002/predict_NB", NBformData, mainResult))
     {
-      console.log("Here should open pop up")
-      const dialog = $("#resultPopup")[0];
       handleOpenPopUp(dialog)
+      area.val('');
     }
   });
-
-
 // Event listener for close button click
-closePopupBtn.on("click", function () {
-  const dialog = $("#resultPopup")[0];
-  handleCLosePopUp(dialog, optionalContent, expandResultBtn);
-});
+  closePopupBtn.on("click", function () {
+    handleCLosePopUp(dialog, optionalContent, expandResultBtn, mainResult, optOne, optTwo);
+  });
 
-// Event listener for dialog close event
-resultPopup.on("close", function () {
-  const dialog = $("#resultPopup")[0];
-  handleCLosePopUp(dialog, optionalContent, expandResultBtn);
-});
+  // Event listener for dialog close event
+  resultPopup.on("close", function () {
+    handleCLosePopUp(dialog, optionalContent, expandResultBtn, mainResult, optOne, optTwo);
+  });
 
-
-  // Event listener for expand/collapse button click
   expandResultBtn.on("click", async function (event) {
-    optionalContent.toggleClass("expanded");
-    // Update button text based on content visibility
-    if (optionalContent.hasClass("expanded")) {
-      expandResultBtn.text("Hide other model responses");
-      await handleOptional(event,"http://127.0.0.1:5002/NB/get_result", formData);
-    } else {
-      expandResultBtn.text("View how other models have responded");
-    }
+    URL = "http://127.0.0.1:5002/NB/get_result";
+    showOptionalResults(event, optionalContent, expandResultBtn, URL, NBformData)
+  });
+
+  $("#countPlotBtn").on("click", async function (event) {
+    setupChartToggle("#countPlotBtn","#optional-graphs", "http://127.0.0.1:5002/getNBData", "myChart", "Generate Class Ratio", "Hide graph")
+  });
+  
+  $("#wordCountBtn").on("click", async function (event) {
+    setupChartToggle("#wordCountBtn","#optional-mean", "http://127.0.0.1:5002/getWCData", "wcChart", "Generate Word Count", "Hide graph")
   });
 });
 
-
-$(document).ready(function () {
-  const countPlotBtn = $("#countPlotBtn");
-  const optionalContent = $("#optional-graphs");
-  let myChart = null;
-  countPlotBtn.on("click", async function () {
-    optionalContent.toggleClass("expanded");
-    if (optionalContent.hasClass("expanded")) {
-      countPlotBtn.text("Hide graph");
-      const data = await fetchDataAndDrawChart("http://127.0.0.1:5002/getNBData");
-      // Ensure the canvas is visible before drawing the chart
-      optionalContent.show();
-      if (myChart) {
-        myChart.destroy();
-      }
-      // Draw new chart
-      myChart = drawChart(data, "myChart");
-    } else {
-      countPlotBtn.text("Generate graph");
-      optionalContent.hide();
-      if (myChart) {
-        myChart.destroy();
-        myChart = null;
-        console.log("Chart destroyed");
-      }
-    }
-  });
-});
-
-
-$(document).ready(function () {
-  const countPlotBtn = $("#wordCountBtn");
-  const optionalContent = $("#optional-mean");
-  let myChart = null;
-  countPlotBtn.on("click", async function () {
-    optionalContent.toggleClass("expanded");
-    if (optionalContent.hasClass("expanded")) {
-      countPlotBtn.text("Hide graph");
-      // Fetch data and draw chart
-      const data = await fetchDataAndDrawChart("http://127.0.0.1:5002/getWCData");
-      // Ensure the canvas is visible before drawing the chart
-      optionalContent.show();
-      if (myChart) {
-        myChart.destroy();
-      }
-      myChart = drawChart(data, "wcChart");
-      console.log(myChart)
-    } else {
-      countPlotBtn.text("Generate Word Cloud");
-      optionalContent.hide();
-      if (myChart) {
-        myChart.destroy();
-        myChart = null;
-      }
-    }
-  });
-});
 
