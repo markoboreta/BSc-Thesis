@@ -127,7 +127,7 @@ async function fetchDataAndDrawChart(endpointUrl) {
 
 
 
-async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData,optOne, optTwo)
+async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData)
 {
   try{
     optionalContent.toggleClass("expanded");
@@ -227,7 +227,7 @@ async function handleSubmit(event, mainurl, formData, mainResult) {
     const [newResult] = await Promise.all([makePrediction(mainurl, formData)]);
     $(mainResult).text(newResult.result);
     console.log("Result ", newResult)
-    return 1;
+    return newResult;
   } catch (error) {
     displayAlert(
       "An error occurred while processing the data.",
@@ -304,6 +304,16 @@ async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generate
     }
 }
 
+  // Store and retrieve formData using jQuery's data method
+  function storeFormData(submitBtn,key ,formData) {
+    submitBtn.data(key, formData);
+  }
+
+  function retrieveFormData(submitBtn, key) {
+    return submitBtn.data(key);
+  }
+
+
 /*export {
   handleSubmit,
   handleOptional,
@@ -314,5 +324,4 @@ async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generate
   handleOpenPopUp,
   setupChartToggle,
   showOptionalResults,
-  
 };*/

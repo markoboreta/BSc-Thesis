@@ -1,4 +1,4 @@
-FROM python:3.8-slim AS builder
+FROM python:3.11-slim AS builder
 
 # Set working directory
 WORKDIR /PAapp
@@ -11,7 +11,6 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
         python3-dev \
-        libgomp1 \
         && \
     rm -rf /var/lib/apt/lists/*
 
@@ -19,7 +18,7 @@ RUN apt-get update && \
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 # Use a lightweight base image for the runtime stage
-FROM python:3.8-slim
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /PAapp

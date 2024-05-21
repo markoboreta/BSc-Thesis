@@ -1,7 +1,7 @@
 import json
 import re
 from flask import Flask, render_template, request, jsonify
-from LR_service import LRModel 
+from LR import LRModel 
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictPA, PredictNB
 from flask_restful import Api
@@ -17,10 +17,6 @@ class LRApp(Service):
         self.api.add_resource(PredictPA, '/api/predict_pa')
         
     def set_up_routes(self):
-
-        @self.route('/favicon.ico')
-        def favicon():
-            return '', 204
 
         # route for the main page of the 
         @self.route("/LR_page", methods=["GET", "POST"])
@@ -85,6 +81,6 @@ class LRApp(Service):
             else:
                 return jsonify(error="Method not allowed."), 405
 
+app = LRApp(__name__)
 if __name__ == "__main__":
-    app = LRApp(__name__)
     app.run(host="0.0.0.0", port=5001, debug=True)

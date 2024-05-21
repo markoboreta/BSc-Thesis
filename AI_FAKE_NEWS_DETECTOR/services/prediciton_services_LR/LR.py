@@ -13,9 +13,9 @@ class LR(Model):
             print(">>>>>>>>>>ARTICLE\n\n", len(article))
             prediction = self.verdict(article)
             if prediction[0] == 0:
-                return "The news article is highly likely to be real according to LR."
-            else:
                 return "The news article is highly likely to be fake according to LR."
+            else:
+                return "The news article is highly likely to be real according to LR."
         except Exception as e:
             return None
         

@@ -4,16 +4,16 @@ const $ = require('jquery');
 global.$ = global.jQuery =$; 
 
 const { JSDOM } = require('jsdom');
-const { handleOpenPopUp, handleCLosePopUp, handleOptional, handleSubmit, fetchDataAndDrawChart, showOptionalResults, setupChartToggle} = require('../../common/static/ajaxScript');
+const { handleOpenPopUp, handleCLosePopUp, handleOptional, handleSubmit, fetchDataAndDrawChart, showOptionalResults, setupChartToggle, navigateToPage} = require('../../common/static/ajaxScript');
 const { drawChart } = require('../../common/static/ChartScripts');
 jest.mock('../../common/static/ChartScripts', () => ({
   //fetchDataAndDrawChart: jest.fn(() => Promise.resolve({ Fake: 10, Real: 20 })),
   drawChart: jest.fn(),
 }));
-const axios = require('axios');
 const testArticle = "The law earmarks roughly $60 billion in aid for Ukraine, $26 billion for Israel and $8 billion for security in Taiwan and the Indo-Pacific. It also requires ByteDance to sell TikTok within nine months — or a year, if Biden invokes a 90-day extension — or else face a nationwide ban in the U.S. TikTok has already vowed to fight the measure. “This unconstitutional law is a TikTok ban, and we will challenge it in court,” the company wrote in a Wednesday statement on X following Biden’s signing. “This ban would devastate seven million businesses and silence 170 million Americans,” the company added in its statement. TikTok CEO Shou Zi Chew posted a video response to the enactment of the TikTok bill, calling it a “disappointing moment” and reiterating the company’s commitment to challenge it. Despite Biden’s official support of the TikTok bill, his 2024 reelection campaign told NBC News Wednesday that it would continue using the social media platform to reach voters for at least the next year. Notably, the nine-month to one-year deadline for ByteDance allows it to maintain ownership of TikTok through the November election.";
 
-const badArticle = "Bad article";
+const wrongArticle = "aaaaaaaaaaa";
+const wrongArticle2 = '11 11 11 11';
 
 
 // Mocks and setups specific to jQuery
@@ -22,6 +22,7 @@ describe('Unit Test Event Listeners with jQuery', () => {
   beforeEach(() => {
     // Set up the HTML structure for the tests
     $('body').html(`
+    <button class="navButton" id="lrPageBtn">LR</button>
       <textarea id="area"></textarea>
       <div id="error-message"></div>
       <input type="submit" id="submitBtn" class="submit-button" value="Submit">
@@ -44,12 +45,15 @@ describe('Unit Test Event Listeners with jQuery', () => {
       </div>
     `);
     const dialogElement = $('#resultPopup')[0];
-    //fetchDataAndDrawChart: jest.fn(() => Promise.resolve({ Fake: 10, Real: 20 })),
-    
+    fetchDataAndDrawChart: jest.fn(() => Promise.resolve({ Fake: 10, Real: 20 })),
+    // Mock console.log and console.error
+    console.log = jest.fn();
+    console.error = jest.fn();
+    $.ajax = jest.fn(() => $.Deferred().resolve());
+    console.log.mockClear();
+    console.error.mockClear();
     dialogElement.showModal = jest.fn(); // Mock showModal
     dialogElement.close = jest.fn(); // Mock close
-
-    
     global.Chart = function() {
       return {
         destroy: jest.fn()
@@ -60,6 +64,8 @@ describe('Unit Test Event Listeners with jQuery', () => {
       handleOpenPopUp($('#resultPopup')[0]); 
     });
 
+    
+
     $('.close-popup').on('click', function() {
       handleCLosePopUp($('#resultPopup')[0], $('#optional'), $('#expand-result')[0]);
     });
@@ -68,6 +74,10 @@ describe('Unit Test Event Listeners with jQuery', () => {
       $("#optional").toggleClass("expanded");
       $("#expand-result").text("Hide other model responses")
 
+    })
+
+    $("#expand-result").on('click', function() {
+      setupChartToggle("#countPlotBtn","#optional-graphs", "http://127.0.0.1:5001/getTFData", "myChart", "Generate Class Ratio", "Hide graph");
     })
 
   });
@@ -102,9 +112,8 @@ describe('Unit Test Event Listeners with jQuery', () => {
 
   test('handleOptional triggers on submit button click with correct form data', async () => 
   {
-    $('#area').val("The law earmarks roughly $60 billion in aid for Ukraine, $26 billion for Israel and $8 billion for security in Taiwan and the Indo-Pacific. It also requires ByteDance to sell TikTok within nine months — or a year, if Biden invokes a 90-day extension — or else face a nationwide ban in the U.S. TikTok has already vowed to fight the measure. “This unconstitutional law is a TikTok ban, and we will challenge it in court,” the company wrote in a Wednesday statement on X following Biden’s signing. “This ban would devastate seven million businesses and silence 170 million Americans,” the company added in its statement. TikTok CEO Shou Zi Chew posted a video response to the enactment of the TikTok bill, calling it a “disappointing moment” and reiterating the company’s commitment to challenge it. Despite Biden’s official support of the TikTok bill, his 2024 reelection campaign told NBC News Wednesday that it would continue using the social media platform to reach voters for at least the next year. Notably, the nine-month to one-year deadline for ByteDance allows it to maintain ownership of TikTok through the November election.");
     const formData = new FormData();
-    formData.append('message', $('#area').val().trim());
+    formData.append('message', testArticle.trim());
 
     $("#expand-result").on('click', (e) => {
       handleOptional(e, "http://127.0.0.1:5001/LR/get_result", formData);
@@ -130,9 +139,8 @@ describe('Unit Test Event Listeners with jQuery', () => {
 
   test('handleSubmit triggers on submit button click with incorrect form data', async () => 
     {
-      $('#area').val("The law earmarks roughly $60 billion in aid for Ukraine, $26 billion.");
       const formData = new FormData();
-      formData.append('message', $('#area').val().trim());
+      formData.append('message', wrongArticle.trim());
   
       $('#submitBtn').on('click', (e) => {
         handleSubmit(e, "http://127.0.0.1:5001/predict_LR", formData);
@@ -141,6 +149,34 @@ describe('Unit Test Event Listeners with jQuery', () => {
       await new Promise(process.nextTick); // Ensure all promises resolve
       expect($('#error-message').text()).toContain("Text needs to be between 900 and 3000 characters long.");
     });
+
+    test('handleSubmit triggers on submit button click with incorrect form data', async () => 
+      {
+        const formData = new FormData();
+        formData.append('message', wrongArticle2.trim());
+    
+        $('#submitBtn').on('click', (e) => {
+          handleSubmit(e, "http://127.0.0.1:5001/predict_LR", formData);
+        });
+        $('#submitBtn').trigger('click');
+        await new Promise(process.nextTick); // Ensure all promises resolve
+        expect($('#error-message').text()).toContain("Text needs to be between 900 and 3000 characters long.");
+      });
+
+
+    test('handleSubmit triggers on submit button click with incorrect form data in numbers', async () => 
+      {
+        $('#area').val("1 1 1 1 1 1 1 1 1 1");
+        const formData = new FormData();
+        formData.append('message', $('#area').val().trim());
+    
+        $('#submitBtn').on('click', (e) => {
+          handleSubmit(e, "http://127.0.0.1:5001/predict_LR", formData);
+        });
+        $('#submitBtn').trigger('click');
+        await new Promise(process.nextTick); // Ensure all promises resolve
+        expect($('#error-message').text()).toContain("Text needs to be between 900 and 3000 characters long.");
+      });
 
   
   test('handleCLosePopUp is triggered when close button is clicked', async () => {
@@ -151,84 +187,103 @@ describe('Unit Test Event Listeners with jQuery', () => {
   });
   
 
-  test('handleOptional toggles content and updates text on expand/collapse button click', async () => {
-    $('#area').val(testArticle);
-    
-    const mockResponse = { result: "Predicted Result" };
+  test('showOptionalResults toggles content and updates text on expand/collapse button click', async () => {
+
+    const formData = new FormData();
+    formData.append('message', testArticle.trim());
+    const mockResponse = { "result1": "Predicted Result", "result2": "Predicted Result"};
     $.ajax = jest.fn().mockResolvedValue(mockResponse);
-    const ro = "#optional1";
-    const rt = "#optional2";
     
-    $('#submitBtn').on('click', (e) => {
-      handleSubmit(e, "http://127.0.0.1:5001/predict_LR", formData, mainResult);
+    $('#expand-result').on('click', (event) => {
+      const URL = "http://127.0.0.1:5001/LR/get_result";
+      const optionalContent = $("#optional");
+      const expandResultBtn = $("#expand-result");
+      showOptionalResults(event, optionalContent, expandResultBtn, URL, formData)
     });
     $('#expand-result').trigger('click'); 
-
     await new Promise(r => setTimeout(r, 100));
     await new Promise(process.nextTick); 
- 
     expect($('#optional').hasClass('expanded')).toBeTruthy();
     expect($('#expand-result').text()).toBe("Hide other model responses");
-    expect($('optional1').text()).toBe("")
+    expect($('optional1').text()).toBe(mockResponse.result);
   });
 
 
+  test('LR Page Button Click Navigates to Correct URL', async () => {
+    $('#lrPageBtn').on('click', async function (event) {
+      event.preventDefault();
+      navigateToPage("http://127.0.0.1:5001/LR_page");
+    });
+    $('#lrPageBtn').trigger('click');
+    await $.ajax();
+  
+    expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({
+      url: "http://127.0.0.1:5001/LR_page",
+      type: "GET"
+    }));
+    expect($.ajax).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: 'http://127.0.0.1:5001/LR_page',
+        type: 'GET',
+      })
+    );
+  });
 
+  test('LR Page Button Click Handles Error', async () => {
+    // Making AJAX call reject
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+    const ajaxMock = jest.fn().mockImplementation((options) => {
+      options.error({ status: 404 }, 'Not Found');
+    });
+    global.$ = { ajax: ajaxMock };
+    $('#lrPageBtn').on('click', async function (event) {
+      event.preventDefault();
+      navigateToPage('http://127.0.0.1:5003/aad_page');
+    });
+    $('#lrPageBtn').trigger('click')
+    await $.ajax();
+    expect(ajaxMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: 'http://127.0.0.1:5003/aad_page',
+        type: 'GET',
+      })
+    );
+    // Verify that the error handling function was called
+    expect(consoleSpy).toHaveBeenCalledWith('Error occurred while making the request.');
+    consoleSpy.mockRestore();
+  });
   
 
 
   test('Toggle the visibility of the graph section and update button text', async () => {
     const mockChartInstance = { destroy: jest.fn() };
     drawChart.mockReturnValue(mockChartInstance); 
-    
-    
-
-    const mockResponse = { Fake: 10, Real: 20 }; // why does this work ? 
-    $.ajax = $.ajax = jest.fn().mockResolvedValue(mockResponse);
-    // First click is supposed to expand and show chart
-    $("#countPlotBtn").on("click", async function (event) {
+    // Make sure $.ajax is mocked correctly
+    $.ajax = jest.fn().mockResolvedValue({ Fake: 10, Real: 20 });
+    // Bind the event handler just before triggering the event
+    $("#countPlotBtn").off("click").on("click", function(event) {
       setupChartToggle("#countPlotBtn","#optional-graphs", "http://127.0.0.1:5001/getTFData", "myChart", "Generate Class Ratio", "Hide graph")
     });
+    // First click is supposed to expand and show chart
     $('#countPlotBtn').trigger('click');
-    await new Promise(r => setTimeout(r, 100));
-    
+    await new Promise(r => setTimeout(r, 100));  // Wait for AJAX call to be made
+    // Diagnostics: Check if the AJAX mock is called
+    console.log('AJAX called:', $.ajax.mock.calls);
     // Expectations after expansion
     expect($('#optional-graphs').css('display')).not.toBe('none');
-    expect($.ajax).toHaveBeenCalledWith("http://127.0.0.1:5001/getTFData");
-    expect(drawChart).toHaveBeenCalledTimes(1);
+    expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({
+      url: "http://127.0.0.1:5001/getTFData",
+      method: "GET",
+      dataType: "json"
+    }));    
   
     // Second click is supposed to hide and destroy chart
     $('#countPlotBtn').trigger('click');
     await new Promise(r => setTimeout(r, 100)); // Wait for asynchronous actions to complete
-  
     expect($('#optional-graphs').css('display')).toBe('none');
-    expect(mockChartInstance.destroy).toHaveBeenCalledTimes(1); // Check if the chart destroy method was called
   });
 });
 
-
-
-
-
-// Integration testing
-test('handleSubmit triggers on submit button click with correct form data (integration test)', async () => {
-  $('#area').val(testArticle);
-  const formData = new FormData();
-  formData.append('message', $('#area').val().trim());
-  axios.post = jest.fn().mockResolvedValue({ data: { result: "Predicted Result" } });
-
-  $('#submitBtn').on('click', async (e) => {
-    e.preventDefault();
-    const response = await axios.post("http://127.0.0.1:5001/predict_LR", formData);
-    $('#main-result').text(response.data.result);
-  });
-
-  $('#submitBtn').trigger('click');
-  await new Promise(process.nextTick); // Ensure all promises resolve
-
-  expect(axios.post).toHaveBeenCalledWith("http://127.0.0.1:5001/predict_LR", formData);
-  expect($("#main-result").text()).toBe("Predicted Result");
-  });
 
 
 

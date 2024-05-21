@@ -1,5 +1,4 @@
 import os
-import logging
 import json
 import requests
 from flask import Flask, render_template, request, jsonify
@@ -24,15 +23,18 @@ class NBApp(Service):
         self.api.add_resource(PredictLR, '/api/predict_lr')
   
     def set_up_routes(self):
-
-        @self.route('/favicon.ico')
-        def favicon():
-            return '', 204
         # route for the main page of the 
         @self.route("/NB_page", methods=["GET", "POST"])
         def NB_page():
             return render_template("Model_3.html")
         
+        @self.route('/getNBData')
+        def get_graph_data():
+            self.load_json_data("static/TF.json")
+
+        @self.route('/getWCData')
+        def get_WC_data():
+            self.load_json_data("static/WC.json")
         
         @self.route("/predict_NB", methods=["POST"])
         def predict_NB():
@@ -54,21 +56,7 @@ class NBApp(Service):
                 print("Not goot method")
 
         # to be added for the json formatt
-        @self.route('/getNBData')
-        def get_graph_data():
-            # Load JSON data from file
-            with open("static/TF.json") as data_file:
-                data = json.load(data_file)
-            # Return JSON response
-            return jsonify(data)
-
-        @self.route('/getWCData')
-        def get_WC_data():
-            # Load JSON data from file
-            with open("static/WC.json") as data_file:
-                data = json.load(data_file)
-            # Return JSON response
-            return jsonify(data)
+        
 
         @self.route("/NB/get_result", methods=["POST"])
         def predict_toegther():
@@ -76,7 +64,6 @@ class NBApp(Service):
                 data = request.form.get("message", "")
                 predict_lr = PredictLR()
                 predict_pa = PredictPA()
-                
                 if not data:
                     return jsonify(error="Error: Invalid input. Please provide a 'message' field in JSON format."), 400
                 try:
@@ -87,7 +74,6 @@ class NBApp(Service):
                         return jsonify(lr_response) 
                     if pa_response[1] != 200:
                         return jsonify(pa_response)
-                    
                     # Combine the results from all models
                     combined_result = {
                         "result1": lr_response[0],
@@ -98,7 +84,6 @@ class NBApp(Service):
                 except Exception as e:
                     error_message = f"Error occurred while processing data: {str(e)}"
                     return jsonify(error=error_message), 500
-
             else:
                 return jsonify(error="Method not allowed."), 405
 

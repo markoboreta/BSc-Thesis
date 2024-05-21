@@ -1,8 +1,7 @@
 import pytest
 import json
 import os
-from unittest.mock import mock_open, patch, Mock
-from app import LRApp
+from services.prediciton_services_LR.app import LRApp
 
 # add support for some mocks and some integration tests
 
@@ -55,18 +54,16 @@ def test_handle_error_404(client):
 
 # Test whether the backend for graph data is handled well
 def test_get_graph_data(client):
-    with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:
         response = client.get('/getTFData')
         assert response.status_code == 200
         data = json.loads(response.data)
-        assert data == {'data': [1, 2, 3]}
+        assert data == {"Fake": 22850, "Real": 21416}
 
 # the same test for the word count
 def test_get_wc_data(client):
-    with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:
         response = client.get('/getWCData')
         assert response.status_code == 200
         data = json.loads(response.data)
-        assert data == {'data': [1, 2, 3]}
+        assert data == {"Fake": 1310, "Real": 2167}
 
 

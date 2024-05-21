@@ -51,17 +51,15 @@ def test_handle_error_404(client):
     assert b'You have reached the error 404 page' in response.data
 
 def test_get_graph_data(client):
-    with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:
         response = client.get('/getNBData')
         assert response.status_code == 200
         data = json.loads(response.data)
-        assert data == {'data': [1, 2, 3]}
+        assert data == {"Fake": 22850, "Real": 21416}
 
 def test_get_wc_data(client):
-    with patch('app.open', mock_open(read_data='{"data": [1, 2, 3]}')) as mock_file:
         response = client.get('/getWCData')
         assert response.status_code == 200
         data = json.loads(response.data)
-        assert data == {'data': [1, 2, 3]}
+        assert data == {"Fake": 1310, "Real": 2167}
 
 

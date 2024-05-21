@@ -3,7 +3,6 @@ import requests
 
 # Flask-Restful API for communication between the backend services 
 
-
 class API_Class(Resource):
 
     def __init__(self, url):

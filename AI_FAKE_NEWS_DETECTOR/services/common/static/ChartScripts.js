@@ -55,11 +55,11 @@ function drawChart(data, canvasID) {
 }
 
 
-function clearCanavs()
+/*function clearCanavs()
 {
   const canvas = document.getElementById("myChart");
   const ctx = document.getElementById("myChart").getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+}*/
 
-// /export{drawChart}
+//export{drawChart}

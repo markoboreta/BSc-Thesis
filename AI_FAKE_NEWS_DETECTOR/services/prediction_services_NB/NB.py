@@ -25,13 +25,13 @@ class NB(Model):
     def predict_news_article(self, article):
         prediction = super().verdict(article)
         if prediction == 0:
-            return "The news article is highly likely to be real according to NB."
-        else:
             return "The news article is highly likely to be fake according to NB."
+        else:
+            return "The news article is highly likely to be real according to NB."
         
 # Set up LR model below
-model_path = 'naive_model_new.pkl'
-vect_path = 'count_vectorizer.pkl'
+model_path = 'model_and_vect/naive_model_new.pkl'
+vect_path = 'model_and_vect/count_vectorizer.pkl'
 
 NBModel = NB(model_path, vect_path)
 
