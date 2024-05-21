@@ -62,4 +62,4 @@ function drawChart(data, canvasID) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }*/
 
-export{drawChart}
+//export{drawChart}

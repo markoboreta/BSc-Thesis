@@ -30,8 +30,8 @@ class NB(Model):
             return "The news article is highly likely to be real according to NB."
         
 # Set up LR model below
-model_path = 'naive_model_new.pkl'
-vect_path = 'count_vectorizer.pkl'
+model_path = 'model_and_vect/naive_model_new.pkl'
+vect_path = 'model_and_vect/count_vectorizer.pkl'
 
 NBModel = NB(model_path, vect_path)
 

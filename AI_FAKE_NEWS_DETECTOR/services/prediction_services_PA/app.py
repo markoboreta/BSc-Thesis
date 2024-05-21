@@ -26,10 +26,6 @@ class PA_App(Service):
   
     def set_up_routes(self):
 
-        @self.route('/favicon.ico')
-        def favicon():
-            return '', 204
-
         # route for the main page of the 
         @self.route("/PA_page", methods=["GET", "POST"])
         def PA_page():

@@ -1,7 +1,6 @@
 import pytest
 import json
 import os
-from unittest.mock import mock_open, patch, Mock
 from services.prediciton_services_LR.app import LRApp
 
 # add support for some mocks and some integration tests

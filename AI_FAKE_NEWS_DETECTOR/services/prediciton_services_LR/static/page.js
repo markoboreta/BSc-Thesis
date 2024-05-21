@@ -4,9 +4,9 @@ $(document).ready(function () {
   const expandResultBtn = $("#LR_expand_result");
   const optionalContent = $("#LR_optional");
   const dialog = $("#LR_resultPopup")[0];
-  mainResult = "#LR-main-result";
-  optOne = "#optional1";
-  optTwo = "#optional2";
+  const mainResult = "#LR-main-result";
+  const optOne = "#optional1";
+  const optTwo = "#optional2";
   const submitBtn = $("#submitBtn");
 
   

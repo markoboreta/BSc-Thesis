@@ -28,6 +28,14 @@ class NBApp(Service):
         def NB_page():
             return render_template("Model_3.html")
         
+        @self.route('/getNBData')
+        def get_graph_data():
+            self.load_json_data("static/TF.json")
+
+        @self.route('/getWCData')
+        def get_WC_data():
+            self.load_json_data("static/WC.json")
+        
         @self.route("/predict_NB", methods=["POST"])
         def predict_NB():
             if request.method == "POST":
@@ -48,13 +56,7 @@ class NBApp(Service):
                 print("Not goot method")
 
         # to be added for the json formatt
-        @self.route('/getNBData')
-        def get_graph_data():
-            self.load_json_data("static/TF.json")
-
-        @self.route('/getWCData')
-        def get_WC_data():
-            self.load_json_data("static/WC.json")
+        
 
         @self.route("/NB/get_result", methods=["POST"])
         def predict_toegther():

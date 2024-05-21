@@ -18,10 +18,6 @@ class LRApp(Service):
         
     def set_up_routes(self):
 
-        @self.route('/favicon.ico')
-        def favicon():
-            return '', 204
-
         # route for the main page of the 
         @self.route("/LR_page", methods=["GET", "POST"])
         def LR_page():

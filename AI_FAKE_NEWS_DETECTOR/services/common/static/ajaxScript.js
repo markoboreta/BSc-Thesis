@@ -314,7 +314,7 @@ async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generate
   }
 
 
-export {
+/*export {
   handleSubmit,
   handleOptional,
   fetchDataAndDrawChart,
@@ -324,4 +324,4 @@ export {
   handleOpenPopUp,
   setupChartToggle,
   showOptionalResults,
-};
+};*/

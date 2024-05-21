@@ -4,15 +4,17 @@ $(document).ready(function () {
   const expandResultBtn = $("#expand-result");
   const optionalContent = $("#optional");
   const dialog = $("#NB_resultPopup")[0];
-  optOne = "#optional1";
-  optTwo = "#optional2";
-  mainResult = "#NB-main-result";
+  const optOne = "#optional1";
+  const optTwo = "#optional2";
+  const mainResult = "#NB-main-result";
   
   // Event listener for submit button click
   $("#submitBtn").on("click", async function (event) {
     event.preventDefault();
-    const area = $("#NB_area");
-    NBformData = new FormData();
+    const form = $("#lrForm")[0];
+    const LRformData = new FormData(form);      
+    //LRformData.append('message', area.val().trim());
+    storeFormData(submitBtn, 'LRformData', LRformData);
     NBformData.append('message', area.val().trim());
     console.log(NBformData);
 
