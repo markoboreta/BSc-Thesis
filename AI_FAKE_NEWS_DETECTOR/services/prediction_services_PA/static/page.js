@@ -3,22 +3,21 @@ $(document).ready(function () {
   const closePopupBtn = $(".close-popup");
   const expandResultBtn = $("#PA_expand_result");
   const optionalContent = $("#optional");
-  optOne = "#optional1";
-  optTwo = "#optional2";
-  mainResult = "#PA-main-result";
   const dialog = $("#PA_resultPopup")[0];
-
+  let optOne = "#optional1";
+  let optTwo = "#optional2";
+  let mainResult = "#PA-main-result";
+  const submitBtn = $("#PAsubmitBtn");
 
   // Event listener for submit button click
   $("#submitBtn").on("click", async function (event) {
     event.preventDefault();
-    const area = $("#PA_area");
-    PAformData = new FormData();
-    PAformData.append("message", area.val().trim());
+    const form = $("#paForm")[0];
+    const PAformData = new FormData(form);
+    // PAformData.append("message", area.val().trim());  
+    storeFormData(submitBtn, 'PAformData', PAformData);
     console.log(PAformData);
-    if (
-      await handleSubmit(event, "http://127.0.0.1:5003/predict_PA", PAformData, mainResult)
-    ) {
+    if (await handleSubmit(event, "http://127.0.0.1:5003/predict_PA", PAformData, mainResult)) {
       handleOpenPopUp(dialog);
     }
   });
@@ -35,10 +34,10 @@ $(document).ready(function () {
 
    // Event listener for expand/collapse button click
   expandResultBtn.on("click", async function (event) {
+    const formData = retrieveFormData(submitBtn);
     URL = "http://127.0.0.1:5003/PA/get_result";
-    showOptionalResults(event, optionalContent, expandResultBtn, URL, PAformData);
+    showOptionalResults(event, optionalContent, expandResultBtn, URL, formData);
   });
-
 
   // event listener for true false graph
   $("#countPlotBtn").on("click", async function (event) {

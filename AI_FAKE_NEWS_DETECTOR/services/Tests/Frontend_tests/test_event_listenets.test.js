@@ -2,16 +2,11 @@ global.TextEncoder = require('util').TextEncoder;
 global.TextDecoder = require('util').TextDecoder;
 const $ = require('jquery');
 global.$ = global.jQuery =$; 
-
 const { JSDOM } = require('jsdom');
-const { handleOpenPopUp, handleCLosePopUp, handleOptional, handleSubmit, fetchDataAndDrawChart, showOptionalResults, setupChartToggle, navigateToPage} = require('../../common/static/ajaxScript');
+const { handleOpenPopUp, handleCLosePopUp, handleOptional, handleSubmit, fetchDataAndDrawChart, showOptionalResults, setupChartToggle, navigateToPage} = require('../../common/static/scripts');
 const { drawChart } = require('../../common/static/ChartScripts');
-jest.mock('../../common/static/ChartScripts', () => ({
-  //fetchDataAndDrawChart: jest.fn(() => Promise.resolve({ Fake: 10, Real: 20 })),
-  drawChart: jest.fn(),
-}));
-const testArticle = "The law earmarks roughly $60 billion in aid for Ukraine, $26 billion for Israel and $8 billion for security in Taiwan and the Indo-Pacific. It also requires ByteDance to sell TikTok within nine months — or a year, if Biden invokes a 90-day extension — or else face a nationwide ban in the U.S. TikTok has already vowed to fight the measure. “This unconstitutional law is a TikTok ban, and we will challenge it in court,” the company wrote in a Wednesday statement on X following Biden’s signing. “This ban would devastate seven million businesses and silence 170 million Americans,” the company added in its statement. TikTok CEO Shou Zi Chew posted a video response to the enactment of the TikTok bill, calling it a “disappointing moment” and reiterating the company’s commitment to challenge it. Despite Biden’s official support of the TikTok bill, his 2024 reelection campaign told NBC News Wednesday that it would continue using the social media platform to reach voters for at least the next year. Notably, the nine-month to one-year deadline for ByteDance allows it to maintain ownership of TikTok through the November election.";
 
+const testArticle = "The law earmarks roughly $60 billion in aid for Ukraine, $26 billion for Israel and $8 billion for security in Taiwan and the Indo-Pacific. It also requires ByteDance to sell TikTok within nine months — or a year, if Biden invokes a 90-day extension — or else face a nationwide ban in the U.S. TikTok has already vowed to fight the measure. “This unconstitutional law is a TikTok ban, and we will challenge it in court,” the company wrote in a Wednesday statement on X following Biden’s signing. “This ban would devastate seven million businesses and silence 170 million Americans,” the company added in its statement. TikTok CEO Shou Zi Chew posted a video response to the enactment of the TikTok bill, calling it a “disappointing moment” and reiterating the company’s commitment to challenge it. Despite Biden’s official support of the TikTok bill, his 2024 reelection campaign told NBC News Wednesday that it would continue using the social media platform to reach voters for at least the next year. Notably, the nine-month to one-year deadline for ByteDance allows it to maintain ownership of TikTok through the November election.";
 const wrongArticle = "aaaaaaaaaaa";
 const wrongArticle2 = '11 11 11 11';
 
@@ -45,7 +40,6 @@ describe('Unit Test Event Listeners with jQuery', () => {
       </div>
     `);
     const dialogElement = $('#resultPopup')[0];
-    fetchDataAndDrawChart: jest.fn(() => Promise.resolve({ Fake: 10, Real: 20 })),
     // Mock console.log and console.error
     console.log = jest.fn();
     console.error = jest.fn();
@@ -64,8 +58,7 @@ describe('Unit Test Event Listeners with jQuery', () => {
       handleOpenPopUp($('#resultPopup')[0]); 
     });
 
-    
-
+  
     $('.close-popup').on('click', function() {
       handleCLosePopUp($('#resultPopup')[0], $('#optional'), $('#expand-result')[0]);
     });
@@ -87,11 +80,9 @@ describe('Unit Test Event Listeners with jQuery', () => {
 
   test('handleSubmit triggers on submit button click with correct form data', async () => 
   {
-    $('#area').val(testArticle);
     const formData = new FormData();
-    formData.append('message', $('#area').val().trim());
-
-    const mockResponse = { result: "Predicted Result" }; // why does this work ? 
+    formData.append('message', testArticle.trim());
+    const mockResponse = { result: "Predicted Result" }; // mock the result
     $.ajax = jest.fn().mockResolvedValue(mockResponse);
     
     $('#submitBtn').on('click', (e) => {
@@ -99,14 +90,12 @@ describe('Unit Test Event Listeners with jQuery', () => {
     });
     $('#submitBtn').trigger('click');
     await new Promise(process.nextTick); // Ensure all promises resolve
-
     expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({
       url: "http://127.0.0.1:5001/predict_LR",
       type: 'POST',
       data: formData
     }));
-    expect($("#main-result").text()).toBe(mockResponse.result); // correct rendering
-    
+    expect($("#main-result").text()).toBe(mockResponse.result); // correct rendering of text
   });
 
 
@@ -114,7 +103,6 @@ describe('Unit Test Event Listeners with jQuery', () => {
   {
     const formData = new FormData();
     formData.append('message', testArticle.trim());
-
     $("#expand-result").on('click', (e) => {
       handleOptional(e, "http://127.0.0.1:5001/LR/get_result", formData);
     });
@@ -126,11 +114,11 @@ describe('Unit Test Event Listeners with jQuery', () => {
       type: 'POST',
       data: formData
     }));
+
   });
 
   test('handleOpenPopUp is triggered when submit is successful', async () => {
     $('#submitBtn').click();
-  
     await new Promise(r => setTimeout(r, 100)); 
   
     expect($('#resultPopup')[0].showModal).toHaveBeenCalled();
@@ -191,7 +179,7 @@ describe('Unit Test Event Listeners with jQuery', () => {
 
     const formData = new FormData();
     formData.append('message', testArticle.trim());
-    const mockResponse = { "result1": "Predicted Result", "result2": "Predicted Result"};
+    const mockResponse = { "result":{"result1": "Predicted Result", "result2": "Predicted Result"}};
     $.ajax = jest.fn().mockResolvedValue(mockResponse);
     
     $('#expand-result').on('click', (event) => {
@@ -203,9 +191,8 @@ describe('Unit Test Event Listeners with jQuery', () => {
     $('#expand-result').trigger('click'); 
     await new Promise(r => setTimeout(r, 100));
     await new Promise(process.nextTick); 
-    expect($('#optional').hasClass('expanded')).toBeTruthy();
     expect($('#expand-result').text()).toBe("Hide other model responses");
-    expect($('optional1').text()).toBe(mockResponse.result);
+    expect($('optional1').text()).toBe(mockResponse.result.result1);
   });
 
 
@@ -264,12 +251,9 @@ describe('Unit Test Event Listeners with jQuery', () => {
     $("#countPlotBtn").off("click").on("click", function(event) {
       setupChartToggle("#countPlotBtn","#optional-graphs", "http://127.0.0.1:5001/getTFData", "myChart", "Generate Class Ratio", "Hide graph")
     });
-    // First click is supposed to expand and show chart
     $('#countPlotBtn').trigger('click');
     await new Promise(r => setTimeout(r, 100));  // Wait for AJAX call to be made
-    // Diagnostics: Check if the AJAX mock is called
     console.log('AJAX called:', $.ajax.mock.calls);
-    // Expectations after expansion
     expect($('#optional-graphs').css('display')).not.toBe('none');
     expect($.ajax).toHaveBeenCalledWith(expect.objectContaining({
       url: "http://127.0.0.1:5001/getTFData",

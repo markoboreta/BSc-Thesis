@@ -30,11 +30,11 @@ class NBApp(Service):
         
         @self.route('/getNBData')
         def get_graph_data():
-            self.load_json_data("static/TF.json")
+            return self.load_json_data("static/TF.json")
 
         @self.route('/getWCData')
         def get_WC_data():
-            self.load_json_data("static/WC.json")
+            return self.load_json_data("static/WC.json")
         
         @self.route("/predict_NB", methods=["POST"])
         def predict_NB():

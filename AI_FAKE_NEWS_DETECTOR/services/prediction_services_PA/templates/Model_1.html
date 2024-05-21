@@ -4,14 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Exploration</title>
-    <style>
-        body {
-            background-color: rgb(104, 105, 104);
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-    </style>
+    <title>Passive Agressive Classifier</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static_bp.get_styles', filename='styles.css') }}">
 </head>
 <body>
@@ -24,7 +17,6 @@
     <script type='text/javascript' src="{{ url_for('static_bp.get_styles', filename='ChartScripts.js') }}"></script>
     
     <div class="container">
-
         <!-- Sidebar navigation -->
         <div class="sidebar">
             <!-- Navigation buttons -->
@@ -48,7 +40,7 @@
                 <textarea name="message" id="PA_area" placeholder="Enter your suspicious article here..." maxlength="3000" minlength="900"></textarea>
                 <div class="result">
                     <span id="char">0 Characters</span>
-                    <button type="submit" id="submitBtn" class="submit-button">Submit</button>
+                    <button type="submit" id="PAsubmitBtn" class="submit-button">Submit</button>
                     <div id="error-message"></div>
                 </div>
             </form>
@@ -68,10 +60,8 @@
             </dialog>
             <div class="additional">
                 <h3>About the model:</h3>
-                <p>Logistic regression is a supervised machine learning model used for classification of data.</p>
-                <p>This specific iteration of the model is best used for smaller news articles between 3500 and 4000
-                    characters, preferably about politics, and specifically about Donald Trump since the training data
-                    was focused on this topic.</p>
+                <p>Passive Aggressive Classifier is a online machine learning model used for classification of data.</p>
+                <p>This specific iteration of the model is best used for smaller news articles between 3500 and 4000 characters, preferably about politics, and specifically about Donald Trump since the training data was focused on this topic.</p>
                 <p>The submitted data is not stored anywhere; it is only preprocessed, and the output is displayed to
                     the user. Refreshing the page will clear the data.</p>
                 <p>The model is Logistic Regression, trained on vectorized data for research purposes, which may limit
@@ -100,12 +90,12 @@
     </div>
     <script>
         // Character count script
-        let area = $('#PA_area');
+        /*let area = $('#PA_area');
         let char = $('#char')[0];
         area.on('input', function () {
             let content = this.value.trim();
             char.textContent = content.length + " Characters";
-        });
+        });*/
         
         
 

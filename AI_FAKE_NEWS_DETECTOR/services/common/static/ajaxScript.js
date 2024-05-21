@@ -14,19 +14,17 @@ function navigateToPage(url) {
   });
 }
 
-
 // Event listeners for navigation buttons, same on every html page
 $(document).ready(function () {
-
   try {
     $("#mainPageBtn").click(async function (event) {
       event.preventDefault();
-       navigateToPage("http://127.0.0.1:5000/");
+      navigateToPage("http://127.0.0.1:5000/");
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-  
+
   // Event listener for LR page navigation
   try {
     $("#lrPageBtn").click(async function (event) {
@@ -34,29 +32,28 @@ $(document).ready(function () {
       navigateToPage("http://127.0.0.1:5001/LR_page");
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-  
+
   // Event listener for NB page navigation
   try {
     $("#nbPageBtn").click(async function (event) {
       event.preventDefault();
-       navigateToPage("http://127.0.0.1:5002/NB_page");
+      navigateToPage("http://127.0.0.1:5002/NB_page");
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-  
+
   try {
     $("#paPageBtn").click(async function (event) {
       event.preventDefault();
       navigateToPage("http://127.0.0.1:5003/PA_page");
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });
-
 
 // Function to handle prediction button, this will send artticle and get result
 async function makePrediction(endpointUrl, formData) {
@@ -70,7 +67,7 @@ async function makePrediction(endpointUrl, formData) {
       processData: false,
       timeout: timeout,
       success: function (data) {
-        console.log("Response returned!")
+        console.log("Response returned!");
         return data;
       },
       error: function (xhr, status, errorThrown) {
@@ -79,18 +76,19 @@ async function makePrediction(endpointUrl, formData) {
           throw new Error(
             "Request timed out after 15 seconds. Please try again."
           );
-        } 
+        }
       },
     });
   } catch (error) {
     console.error(error);
   }
-  
 }
 
 // Function to display error message
 function displayAlert(message, alertClass, divString) {
-  const alertElement = $("<div>").addClass("alert " + alertClass).text(message);
+  const alertElement = $("<div>")
+    .addClass("alert " + alertClass)
+    .text(message);
   const closeButton = $("<strong>").addClass("close").html("&times;");
   alertElement.append(closeButton);
 
@@ -102,7 +100,7 @@ function displayAlert(message, alertClass, divString) {
     alertElement.addClass("fade-out"); // Apply fade-out animation
     setTimeout(function () {
       alertElement.remove();
-    }, 500); 
+    }, 500);
   });
 }
 
@@ -114,7 +112,6 @@ async function fetchDataAndDrawChart(endpointUrl) {
       method: "GET",
       dataType: "json",
     });
-
     return data;
   } catch (error) {
     displayAlert(
@@ -124,8 +121,6 @@ async function fetchDataAndDrawChart(endpointUrl) {
     );
   }
 }
-
-
 
 async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData)
 {
@@ -159,8 +154,7 @@ function openDialog(dialogElement) {
   }
 }
 
-
-// Function to close the PopUp 
+// Function to close the PopUp
 function closeDialog(dialogElement) {
   if (dialogElement && typeof dialogElement.close === "function") {
     dialogElement.close(); // Close the dialog
@@ -176,18 +170,16 @@ function closeDialog(dialogElement) {
 // Function to reset dialog content
 function resetDialogContent(idName) {
   console.log("resetting diagonal");
-  $(idName).text(""); 
-
+  $(idName).text("");
 }
 
 // Function to handle the optional button
 async function handleOptional(event, optionalURL, formData) {
   event.preventDefault();
   let activeRequests = 0;
-  console.log(formData);
+  console.log("Handling optional", formData);
   if (activeRequests > 0) {
-    
-    return; 
+    return;
   }
   activeRequests += 1;
   try {
@@ -208,12 +200,13 @@ async function handleOptional(event, optionalURL, formData) {
   console.log(activeRequests);
 }
 
-// Fucntion to handle submit button 
+// Fucntion to handle submit button
 async function handleSubmit(event, mainurl, formData, mainResult) {
   event.preventDefault();
   const minLength = 900;
   const maxLength = 3000;
   const text = formData.get("message");
+  console.log("Handling optional", formData);
   if (text.length < minLength || text.length > maxLength) {
     event.preventDefault();
     displayAlert(
@@ -226,7 +219,7 @@ async function handleSubmit(event, mainurl, formData, mainResult) {
   try {
     const [newResult] = await Promise.all([makePrediction(mainurl, formData)]);
     $(mainResult).text(newResult.result);
-    console.log("Result ", newResult)
+    console.log("Result ", newResult);
     return newResult;
   } catch (error) {
     displayAlert(
@@ -238,17 +231,12 @@ async function handleSubmit(event, mainurl, formData, mainResult) {
   }
 }
 
-
-
-function handleCLosePopUp(dialog, optionalContent, expandResultBtn, mainResult, optOne, optTwo)
-{
+function handleCLosePopUp(dialog,optionalContent,expandResultBtn,mainResult,optOne,optTwo) {
   if (dialog && typeof dialog.close === "function") {
-    
     // close the optional if open
-    if(optionalContent.hasClass("expanded"))
-    {
+    if (optionalContent.hasClass("expanded")) {
       optionalContent.toggleClass("expanded");
-      expandResultBtn.text("View how other models have responded")
+      expandResultBtn.text("View how other models have responded");
       resetDialogContent(mainResult);
       resetDialogContent(optOne);
       resetDialogContent(optTwo);
@@ -262,9 +250,7 @@ function handleCLosePopUp(dialog, optionalContent, expandResultBtn, mainResult, 
   }
 }
 
-
-function handleOpenPopUp(dialog)
-{
+function handleOpenPopUp(dialog) {
   if (dialog && typeof dialog.showModal === "function") {
     dialog.showModal(); // Show the dialog as a modal
   } else {
@@ -275,44 +261,49 @@ function handleOpenPopUp(dialog)
   }
 }
 
-
-async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generateText, hideText) {
+async function setupChartToggle(buttonId,contentId,fetchUrl,chartId, generateText,hideText) {
   const countPlotBtn = $(buttonId);
   const optionalContent = $(contentId);
   let myChart = null;
 
-    try {
-      optionalContent.toggleClass("expanded");
-      if (optionalContent.hasClass("expanded")) {
-        countPlotBtn.text(hideText);
-        const data = await fetchDataAndDrawChart(fetchUrl);
-        optionalContent.show();
-        if (myChart) {
-          myChart.destroy();
-        }
-        myChart = drawChart(data, chartId);
-      } else {
-        countPlotBtn.text(generateText);
-        optionalContent.hide();
-        if (myChart) {
-          myChart.destroy();
-          myChart = null;
-        }
+  try {
+    optionalContent.toggleClass("expanded");
+    if (optionalContent.hasClass("expanded")) {
+      countPlotBtn.text(hideText);
+      const data = await fetchDataAndDrawChart(fetchUrl);
+      optionalContent.show();
+      if (myChart) {
+        myChart.destroy();
       }
-    } catch (error) {
-      console.error("Error occurred while toggling chart:", error);
+      myChart = drawChart(data, chartId);
+    } else {
+      countPlotBtn.text(generateText);
+      optionalContent.hide();
+      if (myChart) {
+        myChart.destroy();
+        myChart = null;
+      }
     }
+  } catch (error) {
+    console.error("Error occurred while toggling chart:", error);
+  }
 }
 
-  // Store and retrieve formData using jQuery's data method
-  function storeFormData(submitBtn,key ,formData) {
-    submitBtn.data(key, formData);
-  }
+// Store and retrieve formData using jQuery's data method
+function storeFormData(submitBtn, key, formData) {
+  submitBtn.data(key, formData);
+}
 
-  function retrieveFormData(submitBtn, key) {
-    return submitBtn.data(key);
-  }
+function retrieveFormData(submitBtn, key) {
+  return submitBtn.data(key);
+}
 
+function countCharacters(area, char) {
+  area.on('input', function () {
+    let content = this.value.trim();
+    char.textContent = content.length + " Characters";
+  });
+}
 
 /*export {
   handleSubmit,

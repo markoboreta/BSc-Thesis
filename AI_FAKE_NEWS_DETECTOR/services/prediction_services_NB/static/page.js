@@ -4,24 +4,22 @@ $(document).ready(function () {
   const expandResultBtn = $("#expand-result");
   const optionalContent = $("#optional");
   const dialog = $("#NB_resultPopup")[0];
-  const optOne = "#optional1";
-  const optTwo = "#optional2";
-  const mainResult = "#NB-main-result";
+  let optOne = "#optional1";
+  let optTwo = "#optional2";
+  let mainResult = "#NB-main-result";
+  const submitBtn = $("#NBsubmitBtn");
   
   // Event listener for submit button click
-  $("#submitBtn").on("click", async function (event) {
+  $("#NBsubmitBtn").on("click", async function (event) {
     event.preventDefault();
-    const form = $("#lrForm")[0];
-    const LRformData = new FormData(form);      
+    const form = $("#nbForm")[0];
+    const NBformData = new FormData(form);      
     //LRformData.append('message', area.val().trim());
-    storeFormData(submitBtn, 'LRformData', LRformData);
-    NBformData.append('message', area.val().trim());
+    storeFormData(submitBtn, 'NBformData', NBformData);
     console.log(NBformData);
-
     if(await handleSubmit(event, "http://127.0.0.1:5002/predict_NB", NBformData, mainResult))
     {
       handleOpenPopUp(dialog)
-      area.val('');
     }
   });
 // Event listener for close button click
@@ -35,8 +33,9 @@ $(document).ready(function () {
   });
 
   expandResultBtn.on("click", async function (event) {
+    const formData = retrieveFormData(submitBtn);
     URL = "http://127.0.0.1:5002/NB/get_result";
-    showOptionalResults(event, optionalContent, expandResultBtn, URL, NBformData)
+    showOptionalResults(event, optionalContent, expandResultBtn, URL, formData)
   });
 
   $("#countPlotBtn").on("click", async function (event) {

@@ -3,14 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Exploration</title>
-    <style>
-        body {
-            background-color: rgb(104, 105, 104);
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-    </style>
+    <title>Naive Bayes</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static_bp.get_styles', filename='styles.css') }}">
 </head>
 
@@ -47,7 +40,7 @@
                 <textarea name="message" id="NB_area" placeholder="Enter your suspicious article here..." maxlength="3000" minlength="900"></textarea>
                 <div class="result">
                     <span id="char">0 Characters</span>
-                    <input type="submit" id="submitBtn" class="submit-button" value="Submit">
+                    <input type="submit" id="NBsubmitBtn" class="submit-button" value="Submit">
                     <div id="error-message"></div>
                 </div>
             </form>

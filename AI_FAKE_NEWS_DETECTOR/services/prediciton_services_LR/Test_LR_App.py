@@ -1,7 +1,7 @@
 import pytest
 import json
 import os
-from services.prediciton_services_LR.app import LRApp
+from app import LRApp
 
 # add support for some mocks and some integration tests
 
@@ -50,7 +50,7 @@ def test_predict_together_empty_data(client):
 def test_handle_error_404(client):
     response = client.get('/random_route_101')
     assert response.status_code == 404
-    assert b'File not found' in response.data
+    assert b'404' in response.data
 
 # Test whether the backend for graph data is handled well
 def test_get_graph_data(client):

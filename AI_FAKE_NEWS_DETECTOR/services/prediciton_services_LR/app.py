@@ -26,15 +26,11 @@ class LRApp(Service):
         
         @self.route('/getTFData')
         def get_graph_data():
-            with open("static/TF.json") as data_file:
-                data = json.load(data_file)
-            return jsonify(data)
+            return self.load_json_data("static/TF.json")
         
         @self.route('/getWCData')
         def get_WC_data():
-            with open("static/WC.json") as data_file:
-                data = json.load(data_file)
-            return jsonify(data)
+            return self.load_json_data("static/WC.json")
 
         @self.route("/predict_LR", methods=["POST"])
         def predict_LR():
@@ -83,4 +79,4 @@ class LRApp(Service):
 
 app = LRApp(__name__)
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=False)
