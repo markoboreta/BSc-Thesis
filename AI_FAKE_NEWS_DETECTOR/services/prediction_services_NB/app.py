@@ -11,6 +11,7 @@ from common.classes.class_service.service_api import PredictPA, PredictLR
 from flask_restful import Api
 from NB import NBModel
 from common.classes.class_service.service import Service
+import re
 
 
 # Class for the service
@@ -41,9 +42,10 @@ class NBApp(Service):
             if request.method == "POST":
                 data = request.form.get("message", "")
                 print("Data:\n", data);
-                if not data:
+                is_any_text = re.search('[a-zA-Z]', data)
+                if not data or not is_any_text:
                     # If message data is missing or invalid, return an error response
-                    return jsonify(error="Invalid input. Please provide a message."), 400
+                    return (jsonify(error="Invalid input. Please provide a message."), 415)
                 try:
                     # Process the received data
                     processed_result = NBModel.predict_news_article(data)
@@ -62,6 +64,7 @@ class NBApp(Service):
         def predict_toegther():
             if request.method == "POST":
                 data = request.form.get("message", "")
+                
                 predict_lr = PredictLR()
                 predict_pa = PredictPA()
                 if not data:
@@ -71,9 +74,9 @@ class NBApp(Service):
                     lr_response = predict_lr.post({"message" : data})
 
                     if lr_response[1] != 200:
-                        return jsonify(lr_response) 
+                        return lr_response
                     if pa_response[1] != 200:
-                        return jsonify(pa_response)
+                        return pa_response
                     # Combine the results from all models
                     combined_result = {
                         "result1": lr_response[0],

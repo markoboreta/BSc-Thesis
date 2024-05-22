@@ -14,9 +14,8 @@ $(document).ready(function () {
   // Event listener for submit button click
   $("#submitBtn").on("click", async function (event) {
     event.preventDefault();
-    const form = $("#lrForm")[0];
-    const LRformData = new FormData(form);      
-    //LRformData.append('message', area.val().trim());
+    const LRformData = new FormData();      
+    LRformData.append('message', area.val().trim());
     storeFormData(submitBtn, 'LRformData', LRformData);
     if(await handleSubmit(event, "http://127.0.0.1:5001/predict_LR", LRformData, mainResult))
    { 

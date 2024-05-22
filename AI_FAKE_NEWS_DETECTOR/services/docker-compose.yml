@@ -76,6 +76,7 @@ services:
         limits:
           memory: 250M
 
+
 networks:
   main_network:
     driver: bridge

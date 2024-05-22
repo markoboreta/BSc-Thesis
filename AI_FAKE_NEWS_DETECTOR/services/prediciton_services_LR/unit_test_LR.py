@@ -10,7 +10,6 @@ class TestLRApp(unittest.TestCase):
         self.app.testing = True
         self.client = self.app.test_client()
 
-    # Normal operation tests
     def test_home_page(self):
         response = self.client.get('/LR_page')
         self.assertEqual(response.status_code, 200)

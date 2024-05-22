@@ -73,6 +73,7 @@ class LRApp(Service):
                     return jsonify(result=combined_result), 200
                 except Exception as e:
                     error_message = f"Error occurred while processing data: {str(e)}"
+                    print(error_message)
                     return jsonify(error=error_message), 500
             else:
                 return jsonify(error="Method not allowed."), 405

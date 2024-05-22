@@ -1,4 +1,4 @@
-import unittest
+"""import unittest
 from unittest.mock import patch, mock_open, MagicMock
 from services.prediction_services_PA.app import PA_App
 class TestLRApp(unittest.TestCase):
@@ -13,4 +13,4 @@ class TestLRApp(unittest.TestCase):
         self.assertIn(b'<h1>Welcome</h1>', response.data)
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main()"""

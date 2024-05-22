@@ -1,4 +1,8 @@
 function drawChart(data, canvasID) {
+  if (!data) {
+    console.error("No data provided to drawChart");
+    return;
+  }
   const labels = Object.keys(data);
   const values = Object.values(data).map(Number); // Convert values to numbers
   // Get canvas element
@@ -53,13 +57,4 @@ function drawChart(data, canvasID) {
   });
   return myChart;
 }
-
-
-/*function clearCanavs()
-{
-  const canvas = document.getElementById("myChart");
-  const ctx = document.getElementById("myChart").getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}*/
-
-//export{drawChart}
+export{ drawChart }

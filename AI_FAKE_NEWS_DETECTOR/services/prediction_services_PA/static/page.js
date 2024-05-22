@@ -10,11 +10,10 @@ $(document).ready(function () {
   const submitBtn = $("#PAsubmitBtn");
 
   // Event listener for submit button click
-  $("#submitBtn").on("click", async function (event) {
+  $("#PAsubmitBtn").on("click", async function (event) {
     event.preventDefault();
     const form = $("#paForm")[0];
     const PAformData = new FormData(form);
-    // PAformData.append("message", area.val().trim());  
     storeFormData(submitBtn, 'PAformData', PAformData);
     console.log(PAformData);
     if (await handleSubmit(event, "http://127.0.0.1:5003/predict_PA", PAformData, mainResult)) {

@@ -13,7 +13,7 @@ function navigateToPage(url) {
     },
   });
 }
-
+import { drawChart } from './ChartScripts';
 // Event listeners for navigation buttons, same on every html page
 $(document).ready(function () {
   try {
@@ -86,13 +86,10 @@ async function makePrediction(endpointUrl, formData) {
 
 // Function to display error message
 function displayAlert(message, alertClass, divString) {
-  const alertElement = $("<div>")
-    .addClass("alert " + alertClass)
-    .text(message);
+  const alertElement = $("<div>").addClass("alert " + alertClass).text(message);
   const closeButton = $("<strong>").addClass("close").html("&times;");
   alertElement.append(closeButton);
 
-  // Append alert element to error message div
   const errorMessageDiv = $(divString);
   errorMessageDiv.empty().append(alertElement);
 
@@ -122,14 +119,16 @@ async function fetchDataAndDrawChart(endpointUrl) {
   }
 }
 
-async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData)
+async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, opt1, opt2)
 {
   try{
     optionalContent.toggleClass("expanded");
     if (optionalContent.hasClass("expanded")) {
+      console.log("I am in expanded")
       expandResultBtn.text("Hide other model responses");
-      await handleOptional(event, URL, formData);
+      await handleOptional(event, URL, formData, opt1, opt2);
     } else {
+      console.log("Not expanded")
       expandResultBtn.text("View how other models have responded");
       
     }
@@ -174,7 +173,7 @@ function resetDialogContent(idName) {
 }
 
 // Function to handle the optional button
-async function handleOptional(event, optionalURL, formData) {
+async function handleOptional(event, optionalURL, formData, opt1, opt2) {
   event.preventDefault();
   let activeRequests = 0;
   console.log("Handling optional", formData);
@@ -186,8 +185,8 @@ async function handleOptional(event, optionalURL, formData) {
     const res = await makePrediction(optionalURL, formData);
     const message1 = res.result.result1.result;
     const message2 = res.result.result2.result;
-    $("#optional1").text(message1);
-    $("#optional2").text(message2);
+    $(opt1).text(message1);
+    $(opt2).text(message2);
   } catch (error) {
     displayAlert(
       "An error occurred while processing the data.",
@@ -206,7 +205,7 @@ async function handleSubmit(event, mainurl, formData, mainResult) {
   const minLength = 900;
   const maxLength = 3000;
   const text = formData.get("message");
-  console.log("Handling optional", formData);
+  console.log("Handling submit", formData);
   if (text.length < minLength || text.length > maxLength) {
     event.preventDefault();
     displayAlert(
@@ -261,7 +260,7 @@ function handleOpenPopUp(dialog) {
   }
 }
 
-async function setupChartToggle(buttonId,contentId,fetchUrl,chartId, generateText,hideText) {
+async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generateText, hideText) {
   const countPlotBtn = $(buttonId);
   const optionalContent = $(contentId);
   let myChart = null;
@@ -271,6 +270,7 @@ async function setupChartToggle(buttonId,contentId,fetchUrl,chartId, generateTex
     if (optionalContent.hasClass("expanded")) {
       countPlotBtn.text(hideText);
       const data = await fetchDataAndDrawChart(fetchUrl);
+
       optionalContent.show();
       if (myChart) {
         myChart.destroy();
@@ -285,7 +285,13 @@ async function setupChartToggle(buttonId,contentId,fetchUrl,chartId, generateTex
       }
     }
   } catch (error) {
-    console.error("Error occurred while toggling chart:", error);
+    displayAlert(
+      "An error occurred while processing the data needed for the graph",
+      "alert-warning",
+      "#error-message"
+    );
+    console.error("Failed to fetch data");
+    optionalContent.hide();
   }
 }
 
@@ -305,7 +311,7 @@ function countCharacters(area, char) {
   });
 }
 
-/*export {
+export {
   handleSubmit,
   handleOptional,
   fetchDataAndDrawChart,
@@ -315,4 +321,4 @@ function countCharacters(area, char) {
   handleOpenPopUp,
   setupChartToggle,
   showOptionalResults,
-};*/
+};
