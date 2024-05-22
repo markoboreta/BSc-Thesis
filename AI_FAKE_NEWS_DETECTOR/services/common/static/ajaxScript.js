@@ -1,3 +1,4 @@
+//import { drawChart } from './ChartScripts';
 // Function for navigation buttons
 function navigateToPage(url) {
   console.log("Navigating to: ", url);
@@ -13,7 +14,7 @@ function navigateToPage(url) {
     },
   });
 }
-import { drawChart } from './ChartScripts';
+
 // Event listeners for navigation buttons, same on every html page
 $(document).ready(function () {
   try {
@@ -111,6 +112,7 @@ async function fetchDataAndDrawChart(endpointUrl) {
     });
     return data;
   } catch (error) {
+    console.log(error);
     displayAlert(
       "An error occurred while processing the data needed for the graph.",
       "alert-warning",
@@ -260,38 +262,37 @@ function handleOpenPopUp(dialog) {
   }
 }
 
-async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generateText, hideText) {
+async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generateText, hideText, btnCnt) {
   const countPlotBtn = $(buttonId);
   const optionalContent = $(contentId);
-  let myChart = null;
-
+  //const oldCtx = document.querySelector(chartId);
+  //const oldChart = Chart.getChart(oldCtx);
+  let myChart;
   try {
-    optionalContent.toggleClass("expanded");
-    if (optionalContent.hasClass("expanded")) {
-      countPlotBtn.text(hideText);
-      const data = await fetchDataAndDrawChart(fetchUrl);
-
-      optionalContent.show();
-      if (myChart) {
-        myChart.destroy();
+    if(btnCnt == 0)
+      {
+        let data = await fetchDataAndDrawChart(fetchUrl);
+        console.log("data ", data)
+        myChart = drawChart(data, chartId);
+        console.log("drawing charts");
+        optionalContent.toggleClass("expanded");
+        optionalContent.show();
       }
-      myChart = drawChart(data, chartId);
-    } else {
-      countPlotBtn.text(generateText);
-      optionalContent.hide();
-      if (myChart) {
-        myChart.destroy();
-        myChart = null;
+      else
+      {
+        optionalContent.toggleClass("expanded");
+        if (optionalContent.hasClass("expanded")) {
+          countPlotBtn.text(hideText);
+          optionalContent.show();
+        
+        } else {
+          countPlotBtn.text(generateText);
+          optionalContent.hide();
+        }
       }
-    }
+      
   } catch (error) {
-    displayAlert(
-      "An error occurred while processing the data needed for the graph",
-      "alert-warning",
-      "#error-message"
-    );
-    console.error("Failed to fetch data");
-    optionalContent.hide();
+      console.error("Error in setupChartToggle:", error);
   }
 }
 
@@ -311,7 +312,7 @@ function countCharacters(area, char) {
   });
 }
 
-export {
+/*export {
   handleSubmit,
   handleOptional,
   fetchDataAndDrawChart,
@@ -321,4 +322,4 @@ export {
   handleOpenPopUp,
   setupChartToggle,
   showOptionalResults,
-};
+};*/

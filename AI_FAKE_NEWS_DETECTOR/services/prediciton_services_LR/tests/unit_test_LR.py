@@ -3,10 +3,17 @@ from unittest.mock import patch, mock_open
 from flask import jsonify
 from app import LRApp
 import json
+from prediciton_services_LR.app import LRApp, base_dir, app # Ensure this imports correctly
+import json
+import os
+
+#base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) 
+template_dir = os.path.join(base_dir, 'templates')
+static_dir = os.path.join(base_dir, "static")
 
 class TestLRApp(unittest.TestCase):
     def setUp(self):
-        self.app = LRApp(__name__)
+        self.app = LRApp(__name__, template_dir, static_dir)
         self.app.testing = True
         self.client = self.app.test_client()
 
@@ -22,11 +29,11 @@ class TestLRApp(unittest.TestCase):
             self.assertEqual(response.json, {'data': [1, 2, 3]})
 
     def test_predict_LR_valid_input(self):
-        with patch('LR.LRModel.predict_news_article', return_value='Prediction'):
+        with patch('prediciton_services_LR.LR.LRModel.predict_news_article', return_value='Prediction'):
             response = self.client.post('/predict_LR', data={'message': 'valid input'})
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json, {'result': 'Prediction'})
-
+            self.assertEqual(json.loads(response.data)['result'], 'Prediction')
+            
     def test_predict_together_valid_input(self):
         with patch('common.classes.class_service.service_api.PredictNB.post', return_value=({'result': 'NB result'}, 200)):
             with patch('common.classes.class_service.service_api.PredictPA.post', return_value=({'result': 'PA result'}, 200)):
@@ -46,10 +53,11 @@ class TestLRApp(unittest.TestCase):
         self.assertIn(b'title>Error</title>', response.data)
 
     def test_predict_LR_exception_handling(self):
-        with patch('LR.LRModel.predict_news_article', side_effect=Exception('Test Error')):
+        with patch('prediciton_services_LR.LR.LRModel.predict_news_article', side_effect=Exception('Test Error')):
             response = self.client.post('/predict_LR', data={'message': 'valid input'})
             self.assertEqual(response.status_code, 500)
             self.assertIn('Error occurred while processing data', response.json['error'])
+
 
     def test_file_not_found_error(self):
         with patch('builtins.open', mock_open()) as mocked_file:

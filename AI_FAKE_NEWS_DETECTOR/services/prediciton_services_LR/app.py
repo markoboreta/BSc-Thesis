@@ -1,7 +1,8 @@
 import json
 import re
+import os
 from flask import Flask, render_template, request, jsonify
-from LR import LRModel 
+from prediciton_services_LR.LR import LRModel 
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictPA, PredictNB
 from flask_restful import Api
@@ -9,8 +10,8 @@ from flask_restful import Api
 
 # Class for the service
 class LRApp(Service):
-    def __init__(self, import_name):
-        super().__init__(import_name)
+    def __init__(self, import_name, template, static):
+        super().__init__(import_name, template_folder=template, static_folder=static)
         self.set_up_routes()
         self.api = Api(self)
         self.api.add_resource(PredictNB, '/api/predict_nb')
@@ -26,11 +27,13 @@ class LRApp(Service):
         
         @self.route('/getTFData')
         def get_graph_data():
-            return self.load_json_data("static/TF.json")
+            if request.method == "GET":
+                return self.load_json_data("static/TF.json")
         
         @self.route('/getWCData')
         def get_WC_data():
-            return self.load_json_data("static/WC.json")
+            if request.method == "GET":
+                return self.load_json_data("static/WC.json")
 
         @self.route("/predict_LR", methods=["POST"])
         def predict_LR():
@@ -77,7 +80,8 @@ class LRApp(Service):
                     return jsonify(error=error_message), 500
             else:
                 return jsonify(error="Method not allowed."), 405
-
-app = LRApp(__name__)
+            
+base_dir = os.path.abspath(os.path.dirname(__file__))
+app = LRApp(__name__, os.path.join(base_dir, 'templates'), os.path.join(base_dir, 'static'))
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=False)

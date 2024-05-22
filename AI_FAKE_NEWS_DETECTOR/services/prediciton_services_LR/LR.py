@@ -17,7 +17,7 @@ class LR(Model):
             else:
                 return "The news article is highly likely to be real according to LR."
         except Exception as e:
-            return None
+            return e# changed from none
         
 model_path = 'model_and_vect/single_LR_plain_NEW.pkl'
 vect_path = 'model_and_vect/single_LR_vect_plain_NEW.pkl'

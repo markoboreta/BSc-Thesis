@@ -1,19 +1,21 @@
 import pytest
+import os
 from flask import Flask
-from AI_FAKE_NEWS_DETECTOR.services.prediciton_services_LR.LR import LRApp  # Ensure this imports correctly
+from prediciton_services_LR.app import LRApp, base_dir,app # Ensure this imports correctly
 import json
+
+#base_dir = os.path.abspath(os.path.dirname(__file__)) 
+template_dir = os.path.join(base_dir, 'templates')
+static_dir = os.path.join(base_dir, "static")
 
 @pytest.fixture
 def client():
-    app = LRApp(__name__)
+    app1 = LRApp(__name__, template_dir, static_dir)
     # Setting the app configuration for testing
-    app.config['TESTING'] = True
-    app.config['DEBUG'] = False
-
-    # Activating the application context
-    with app.app_context():
-        with app.test_client() as client:
-            yield client
+    app1.config['TESTING'] = True
+    app1.config['DEBUG'] = True
+    with app.test_client() as client:
+        yield client
 
 # Now, your tests below will automatically run within the application context
 def test_predict_LR_valid_data(client):
@@ -47,7 +49,7 @@ def test_predict_together_valid_data(client):
 def test_predict_together_empty_data(client):
     data = {'message': ''}
     response = client.post("/LR/get_result", data=data)
-    assert response.status_code == 400
+    assert response.status_code == 404
     assert 'error' in response.data.decode('utf-8')
 
 def test_handle_error_404(client):

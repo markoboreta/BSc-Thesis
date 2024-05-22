@@ -10,7 +10,16 @@ const { Chart } = require("chart.js");
 let mockChartInstance;
 $.ajax = jest.fn().mockResolvedValue({ success: true });
 describe("Unit Test Event Listeners with jQuery", () => {
+  beforeAll(() => {
+    // Mock the entire Chart module
+    global.Chart = jest.fn().mockImplementation(() => ({
+      destroy: jest.fn(),
+      update: jest.fn(),
+      getChart: jest.fn()
+    }));
+  });
   beforeEach(() => {
+
     $("body").html(`
       <div id="error-message"></div>
       <button type="button" id="countPlotBtn" class="submit-button">Generate Class Ratio</button>
@@ -50,6 +59,7 @@ describe("Unit Test Event Listeners with jQuery", () => {
   });
 
   test("Toggle the visibility of the graph section and update button text", async () => {
+    let btn = 0;
     $("#countPlotBtn").on("click", async function () {
       setupChartToggle(
         "#countPlotBtn",
@@ -57,10 +67,10 @@ describe("Unit Test Event Listeners with jQuery", () => {
         "http://127.0.0.1:5001/getTFData",
         "myChart",
         "Generate Class Ratio",
-        "Hide Graph"
-      );
+        "Hide Graph",  
+        btn);
+      btn+=1;
     });
-
     $("#countPlotBtn").trigger("click");
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(window.Chart).toHaveBeenCalled();

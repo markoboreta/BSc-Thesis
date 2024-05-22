@@ -9,15 +9,15 @@ from flask import request, render_template, abort
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictPA, PredictLR
 from flask_restful import Api
-from NB import NBModel
+from prediction_services_NB.NB import NBModel
 from common.classes.class_service.service import Service
 import re
 
 
 # Class for the service
 class NBApp(Service):
-    def __init__(self, import_name):
-        super().__init__(import_name)
+    def __init__(self, import_name, template, static):
+        super().__init__(import_name, template_folder=template, static_folder=static)
         self.set_up_routes()
         self.api = Api(self)
         self.api.add_resource(PredictPA, '/api/predict_pa')
@@ -91,5 +91,7 @@ class NBApp(Service):
                 return jsonify(error="Method not allowed."), 405
 
 
-app = NBApp(__name__)
-app.run(host="0.0.0.0", port=5002, debug=True) 
+base_dir = os.path.abspath(os.path.dirname(__file__))
+app = NBApp(__name__, os.path.join(base_dir, 'templates'), os.path.join(base_dir, 'static'))
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5002, debug=False)

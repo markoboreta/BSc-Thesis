@@ -1,60 +1,45 @@
 function drawChart(data, canvasID) {
   if (!data) {
-    console.error("No data provided to drawChart");
-    return;
+      console.error("No data provided to drawChart");
+      return;
   }
   const labels = Object.keys(data);
-  const values = Object.values(data).map(Number); // Convert values to numbers
-  // Get canvas element
+  const values = Object.values(data).map(Number); 
+
+  const dataset = {
+      labels: labels, 
+      datasets: [{
+          label: 'Count', 
+          data: values, 
+          backgroundColor: [
+            labels[0] === "Fake" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)",
+            labels[1] === "Fake" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)", 
+          ],
+          borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(75, 192, 192, 1)'
+          ],
+          borderWidth: 1
+      }]
+  };
   const canvas = document.getElementById(canvasID);
-  const ctx = document.getElementById(canvasID).getContext("2d");
+  const ctx = canvas.getContext("2d"); 
 
-  const datasets = labels.map((label) => {
-    // Determine color based on label
-    let backgroundColor =
-      label === "Fake" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)";
-    let borderColor =
-      label === "Fake" ? "rgba(255, 99, 132, 1)" : "rgba(75, 192, 192, 1)";
-
-    return {
-      label: label,
-      data: [data[label]], // Data corresponding to this label
-      backgroundColor: backgroundColor,
-      borderColor: borderColor,
-      borderWidth: 1,
-    };
-  });
   // Create new chart instance
-  const myChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: datasets,
-    },
-    options: {
-      responsive: false,
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: "Label",
-            color: "black",
-          },
-        },
-        y: {
-          title: {
-            display: true,
-            text: "Count",
-            color: "black",
-          },
-          ticks: {
-            color: "black",
-          },
-          beginAtZero: true,
-        },
-      },
-    },
+  window.myChart = new Chart(ctx, {
+      type: "bar",
+      data: dataset,
+      options: {
+          responsive: false,
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
   });
-  return myChart;
+
+  return window.myChart;
 }
-export{ drawChart }
+
+//export{ drawChart }

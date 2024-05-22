@@ -8,13 +8,15 @@ $(document).ready(function () {
   let optTwo = "#optional2";
   let mainResult = "#NB-main-result";
   const submitBtn = $("#submitBtn");
+  let cntBtn = 0;
+  let wcBtn = 0;
   
   // Event listener for submit button click
   $("#submitBtn").on("click", async function (event) {
     event.preventDefault();
     const LRformData = new FormData();      
-    LRformData.append('message', $("#LR_area").val().trim());
-    storeFormData(submitBtn, 'LRformData', LRformData);
+    LRformData.append('message', $("#NB_area").val().trim());
+    storeFormData(submitBtn, 'NBformData', LRformData);
     if(await handleSubmit(event, "http://127.0.0.1:5002/predict_NB", LRformData, "#NB-main-result"))
    { 
       handleOpenPopUp(dialog);
@@ -37,11 +39,13 @@ $(document).ready(function () {
   });
 
   $("#countPlotBtn").on("click", async function (event) {
-    setupChartToggle("#countPlotBtn","#optional-graphs", "http://127.0.0.1:5002/getNBData", "myChart", "Generate Class Ratio", "Hide graph")
+    setupChartToggle("#countPlotBtn","#optional-graphs", "http://127.0.0.1:5002/getNBData", "myChart", "Generate Class Ratio", "Hide graph", cntBtn);
+    cntBtn+=1;
   });
   
   $("#wordCountBtn").on("click", async function (event) {
-    setupChartToggle("#wordCountBtn","#optional-mean", "http://127.0.0.1:5002/getWCData", "wcChart", "Generate Word Count", "Hide graph")
+    setupChartToggle("#wordCountBtn","#optional-mean", "http://127.0.0.1:5002/getWCData", "wcChart", "Generate Word Count", "Hide graph", wcBtn);
+    wcBtn+=1;
   });
 });
 

@@ -12,7 +12,7 @@
 <body>
 
     <!-- Scripts which are necessay for the page -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type='text/javascript' src="{{ url_for('static_bp.get_styles', filename='ajaxScript.js') }}"></script>
     <script type='text/javascript' src="{{ url_for('static_bp.get_styles', filename='ChartScripts.js') }}"></script>
@@ -21,7 +21,6 @@
     
 
     <div class="container">
-
         <!-- Sidebar navigation -->
         <div class="sidebar">
             <!-- Navigation buttons -->
@@ -83,34 +82,27 @@
                     <p>This visual representation shows the data used to train the model. The x-axis represents the
                         number of words in the article, and the y-axis represents the label (0 for FAKE NEWS, 1 for REAL
                         NEWS).</p>
-                    <button type="button" id="countPlotBtn" class="submit-button">Generate
-                        Class Ratio</button>
-                    <button type="button" id="wordCountBtn" class="submit-button">Generate Mean Word
-                        Count</button>
-                    <p></p>
-                    <div id="optional-graphs" class="graph">
-                        <canvas id="myChart" width="400" height="400"></canvas>
-                        <p id="data-context">This is how the fake and real classes are distributed, in the dataset.</p>
+                <div class="chart-container">
+                    <div>
+                        <button type="button" id="countPlotBtn" class="submit-button">Generate Class Ratio</button>
+                        <div id="optional-graphs" class="graph">
+                            <canvas id="myChart" width="400" height="400"></canvas>
+                            <p id="data-context">This is how the fake and real classes are distributed, in the dataset.</p>
+                        </div>
                     </div>
-                    <div id="optional-mean" class="graph">
-                        <canvas id="wcChart" width="400" height="400"></canvas>
-                        <p id="data-context">This is the mean word count per real and fake news class.</p>
+                    <div>
+                        <button type="button" id="wordCountBtn" class="submit-button">Generate Mean Word Count</button>
+                        <div id="optional-mean" class="graph">
+                            <canvas id="wcChart" width="380" height="400"></canvas>
+                            <p id="data-context">This is the mean word count per real and fake news class.</p>
+                        </div>
                     </div>
+                </div>
+                   
                 </div>
             </div>
         </div>
     </div>
-
-
-    <script>
-        // Character count script
-        let area = $('#LR_area');
-        let char = $('#char')[0];
-        area.on('input', function () {
-            let content = this.value.trim();
-            char.textContent = content.length + " Characters";
-        });
-    </script>
 
 </body>
 
