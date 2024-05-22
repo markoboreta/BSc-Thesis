@@ -2,7 +2,8 @@ import json
 import re
 import os
 from flask import Flask, render_template, request, jsonify
-from prediciton_services_LR.LR import LRModel 
+#from prediciton_services_LR.LR import LRModel 
+from LR import LRModel 
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictPA, PredictNB
 from flask_restful import Api

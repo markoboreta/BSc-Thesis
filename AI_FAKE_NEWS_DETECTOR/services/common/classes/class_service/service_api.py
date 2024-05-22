@@ -23,6 +23,7 @@ class API_Class(Resource):
 
 # Rettrieve data from the predict_NB
 #url = "http://127.0.0.1:5002/predict_NB" #test env url
+#url = "http://NBapp:5002/predict_NB"
 class PredictNB(API_Class):
     def __init__(self):
         super().__init__("http://127.0.0.1:5002/predict_NB")
@@ -40,6 +41,6 @@ class PredictPA(API_Class):
 #url = 'http://LRapp:5001/predict_LR'
 class PredictLR(API_Class):
     def __init__(self):
-        super().__init__("http://127.0.0.1:5001/predict_LR")
+        super().__init__("http://LRapp:5001/predict_LR")
         
 

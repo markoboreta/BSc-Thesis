@@ -10,7 +10,14 @@ $(document).ready(function () {
   const submitBtn = $("#submitBtn");
   let cntBtn = 0;
   let wcBtn = 0;
+  let area = $("#NB_area");
+  let char = $("#char")[0];
   
+  area.on("input", function () {
+    let content = this.value.trim();
+    char.textContent = content.length + " Characters";
+  });
+
   // Event listener for submit button click
   $("#submitBtn").on("click", async function (event) {
     event.preventDefault();
@@ -33,8 +40,9 @@ $(document).ready(function () {
   });
 
   expandResultBtn.on("click", async function (event) {
-    const formData = retrieveFormData(submitBtn, "LRformData");
+    const formData = retrieveFormData(submitBtn, "NBformData");
     URL = "http://127.0.0.1:5002/NB/get_result";
+    console.log(formData);
     showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo)
   });
 

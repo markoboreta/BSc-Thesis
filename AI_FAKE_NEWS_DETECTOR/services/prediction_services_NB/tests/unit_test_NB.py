@@ -2,11 +2,11 @@ import unittest
 from unittest.mock import patch, mock_open
 from flask import jsonify
 import json
-from prediction_services_NB.app import NBApp, base_dir, app # Ensure this imports correctly
+from prediction_services_NB.app import NBApp#, base_dir, app # Ensure this imports correctly
 import json
 import os
 
-#base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) 
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) 
 template_dir = os.path.join(base_dir, 'templates')
 static_dir = os.path.join(base_dir, "static")
 

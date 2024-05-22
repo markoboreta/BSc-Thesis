@@ -9,7 +9,8 @@ from flask import request, render_template, abort
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictPA, PredictLR
 from flask_restful import Api
-from prediction_services_NB.NB import NBModel
+#from prediction_services_NB.NB import NBModel
+from NB import NBModel
 from common.classes.class_service.service import Service
 import re
 
