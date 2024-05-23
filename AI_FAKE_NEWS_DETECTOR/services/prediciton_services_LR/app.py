@@ -21,7 +21,7 @@ class LRApp(Service):
     def set_up_routes(self):
 
         # route for the main page of the 
-        @self.route("/LR_page", methods=["GET", "POST"])
+        @self.route("/LR_page", methods=["GET"])
         def LR_page():
             if request.method == "POST" or request.method == "GET":
                 return render_template("Model_2.html")
@@ -29,40 +29,46 @@ class LRApp(Service):
         @self.route('/getTFData')
         def get_graph_data():
             if request.method == "GET":
-                return self.load_json_data("static/TF.json")
+                this_dir = os.path.abspath(os.path.dirname(__file__))
+                file_path = os.path.join(this_dir, 'static', 'TF.json')
+                return self.load_json_data(file_path)
         
         @self.route('/getWCData')
         def get_WC_data():
             if request.method == "GET":
-                return self.load_json_data("static/WC.json")
+                this_dir = os.path.abspath(os.path.dirname(__file__))
+                file_path = os.path.join(this_dir, 'static', 'WC.json')
+                return self.load_json_data(file_path)
 
-        @self.route("/predict_LR", methods=["POST"])
+        @self.route("/predict_LR", methods=["POST", "GET"])
         def predict_LR():
             if request.method == "POST":
                 data = request.form.get("message", "")
                 is_any_text = re.search('[a-zA-Z]', data)
-                print(is_any_text)
-                print(">>>>>>>>>>DATA\n\n", len(data))
-                if not data or not is_any_text: ## important check, figure out why classification works even though retrurn has been made 
+                if not data or not is_any_text:
+                    # If message data is missing or invalid, return an error response
                     return (jsonify(error="Invalid input. Please provide a message."), 415)
                 try:
-                    processed_result_lr = LRModel.predict_news_article(data)
-                    print(processed_result_lr)
-                    return jsonify(result=processed_result_lr), 200
+                    # Process the received data
+                    processed_result = LRModel.predict_news_article(data)
+                    print(processed_result)
+                    return jsonify(result=processed_result), 200
                 except Exception as e:
                     error_message = f"Error occurred while processing data: {str(e)}"
                     return jsonify(error=error_message), 500
             else:
-                print("Not goot method")
+                print("Method not allowed.")
+                return jsonify(error="Method not allowed."), 405
 
-        @self.route("/LR/get_result", methods=["POST"])
+        @self.route("/LR/get_result", methods=["POST", "GET"])
         def predict_toegther():
             if request.method == "POST":
                 predict_nb = PredictNB()
                 predict_pa = PredictPA()
                 data = request.form.get("message", "")
-                if not data:
-                    return jsonify(error="Invalid input. Please provide a message."), 400
+                is_any_text = re.search('[a-zA-Z]', data)
+                if not data or not is_any_text:
+                    return jsonify(error="Invalid input. Please provide a message."), 415
                 try:
                     pa_response = predict_pa.post({"message" : data})
                     nb_response = predict_nb.post({"message" : data})

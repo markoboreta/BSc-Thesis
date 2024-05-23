@@ -26,23 +26,28 @@ class NBApp(Service):
   
     def set_up_routes(self):
         # route for the main page of the 
-        @self.route("/NB_page", methods=["GET", "POST"])
+        @self.route("/NB_page", methods=["GET"])
         def NB_page():
             return render_template("Model_3.html")
         
         @self.route('/getNBData')
         def get_graph_data():
-            return self.load_json_data("static/TF.json")
+            if request.method == "GET":
+                this_dir = os.path.abspath(os.path.dirname(__file__))
+                file_path = os.path.join(this_dir, 'static', 'TF.json')
+                return self.load_json_data(file_path)
 
         @self.route('/getWCData')
         def get_WC_data():
-            return self.load_json_data("static/WC.json")
+             if request.method == "GET":
+                this_dir = os.path.abspath(os.path.dirname(__file__))
+                file_path = os.path.join(this_dir, 'static', 'WC.json')
+                return self.load_json_data(file_path)
         
-        @self.route("/predict_NB", methods=["POST"])
+        @self.route("/predict_NB", methods=["POST", "GET"])
         def predict_NB():
             if request.method == "POST":
                 data = request.form.get("message", "")
-                print("Data:\n", data);
                 is_any_text = re.search('[a-zA-Z]', data)
                 if not data or not is_any_text:
                     # If message data is missing or invalid, return an error response
@@ -56,20 +61,21 @@ class NBApp(Service):
                     error_message = f"Error occurred while processing data: {str(e)}"
                     return jsonify(error=error_message), 500
             else:
-                print("Not goot method")
+                print("Method not allowed.")
+                return jsonify(error="Method not allowed."), 405
 
-        # to be added for the json formatt
         
 
-        @self.route("/NB/get_result", methods=["POST"])
+        @self.route("/NB/get_result", methods=["POST", "GET"])
         def predict_toegther():
             if request.method == "POST":
                 data = request.form.get("message", "")
                 
                 predict_lr = PredictLR()
                 predict_pa = PredictPA()
-                if not data:
-                    return jsonify(error="Error: Invalid input. Please provide a 'message' field in JSON format."), 400
+                is_any_text = re.search('[a-zA-Z]', data)
+                if not data or not is_any_text:
+                    return jsonify(error="Error: Invalid input. Please provide a 'message' field in JSON format."), 415
                 try:
                     pa_response = predict_pa.post({"message" : data})
                     lr_response = predict_lr.post({"message" : data})

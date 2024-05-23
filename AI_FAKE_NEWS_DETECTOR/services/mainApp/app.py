@@ -11,7 +11,7 @@ class mainPage(Service):
         self.set_up_routes()
 
     def set_up_routes(self):
-        @self.route("/", methods=["GET", "POST"])  # home page
+        @self.route("/", methods=["GET"])  # home page
         def main():
             return render_template("main_page.html"), 200
 

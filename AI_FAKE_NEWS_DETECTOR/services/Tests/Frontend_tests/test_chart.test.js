@@ -83,7 +83,7 @@ describe("Unit Test Event Listeners with jQuery", () => {
   });
 
 
-  /*test('AJAX call with bad URL should handle errors correctly', async () => {
+  test('AJAX call with bad URL should handle errors correctly', async () => {
     $("#countPlotBtn").on("click", async function () {
         setupChartToggle("#countPlotBtn", "#optional-graphs", "http://127.0.0.1:5009/testiiing", "myChart", "Generate Class Ratio", "Hide Graph");
     });
@@ -91,5 +91,5 @@ describe("Unit Test Event Listeners with jQuery", () => {
     await new Promise(resolve => setTimeout(resolve, 150)); 
     expect($('#error-message').text()).toContain("An error occurred while processing the data needed for the graph.");
     expect($('#optional-graphs').css('display')).toBe('none');
-  });*/
+  });
 });

@@ -33,6 +33,7 @@ class Model:
                 print("Error opening this file.")
         else:
             print('Model not pickeled file!')
+            
     
     def load_vect(self, vectPath:str): 
         if vectPath.endswith('.pkl'):
@@ -50,7 +51,7 @@ class Model:
         if isinstance(text, str):
             text = text.lower()
             # Remove URLs, HTML tags, special characters, and digits
-            pattern = r'\[.*?\]|https?://\S+|www\.\S+|<.*?>+|\w*\d\w*|[%s]' % re.escape(string.punctuation)
+            pattern = r'https?://\S+|www\.\S+|<.*?>|\d+|\W+'
             text = re.sub(pattern, ' ', text)
             text = re.sub(r'\W+', ' ', text)
             text = text.replace('\n', ' ')
@@ -60,10 +61,13 @@ class Model:
     # Remove special characters, tokenize and remove stop words
     def preprocess_text(self, text):
         try:
+            print("text type received: ", type(text))
             text = self.remove_special(text)
+            print("after removing special", text)
             if text:
                 tokenized = word_tokenize(text)
-                #stop_words = set(stopwords.words('english'))
+                print("tokenized ", tokenized)
+                print("joined ", ' '.join([self.lemmatizer.lemmatize(w) for w in tokenized if w not in self.stop_words]))                
                 return ' '.join([self.lemmatizer.lemmatize(w) for w in tokenized if w not in self.stop_words])
         except:
             print("Error, data is not textual most likely")
@@ -79,16 +83,11 @@ class Model:
             preprocessed_article = self.preprocess_text(text)
             print(preprocessed_article)
             if not preprocessed_article or preprocessed_article.isspace():
-                print("Invalid input - preprocessing resulted in empty content.")
                 return -1
-            try:
-                article_vector = self.vect.transform([preprocessed_article])
-                prediction = self.model.predict(article_vector)
-                return prediction  # return the verdict model has made, numerical value 1 or 0
-            except Exception as e:
-                print(f"Error during vector transformation or prediction: {e}")
-                return -1
+            article_vector = self.vect.transform([preprocessed_article])
+            prediction = self.model.predict(article_vector)
+            return prediction  # return the verdict model has made, numerical value 1 or 0
         except Exception as e:
-            print(f"An error occurred: {e}")
-            return -1
-    
+                print(f"Error during vector transformation or prediction: {e}")
+                return ValueError("Error during vector transformation or prediction")
+ 

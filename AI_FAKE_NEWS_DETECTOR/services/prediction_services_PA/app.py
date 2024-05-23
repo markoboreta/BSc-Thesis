@@ -28,18 +28,16 @@ class PA_App(Service):
     def set_up_routes(self):
 
         # route for the main page of the 
-        @self.route("/PA_page", methods=["GET", "POST"])
+        @self.route("/PA_page", methods=["GET"])
         def PA_page():
-            if request.method == "POST" or request.method == "GET":
                 return render_template("Model_1.html")
         
-        @self.route("/predict_PA", methods=["POST"])
+        @self.route("/predict_PA", methods=["POST", "GET"])
         def predict_PA():
             if request.method == "POST":
                 data = request.form.get("message", "")
                 is_any_text = re.search('[a-zA-Z]', data)
                 print(is_any_text)
-                print(">>>>>>>>>>DATA\n\n", len(data))
                 if not data or not is_any_text: 
                     # If message data is missing or invalid, return an error response
                     return jsonify(error="Invalid input. Please provide a message."), 415
@@ -53,29 +51,34 @@ class PA_App(Service):
                     error_message = f"Error occurred while processing data: {str(e)}"
                     return jsonify(error=error_message), 500
             else:
-                print("Not goot method")
+                print("Method not allowed.")
+                return jsonify(error="Method not allowed."), 405
         
         @self.route('/getPAData')
         def get_graph_data():
             if request.method == "GET":
-                return self.load_json_data("static/WC.json")
+                this_dir = os.path.abspath(os.path.dirname(__file__))
+                file_path = os.path.join(this_dir, 'static', 'WC.json')
+                return self.load_json_data(file_path)
         
         @self.route('/getWCData')
         def get_WC_data():
              if request.method == "GET":
-                return self.load_json_data("static/TF.json")
+                this_dir = os.path.abspath(os.path.dirname(__file__))
+                file_path = os.path.join(this_dir, 'static', 'TF.json')
+                return self.load_json_data(file_path)
 
-        @self.route("/PA/get_result", methods=["POST"])
+        @self.route("/PA/get_result", methods=["POST", "GET"])
         def predict_toegther():
             print('here')
             # Check if the request method is POST
             if request.method == "POST":
                 data = request.form.get("message", "")
-                
                 predict_lr = PredictLR()
                 predict_nb = PredictNB()
-                if not data:
-                    return jsonify(error="Invalid input. Please provide a message."), 400
+                is_any_text = re.search('[a-zA-Z]', data)
+                if not data or not is_any_text:
+                    return jsonify(error="Invalid input. Please provide a message."), 415
                 try:
                     lr_response = predict_lr.post({"message": data})
                     nb_response = predict_nb.post({"message": data}) 
