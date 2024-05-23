@@ -1,3 +1,4 @@
+//import { drawChart } from './ChartScripts';
 // Function for navigation buttons
 function navigateToPage(url) {
   console.log("Navigating to: ", url);
@@ -14,19 +15,17 @@ function navigateToPage(url) {
   });
 }
 
-
 // Event listeners for navigation buttons, same on every html page
 $(document).ready(function () {
-
   try {
     $("#mainPageBtn").click(async function (event) {
       event.preventDefault();
-       navigateToPage("http://127.0.0.1:5000/");
+      navigateToPage("http://127.0.0.1:5000/");
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-  
+
   // Event listener for LR page navigation
   try {
     $("#lrPageBtn").click(async function (event) {
@@ -34,29 +33,28 @@ $(document).ready(function () {
       navigateToPage("http://127.0.0.1:5001/LR_page");
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-  
+
   // Event listener for NB page navigation
   try {
     $("#nbPageBtn").click(async function (event) {
       event.preventDefault();
-       navigateToPage("http://127.0.0.1:5002/NB_page");
+      navigateToPage("http://127.0.0.1:5002/NB_page");
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-  
+
   try {
     $("#paPageBtn").click(async function (event) {
       event.preventDefault();
       navigateToPage("http://127.0.0.1:5003/PA_page");
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });
-
 
 // Function to handle prediction button, this will send artticle and get result
 async function makePrediction(endpointUrl, formData) {
@@ -70,7 +68,7 @@ async function makePrediction(endpointUrl, formData) {
       processData: false,
       timeout: timeout,
       success: function (data) {
-        console.log("Response returned!")
+        console.log("Response returned!");
         return data;
       },
       error: function (xhr, status, errorThrown) {
@@ -79,13 +77,12 @@ async function makePrediction(endpointUrl, formData) {
           throw new Error(
             "Request timed out after 15 seconds. Please try again."
           );
-        } 
+        }
       },
     });
   } catch (error) {
     console.error(error);
   }
-  
 }
 
 // Function to display error message
@@ -94,7 +91,6 @@ function displayAlert(message, alertClass, divString) {
   const closeButton = $("<strong>").addClass("close").html("&times;");
   alertElement.append(closeButton);
 
-  // Append alert element to error message div
   const errorMessageDiv = $(divString);
   errorMessageDiv.empty().append(alertElement);
 
@@ -102,7 +98,7 @@ function displayAlert(message, alertClass, divString) {
     alertElement.addClass("fade-out"); // Apply fade-out animation
     setTimeout(function () {
       alertElement.remove();
-    }, 500); 
+    }, 500);
   });
 }
 
@@ -114,9 +110,9 @@ async function fetchDataAndDrawChart(endpointUrl) {
       method: "GET",
       dataType: "json",
     });
-
     return data;
   } catch (error) {
+    console.log(error);
     displayAlert(
       "An error occurred while processing the data needed for the graph.",
       "alert-warning",
@@ -125,16 +121,16 @@ async function fetchDataAndDrawChart(endpointUrl) {
   }
 }
 
-
-
-async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData)
+async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, opt1, opt2)
 {
   try{
     optionalContent.toggleClass("expanded");
     if (optionalContent.hasClass("expanded")) {
+      console.log("I am in expanded")
       expandResultBtn.text("Hide other model responses");
-      await handleOptional(event, URL, formData);
+      await handleOptional(event, URL, formData, opt1, opt2);
     } else {
+      console.log("Not expanded")
       expandResultBtn.text("View how other models have responded");
       
     }
@@ -159,8 +155,7 @@ function openDialog(dialogElement) {
   }
 }
 
-
-// Function to close the PopUp 
+// Function to close the PopUp
 function closeDialog(dialogElement) {
   if (dialogElement && typeof dialogElement.close === "function") {
     dialogElement.close(); // Close the dialog
@@ -176,26 +171,24 @@ function closeDialog(dialogElement) {
 // Function to reset dialog content
 function resetDialogContent(idName) {
   console.log("resetting diagonal");
-  $(idName).text(""); 
-
+  $(idName).text("");
 }
 
 // Function to handle the optional button
-async function handleOptional(event, optionalURL, formData) {
+async function handleOptional(event, optionalURL, formData, opt1, opt2) {
   event.preventDefault();
   let activeRequests = 0;
-  console.log(formData);
+  console.log("Handling optional", formData);
   if (activeRequests > 0) {
-    
-    return; 
+    return;
   }
   activeRequests += 1;
   try {
     const res = await makePrediction(optionalURL, formData);
     const message1 = res.result.result1.result;
     const message2 = res.result.result2.result;
-    $("#optional1").text(message1);
-    $("#optional2").text(message2);
+    $(opt1).text(message1);
+    $(opt2).text(message2);
   } catch (error) {
     displayAlert(
       "An error occurred while processing the data.",
@@ -208,12 +201,13 @@ async function handleOptional(event, optionalURL, formData) {
   console.log(activeRequests);
 }
 
-// Fucntion to handle submit button 
+// Fucntion to handle submit button
 async function handleSubmit(event, mainurl, formData, mainResult) {
   event.preventDefault();
   const minLength = 900;
   const maxLength = 3000;
   const text = formData.get("message");
+  console.log("Handling submit", formData);
   if (text.length < minLength || text.length > maxLength) {
     event.preventDefault();
     displayAlert(
@@ -226,7 +220,7 @@ async function handleSubmit(event, mainurl, formData, mainResult) {
   try {
     const [newResult] = await Promise.all([makePrediction(mainurl, formData)]);
     $(mainResult).text(newResult.result);
-    console.log("Result ", newResult)
+    console.log("Result ", newResult);
     return newResult;
   } catch (error) {
     displayAlert(
@@ -238,17 +232,12 @@ async function handleSubmit(event, mainurl, formData, mainResult) {
   }
 }
 
-
-
-function handleCLosePopUp(dialog, optionalContent, expandResultBtn, mainResult, optOne, optTwo)
-{
+function handleCLosePopUp(dialog,optionalContent,expandResultBtn,mainResult,optOne,optTwo) {
   if (dialog && typeof dialog.close === "function") {
-    
     // close the optional if open
-    if(optionalContent.hasClass("expanded"))
-    {
+    if (optionalContent.hasClass("expanded")) {
       optionalContent.toggleClass("expanded");
-      expandResultBtn.text("View how other models have responded")
+      expandResultBtn.text("View how other models have responded");
       resetDialogContent(mainResult);
       resetDialogContent(optOne);
       resetDialogContent(optTwo);
@@ -262,9 +251,7 @@ function handleCLosePopUp(dialog, optionalContent, expandResultBtn, mainResult, 
   }
 }
 
-
-function handleOpenPopUp(dialog)
-{
+function handleOpenPopUp(dialog) {
   if (dialog && typeof dialog.showModal === "function") {
     dialog.showModal(); // Show the dialog as a modal
   } else {
@@ -275,44 +262,55 @@ function handleOpenPopUp(dialog)
   }
 }
 
-
-async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generateText, hideText) {
+async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generateText, hideText, btnCnt) {
   const countPlotBtn = $(buttonId);
   const optionalContent = $(contentId);
-  let myChart = null;
-
-    try {
-      optionalContent.toggleClass("expanded");
-      if (optionalContent.hasClass("expanded")) {
-        countPlotBtn.text(hideText);
-        const data = await fetchDataAndDrawChart(fetchUrl);
-        optionalContent.show();
-        if (myChart) {
-          myChart.destroy();
-        }
+  //const oldCtx = document.querySelector(chartId);
+  //const oldChart = Chart.getChart(oldCtx);
+  let myChart;
+  try {
+    if(btnCnt == 0)
+      {
+        let data = await fetchDataAndDrawChart(fetchUrl);
+        console.log("data ", data)
         myChart = drawChart(data, chartId);
-      } else {
-        countPlotBtn.text(generateText);
-        optionalContent.hide();
-        if (myChart) {
-          myChart.destroy();
-          myChart = null;
+        console.log("drawing charts");
+        optionalContent.toggleClass("expanded");
+        optionalContent.show();
+      }
+      else
+      {
+        optionalContent.toggleClass("expanded");
+        if (optionalContent.hasClass("expanded")) {
+          countPlotBtn.text(hideText);
+          optionalContent.show();
+        
+        } else {
+          countPlotBtn.text(generateText);
+          optionalContent.hide();
         }
       }
-    } catch (error) {
-      console.error("Error occurred while toggling chart:", error);
-    }
+      
+  } catch (error) {
+      console.error("Error in setupChartToggle:", error);
+  }
 }
 
-  // Store and retrieve formData using jQuery's data method
-  function storeFormData(submitBtn,key ,formData) {
-    submitBtn.data(key, formData);
-  }
+// Store and retrieve formData using jQuery's data method
+function storeFormData(submitBtn, key, formData) {
+  submitBtn.data(key, formData);
+}
 
-  function retrieveFormData(submitBtn, key) {
-    return submitBtn.data(key);
-  }
+function retrieveFormData(submitBtn, key) {
+  return submitBtn.data(key);
+}
 
+function countCharacters(area, char) {
+  area.on('input', function () {
+    let content = this.value.trim();
+    char.textContent = content.length + " Characters";
+  });
+}
 
 /*export {
   handleSubmit,

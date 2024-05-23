@@ -22,10 +22,11 @@ class API_Class(Resource):
             return {'error': str(e)}, 500
 
 # Rettrieve data from the predict_NB
-#url = "http://127.0.0.1:5002/predict_NB" test env url
+#url = "http://127.0.0.1:5002/predict_NB" #test env url
+#url = "http://NBapp:5002/predict_NB"
 class PredictNB(API_Class):
     def __init__(self):
-        super().__init__('http://NBapp:5002/predict_NB')
+        super().__init__("http://NBapp:5002/predict_NB")
 
 
 # Rettrieve data from the predict_PA

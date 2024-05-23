@@ -1,6 +1,6 @@
 import os   
 from flask_cors import CORS
-from flask import  render_template, send_from_directory,request, jsonify
+from flask import  render_template, send_from_directory,request, jsonify, abort
 from flask import Flask, render_template, Blueprint
 from flask_restful import Api, Resource
 import json
@@ -8,8 +8,8 @@ import re
 
 # Flask class for the apps
 class Service(Flask):
-    def __init__(self, import_name):
-        super().__init__(import_name)
+    def __init__(self, import_name,template_folder=None, static_folder=None):
+        super().__init__(import_name, template_folder=template_folder, static_folder=static_folder)
         self.configure_app()
         self.configure_cors()
         self.configure_error_handlers()
@@ -45,7 +45,8 @@ class Service(Flask):
         @errors_bp.app_errorhandler(500)
         def handle_error(e):
             error_message = f"You have reached the error {getattr(e, 'code', 'unknown')} page :("
-            return render_template("error.html", data=error_message), getattr(e, 'code', 500)
+            print(common_templates_dir)
+            return render_template("error.html", data=error_message), getattr(e, 'code', 404)
         self.register_blueprint(errors_bp)
 
     
@@ -57,7 +58,7 @@ class Service(Flask):
         def get_styles(filename):
             file_path = os.path.join(static_bp.static_folder, filename)
             if not os.path.exists(file_path):
-                return "File not found", 404
+                abort(404)
             return send_from_directory(static_bp.static_folder, filename)
 
         self.register_blueprint(static_bp)

@@ -9,14 +9,16 @@ from flask import request, render_template, abort
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictPA, PredictLR
 from flask_restful import Api
+#from prediction_services_NB.NB import NBModel
 from NB import NBModel
 from common.classes.class_service.service import Service
+import re
 
 
 # Class for the service
 class NBApp(Service):
-    def __init__(self, import_name):
-        super().__init__(import_name)
+    def __init__(self, import_name, template, static):
+        super().__init__(import_name, template_folder=template, static_folder=static)
         self.set_up_routes()
         self.api = Api(self)
         self.api.add_resource(PredictPA, '/api/predict_pa')
@@ -24,26 +26,32 @@ class NBApp(Service):
   
     def set_up_routes(self):
         # route for the main page of the 
-        @self.route("/NB_page", methods=["GET", "POST"])
+        @self.route("/NB_page", methods=["GET"])
         def NB_page():
             return render_template("Model_3.html")
         
         @self.route('/getNBData')
         def get_graph_data():
-            self.load_json_data("static/TF.json")
+            if request.method == "GET":
+                this_dir = os.path.abspath(os.path.dirname(__file__))
+                file_path = os.path.join(this_dir, 'static', 'TF.json')
+                return self.load_json_data(file_path)
 
         @self.route('/getWCData')
         def get_WC_data():
-            self.load_json_data("static/WC.json")
+             if request.method == "GET":
+                this_dir = os.path.abspath(os.path.dirname(__file__))
+                file_path = os.path.join(this_dir, 'static', 'WC.json')
+                return self.load_json_data(file_path)
         
-        @self.route("/predict_NB", methods=["POST"])
+        @self.route("/predict_NB", methods=["POST", "GET"])
         def predict_NB():
             if request.method == "POST":
                 data = request.form.get("message", "")
-                print("Data:\n", data);
-                if not data:
+                is_any_text = re.search('[a-zA-Z]', data)
+                if not data or not is_any_text:
                     # If message data is missing or invalid, return an error response
-                    return jsonify(error="Invalid input. Please provide a message."), 400
+                    return (jsonify(error="Invalid input. Please provide a message."), 415)
                 try:
                     # Process the received data
                     processed_result = NBModel.predict_news_article(data)
@@ -53,27 +61,29 @@ class NBApp(Service):
                     error_message = f"Error occurred while processing data: {str(e)}"
                     return jsonify(error=error_message), 500
             else:
-                print("Not goot method")
+                print("Method not allowed.")
+                return jsonify(error="Method not allowed."), 405
 
-        # to be added for the json formatt
         
 
-        @self.route("/NB/get_result", methods=["POST"])
+        @self.route("/NB/get_result", methods=["POST", "GET"])
         def predict_toegther():
             if request.method == "POST":
                 data = request.form.get("message", "")
+                
                 predict_lr = PredictLR()
                 predict_pa = PredictPA()
-                if not data:
-                    return jsonify(error="Error: Invalid input. Please provide a 'message' field in JSON format."), 400
+                is_any_text = re.search('[a-zA-Z]', data)
+                if not data or not is_any_text:
+                    return jsonify(error="Error: Invalid input. Please provide a 'message' field in JSON format."), 415
                 try:
                     pa_response = predict_pa.post({"message" : data})
                     lr_response = predict_lr.post({"message" : data})
 
                     if lr_response[1] != 200:
-                        return jsonify(lr_response) 
+                        return lr_response
                     if pa_response[1] != 200:
-                        return jsonify(pa_response)
+                        return pa_response
                     # Combine the results from all models
                     combined_result = {
                         "result1": lr_response[0],
@@ -88,5 +98,7 @@ class NBApp(Service):
                 return jsonify(error="Method not allowed."), 405
 
 
-app = NBApp(__name__)
-app.run(host="0.0.0.0", port=5002, debug=True) 
+base_dir = os.path.abspath(os.path.dirname(__file__))
+app = NBApp(__name__, os.path.join(base_dir, 'templates'), os.path.join(base_dir, 'static'))
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5002, debug=False)

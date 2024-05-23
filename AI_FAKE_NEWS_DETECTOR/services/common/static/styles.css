@@ -289,3 +289,16 @@ dialog
 {
   background-color: rgb(43, 41, 97);
 }
+
+.chart-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap; 
+}
+
+.graph {
+  margin: 1px;
+  padding-left: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

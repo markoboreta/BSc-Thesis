@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Exploration</title>
-    <style>
-        body {
-            background-color: rgb(104, 105, 104);
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-    </style>
+    <title>Naive Bayes</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static_bp.get_styles', filename='styles.css') }}">
 </head>
 
@@ -19,11 +14,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type='text/javascript' src="{{ url_for('static_bp.get_styles', filename='ajaxScript.js') }}"></script>
-    <script type='text/javascript' src="{{ url_for('static', filename='page.js') }}"></script>
     <script type='text/javascript' src="{{ url_for('static_bp.get_styles', filename='ChartScripts.js') }}"></script>
-
+    <script type='text/javascript' src="{{ url_for('static', filename='page.js') }}"></script>
     <div class="container">
-
         <!-- Sidebar navigation -->
         <div class="sidebar">
             <!-- Navigation buttons -->
@@ -42,16 +35,17 @@
             <p>If you wish to explore this dataset link is <a
                     href="https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification">Here</a></p>
             <h3>Enter your text below:</h3>
-            
-            <form id="nbForm" method="post">
-                <textarea name="message" id="NB_area" placeholder="Enter your suspicious article here..." maxlength="3000" minlength="900"></textarea>
+
+            <form id="lrForm" method="post">
+                <textarea name="message" id="NB_area" placeholder="Enter your suspicious article here..."
+                    maxlength="3000" minlength="900"></textarea>
                 <div class="result">
                     <span id="char">0 Characters</span>
                     <input type="submit" id="submitBtn" class="submit-button" value="Submit">
                     <div id="error-message"></div>
                 </div>
             </form>
-            
+
             <dialog class="popup" id="NB_resultPopup">
                 <div class="popup-content">
                     <a class="close-popup" href="#">&times;</a>
@@ -91,34 +85,29 @@
                     <p>This visual representation shows the data used to train the model. The x-axis represents the
                         number of words in the article, and the y-axis represents the label (0 for FAKE NEWS, 1 for REAL
                         NEWS).</p>
-                    <button type="button" id="countPlotBtn" class="submit-button" id="tfGraph">Generate
-                        Graph</button>
-                    <button type="button" id="wordCountBtn" class="submit-button" id="wcBtn">Generate Word
-                        Cloud</button>
-                    <p></p>
-                    <div id="optional-graphs">
-                        <canvas id="myChart" width="400" height="400"></canvas>
-                        <p id="data-context"></p>
-                    </div>
-                    <div id="optional-mean">
-                        <canvas id="wcChart" width="400" height="400"></canvas>
-                        <p id="data-context"></p>
+                    <div class="chart-container">
+                        <div>
+                            <button type="button" id="countPlotBtn" class="submit-button" id="tfGraph">Generate
+                                Graph</button>
+                            <div id="optional-graphs">
+                                <canvas id="myChart" width="400" height="400"></canvas>
+                                <p id="data-context"></p>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" id="wordCountBtn" class="submit-button" id="wcBtn">Generate Word
+                                Cloud</button>
+                            <p></p>
+                            <div id="optional-mean">
+                                <canvas id="wcChart" width="400" height="400"></canvas>
+                                <p id="data-context"></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        let area = document.getElementById('NB_area');
-        let char = document.getElementById('char');
-
-        area.addEventListener('input', function () {
-            // count characters  
-            let content = this.value;
-            char.textContent = content.length;
-            content.trim();
-            console.log(content);
-        });
-    </script>
 </body>
+
 </html>
