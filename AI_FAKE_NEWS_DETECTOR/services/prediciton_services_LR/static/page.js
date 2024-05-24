@@ -1,16 +1,16 @@
 $(document).ready(function () {
-  const resultPopup = $("#LR_resultPopup");
+  const resultPopup = $("#LRresultPopup");
+  const dialog = $("#LRresultPopup")[0];
   const closePopupBtn = $(".close-popup");
-  const expandResultBtn = $("#LR_expand_result");
-  const optionalContent = $("#LR_optional");
-  const dialog = $("#LR_resultPopup")[0];
+  const expandResultBtn = $("#LRexpand");
+  const optionalContent = $("#LRoptional");
   const mainResult = "#LR-main-result";
   const optOne = "#optional1";
   const optTwo = "#optional2";
-  const submitBtn = $("#submitBtn");
+  const submitBtn = $("#submit");
   let countBtn = 0;
   let wcBtn = 0;
-  let area = $("#LR_area");
+  let area = $("#LRarea");
   let char = $("#char")[0];
 
   area.on("input", function () {
@@ -19,7 +19,7 @@ $(document).ready(function () {
   });
 
   // Event listener for submit button click
-  $("#submitBtn").on("click", async function (event) {
+  $("#submit").on("click", async function (event) {
     event.preventDefault();
     let LRformData = new FormData();      
     LRformData.append('message', area.val().trim());
@@ -44,7 +44,7 @@ $(document).ready(function () {
     // Event listener for expand/collapse button click
     expandResultBtn.on("click", async function (event) {
       const formData = retrieveFormData(submitBtn, 'LRformData');
-      URL = "http://127.0.0.1:5001/LR/get_result";
+      const URL = "http://127.0.0.1:5001/LR/get_result";
       showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo);
   });
  

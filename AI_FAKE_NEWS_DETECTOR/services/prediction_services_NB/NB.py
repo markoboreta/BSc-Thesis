@@ -21,4 +21,4 @@ base_dir = os.path.abspath(os.path.dirname(__file__))
 model_path = os.path.join(base_dir, 'model_and_vect', 'naive_model_new.pkl')
 vect_path = os.path.join(base_dir, 'model_and_vect', 'count_vectorizer.pkl')
 
-NBModel = NB(model_path, vect_path)
+NB_model = NB(model_path, vect_path)

@@ -6,7 +6,7 @@ function navigateToPage(url) {
     url: url,
     type: "GET",
     success: function () {
-      console.log("Response: You have succsessfuly loaded the LR page!");
+      console.log("Response: You have succsessfuly loaded a web page!");
       window.location.href = url;
     },
     error: function () {
@@ -103,7 +103,7 @@ function displayAlert(message, alertClass, divString) {
 }
 
 // Fetching the data to draw the chart
-async function fetchDataAndDrawChart(endpointUrl) {
+async function fetchChartData(endpointUrl) {
   try {
     const data = await $.ajax({
       url: endpointUrl,
@@ -121,14 +121,14 @@ async function fetchDataAndDrawChart(endpointUrl) {
   }
 }
 
-async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, opt1, opt2)
+async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo)
 {
   try{
     optionalContent.toggleClass("expanded");
     if (optionalContent.hasClass("expanded")) {
       console.log("I am in expanded")
       expandResultBtn.text("Hide other model responses");
-      await handleOptional(event, URL, formData, opt1, opt2);
+      await handleOptional(event, URL, formData, optOne, optTwo);
     } else {
       console.log("Not expanded")
       expandResultBtn.text("View how other models have responded");
@@ -175,7 +175,7 @@ function resetDialogContent(idName) {
 }
 
 // Function to handle the optional button
-async function handleOptional(event, optionalURL, formData, opt1, opt2) {
+async function handleOptional(event, optionalURL, formData, optOne, optTwo) {
   event.preventDefault();
   let activeRequests = 0;
   console.log("Handling optional", formData);
@@ -187,8 +187,8 @@ async function handleOptional(event, optionalURL, formData, opt1, opt2) {
     const res = await makePrediction(optionalURL, formData);
     const message1 = res.result.result1.result;
     const message2 = res.result.result2.result;
-    $(opt1).text(message1);
-    $(opt2).text(message2);
+    $(optOne).text(message1);
+    $(optTwo).text(message2);
   } catch (error) {
     displayAlert(
       "An error occurred while processing the data.",
@@ -271,7 +271,7 @@ async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generate
   try {
     if(btnCnt == 0)
       {
-        let data = await fetchDataAndDrawChart(fetchUrl);
+        let data = await fetchChartData(fetchUrl);
         console.log("data ", data)
         myChart = drawChart(data, chartId);
         console.log("drawing charts");
@@ -315,7 +315,7 @@ function countCharacters(area, char) {
 /*export {
   handleSubmit,
   handleOptional,
-  fetchDataAndDrawChart,
+  fetchChartData,
   makePrediction,
   navigateToPage,
   handleCLosePopUp,

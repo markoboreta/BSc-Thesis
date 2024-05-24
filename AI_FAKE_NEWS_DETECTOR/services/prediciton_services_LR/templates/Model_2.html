@@ -24,11 +24,11 @@
         <!-- Sidebar navigation -->
         <div class="sidebar">
             <!-- Navigation buttons -->
-            <form class="SVM_Button">
-                <button class="navButton" id="mainPageBtn">Home</button>
-                <button class="navButton" id="lrPageBtn">LR</button>
-                <button class="navButton" id="nbPageBtn">NB</button>
-                <button class="navButton" id="paPageBtn">PA</button>
+            <form class="nav-buttons">
+                <button class="navigation" id="mainPageBtn">Home</button>
+                <button class="navigation" id="lrPageBtn">LR</button>
+                <button class="navigation" id="nbPageBtn">NB</button>
+                <button class="navigation" id="paPageBtn">PA</button>
             </form>
         </div>
 
@@ -42,22 +42,22 @@
                     href="https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification">Here</a></p>
             <h3>Enter your article below:</h3>
             <form id="lrForm" method="post">
-                <textarea name="message" id="LR_area" placeholder="Enter your suspicious article here..." maxlength="3000" minlength="900"></textarea>
+                <textarea name="message" id="LRarea" placeholder="Enter your suspicious article here..." maxlength="3000" minlength="900"></textarea>
                 <div class="result">
                     <span id="char">0 Characters</span>
-                    <input type="submit" id="submitBtn" class="submit-button" value="Submit">
+                    <input type="submit" id="submit" class="submit-button" value="Submit">
                     <div id="error-message"></div>
                 </div>
             </form>
 
-            <dialog class="popup" id="LR_resultPopup">
+            <dialog class="popup" id="LRresultPopup">
                 <div class="popup-content">
                     <a class="close-popup" href="#">&times;</a>
                     <h2>Result</h2>
                     <div id="LR-main-result" class="content"></div>
                     <!--Optional to view-->
-                    <button class="expand-result" id="LR_expand_result">View how other models have responded</button>
-                    <div id="LR_optional">
+                    <button class="expand-result" id="LRexpand">View how other models have responded</button>
+                    <div id="LRoptional">
                         <div id="optional1" class="optional-content"></div>
                         <div id="optional2" class="optional-content"></div>
                         <p>
@@ -77,7 +77,7 @@
                     the user. Refreshing the page will clear the data.</p>
                 <p>The model is Logistic Regression, trained on vectorized data for research purposes, which may limit
                     its application.</p>
-                <div class="dataRep" id="dashboard">
+                <div class="data-rep" id="dashboard">
                     <h3>DATA REPRESENTATION</h3>
                     <p>This visual representation shows the data used to train the model. The x-axis represents the
                         number of words in the article, and the y-axis represents the label (0 for FAKE NEWS, 1 for REAL
@@ -86,7 +86,7 @@
                     <div>
                         <button type="button" id="countPlotBtn" class="submit-button">Generate Class Ratio</button>
                         <div id="optional-graphs" class="graph">
-                            <canvas id="myChart" width="400" height="400"></canvas>
+                            <canvas id="myChart" width="380" height="400"></canvas>
                             <p id="data-context">This is how the fake and real classes are distributed, in the dataset.</p>
                         </div>
                     </div>

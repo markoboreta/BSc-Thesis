@@ -1,5 +1,4 @@
 import re
-import string
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import  wordnet as wn
@@ -16,17 +15,17 @@ nltk.download("stopwords")
 
 # Class for each model
 class Model:
-    def __init__(self, modelPath:str, vectPath:str):
+    def __init__(self, model_path:str, vect_path:str):
         self.lemmatizer = WordNetLemmatizer()
-        self.model = self.load_model(modelPath)
-        self.vect = self.load_vect(vectPath)
+        self.model = self.load_model(model_path)
+        self.vect = self.load_vect(vect_path)
         self.stop_words = set(stopwords.words('english'))
 
 
-    def load_model(self, modelpath:str):
-        if modelpath.endswith('.pkl'):
+    def load_model(self, model_path:str):
+        if model_path.endswith('.pkl'):
             try:
-                with open(modelpath, "rb") as f:
+                with open(model_path, "rb") as f:
                     model = pickle.load(f)
                 return model
             except:
@@ -35,10 +34,10 @@ class Model:
             print('Model not pickeled file!')
             
     
-    def load_vect(self, vectPath:str): 
-        if vectPath.endswith('.pkl'):
+    def load_vect(self, vect_path:str): 
+        if vect_path.endswith('.pkl'):
             try:
-                with open(vectPath, "rb") as f:
+                with open(vect_path, "rb") as f:
                     vect = pickle.load(f)
                 return vect
             except:

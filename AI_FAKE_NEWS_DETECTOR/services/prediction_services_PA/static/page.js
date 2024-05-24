@@ -66,7 +66,7 @@ $(document).ready(function () {
   // Event listener for expand/collapse button click
   expandResultBtn.on("click", async function (event) {
     const formData = retrieveFormData(submitBtn, "PAformData");
-    URL = "http://127.0.0.1:5003/PA/get_result";
+    const URL = "http://127.0.0.1:5003/PA/get_result";
     showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo);
   });
 

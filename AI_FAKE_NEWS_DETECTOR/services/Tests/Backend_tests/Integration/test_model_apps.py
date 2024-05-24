@@ -3,7 +3,7 @@ import json
 import importlib
 
 # Assuming all apps follow a similar structure in their respective directories
-app_modules = {
+app_classes = {
     "LRApp": "prediciton_services_LR.app",
     "NBApp": "prediction_services_NB.app",
     "PAApp": "prediction_services_PA.app"
@@ -51,8 +51,8 @@ app_configs = {
 
 @pytest.fixture(scope="module", params=["LRApp", "NBApp", "PAApp"])
 def client(request):
-    app_module = importlib.import_module(app_modules[request.param])
-    app = getattr(app_module, app_configs[request.param]['client_function'])
+    app_class = importlib.import_module(app_classes[request.param])
+    app = getattr(app_class, app_configs[request.param]['client_function'])
     app.config['TESTING'] = True
     app.config['DEBUG'] = True
     client = app.test_client()

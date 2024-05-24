@@ -8,9 +8,7 @@ const {
   handleCLosePopUp,
   handleOptional,
   handleSubmit,
-  fetchDataAndDrawChart,
   showOptionalResults,
-  setupChartToggle,
   navigateToPage,
 } = require("../../common/static/ajaxScript");
 const { drawChart } = require("../../common/static/ChartScripts");

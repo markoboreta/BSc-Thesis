@@ -1,10 +1,8 @@
 # Use a Python 3.8 slim base image for the build stage
 FROM python:3.11-slim AS builder
 
-# Set working directory
 WORKDIR /NBapp
 
-# Copy only the requirements file to optimize caching
 COPY requirements.txt .
 
 # Install required packages for building dependencies

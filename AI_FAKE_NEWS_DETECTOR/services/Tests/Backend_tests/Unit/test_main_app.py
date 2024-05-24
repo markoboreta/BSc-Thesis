@@ -2,12 +2,12 @@ import pytest
 from unittest.mock import patch
 from flask import Response
 import os
-from main_app.app import mainPage, base_dir
+from main_app.app import MainPage, base_dir
 
 
 @pytest.fixture(scope="module")
 def main_page_client():
-    app = mainPage(__name__, os.path.join(base_dir, 'templates'), os.path.join(base_dir, 'static'))
+    app = MainPage(__name__, os.path.join(base_dir, 'templates'), os.path.join(base_dir, 'static'))
     app.config['TESTING'] = True
     app.config['DEBUG'] = True
     client = app.test_client()

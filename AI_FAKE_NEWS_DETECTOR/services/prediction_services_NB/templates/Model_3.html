@@ -20,11 +20,12 @@
         <!-- Sidebar navigation -->
         <div class="sidebar">
             <!-- Navigation buttons -->
-            <form class="SVM_Button">
-                <button class="navButton" id="mainPageBtn">Home</button>
-                <button class="navButton" id="lrPageBtn">LR</button>
-                <button class="navButton" id="nbPageBtn">NB</button>
-                <button class="navButton" id="paPageBtn">PA</button>
+            <form class="nav-buttons">
+                <button class="navigation" id="mainPageBtn">Home</button>
+                <button class="navigation" id="lrPageBtn">LR</button>
+                <button class="navigation" id="nbPageBtn">NB</button>
+                <button class="navigation" id="paPageBtn">PA</button>
+            </form>
         </div>
 
         <div class="main-content">
@@ -37,16 +38,16 @@
             <h3>Enter your text below:</h3>
 
             <form id="lrForm" method="post">
-                <textarea name="message" id="NB_area" placeholder="Enter your suspicious article here..."
+                <textarea name="message" id="NBarea" placeholder="Enter your suspicious article here..."
                     maxlength="3000" minlength="900"></textarea>
                 <div class="result">
                     <span id="char">0 Characters</span>
-                    <input type="submit" id="submitBtn" class="submit-button" value="Submit">
+                    <input type="submit" id="submit" class="submit-button" value="Submit">
                     <div id="error-message"></div>
                 </div>
             </form>
 
-            <dialog class="popup" id="NB_resultPopup">
+            <dialog class="popup" id="NBresultPopup">
                 <div class="popup-content">
                     <a class="close-popup" href="#">&times;</a>
                     <h2>Result</h2>
@@ -80,14 +81,14 @@
                 <p>The word "naive" is employed since it is thought that the features that comprise the model are
                     independent of one other. Put differently, modifying the value of a single feature does not directly
                     affect the values of any other features that the algorithm utilizes. </p>
-                <div class="dataRep">
+                <div class="dataRep" id="dashboard">
                     <h3>DATA REPRESENTATION</h3>
                     <p>This visual representation shows the data used to train the model. The x-axis represents the
                         number of words in the article, and the y-axis represents the label (0 for FAKE NEWS, 1 for REAL
                         NEWS).</p>
                     <div class="chart-container">
                         <div>
-                            <button type="button" id="countPlotBtn" class="submit-button" id="tfGraph">Generate
+                            <button type="button" id="countPlotBtn" class="submit-button" >Generate
                                 Graph</button>
                             <div id="optional-graphs">
                                 <canvas id="myChart" width="400" height="400"></canvas>

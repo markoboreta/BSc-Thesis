@@ -22,4 +22,4 @@ model_path = os.path.join(base_dir, 'model_and_vect', 'PA_model.pkl')
 vect_path = os.path.join(base_dir, 'model_and_vect', 'PA_Tfidf.pkl')
 
 
-PAModel = PA(model_path, vect_path)
+PA_Model = PA(model_path, vect_path)

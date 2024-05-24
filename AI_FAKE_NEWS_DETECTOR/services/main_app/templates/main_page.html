@@ -25,11 +25,11 @@
         <!-- Sidebar navigation -->
         <div class="sidebar">
             <!-- Navigation buttons -->
-            <form class="SVM_Button">
-                <button class="navButton" id="mainPageBtn">Home</button>
-                <button class="navButton" id="lrPageBtn">LR</button>
-                <button class="navButton" id="nbPageBtn">NB</button>
-                <button class="navButton" id="paPageBtn">PA</button>
+            <form class="nav-buttons">
+                <button class="navigation" id="mainPageBtn">Home</button>
+                <button class="navigation" id="lrPageBtn">LR</button>
+                <button class="navigation" id="nbPageBtn">NB</button>
+                <button class="navigation" id="paPageBtn">PA</button>
             </form>
         </div>
         <div class="content">
@@ -41,12 +41,13 @@
                 <p>This is the webpage regarding the fake news article detection. Each algortihm used has
                     it's own page.
                     Models are pre-trained on the datasets extracted from the internet. On each page you can
-                    find the link to the dataset used for training and some information about the model and
+                    find the link to the dataset used for training, some information about the model and
                     some viusal representation of the data. From the information provided you can decide
-                    which model you want to use to aid you in the decisin making.
+                    which model you want to use to aid you in the decisin making. 
+                    Additionally you can request verdict from other models to aid you in decision making process.
                 </p>
                 <p class="attention">DISCLAIMER: THE MODELS ARE NOT 100% ACCURATE.</p>
-                <ul>
+                <ul> You can naviagte moedels on the left-hand side on the menu bar, models are sorted in the following order:
                     <li>Model 1: Logistic Regression</li>
                     <li>Model 2: Naive Bayes</li>
                     <li>Model 3: Passive Agressive Classifier</li>
@@ -56,19 +57,11 @@
             <div>
                 <h2>How to use:</h2>
                 <p>Each Model has it's own webpage. They will be shown on the sidebar on the left.</p>
-                <p>On each page you can find the link to the dataset used for training and some information
-                    about the model and some viusal representation of the data. From the information
-                    provided you can decide which model you want to use to aid you in the decisin making.
-                </p>
-                <p>The first page is dedicated to the Combined models, the second one is dedicated to
-                    Logistic Regressin and the third to Naive Bayes model.</p>
+                <p>The first page is dedicated to the Logistic Regression, the second one is dedicated to
+                    Naive Bayes and the third to Passive Aggressive Classifier.</p>
                 <p></p>
                 <p>At the bottom part of the page you can use buttons to generate graphs which display ratio
-                    of Real and Fake news.</p>
-                <p>Also at the bottom you can generate wordcloud, which will display the most common words
-                    in the dataset.</p>
-                <p class="attention">PAY ATTENTION: WHEN GENERATING GRAPHS YOU WILL LOSE YOUR RESULT FROM
-                    THE MODELS.</p>
+                    of Real and Fake news and mean word count per Real and Fake class.</p>
             </div>
         </div>
     </div>

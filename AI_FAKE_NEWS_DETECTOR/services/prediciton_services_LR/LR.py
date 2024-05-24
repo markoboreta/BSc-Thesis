@@ -23,5 +23,5 @@ base_dir = os.path.abspath(os.path.dirname(__file__))
 model_path = os.path.join(base_dir, 'model_and_vect', 'LR_model.pkl')
 vect_path = os.path.join(base_dir, 'model_and_vect', 'LR_vect.pkl')
 
-LRModel = LR(model_path, vect_path)
+LR_model = LR(model_path, vect_path)
 

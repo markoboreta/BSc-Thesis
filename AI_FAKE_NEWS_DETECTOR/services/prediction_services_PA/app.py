@@ -3,13 +3,13 @@ import re
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictNB, PredictLR
 from flask_restful import Api
-from prediction_services_PA.PA import PAModel
-#from PA import PAModel
+#from prediction_services_PA.PA import PA_Model
+from PA import PA_Model
 from flask import request, render_template, jsonify
 from common.classes.class_service.service import Service
 
 
-class PA_App(Service):
+class PAApp(Service):
     def __init__(self, import_name, template, static):
         super().__init__(import_name, template_folder=template, static_folder=static)
         self.set_up_routes()
@@ -35,7 +35,7 @@ class PA_App(Service):
                     return jsonify(error="Invalid input. Please provide a message."), 415
                 try:
                     # Process the received data
-                    processed_result = PAModel.predict_news_article(data)
+                    processed_result = PA_Model.predict_news_article(data)
                     print(processed_result)
                     return jsonify(result=processed_result), 200
                 except Exception as e:
@@ -93,6 +93,6 @@ class PA_App(Service):
                 return jsonify(error="Method not allowed."), 405
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
-app = PA_App(__name__, os.path.join(base_dir, 'templates'), os.path.join(base_dir, 'static'))
+app = PAApp(__name__, os.path.join(base_dir, 'templates'), os.path.join(base_dir, 'static'))
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5003, debug=True)
