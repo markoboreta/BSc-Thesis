@@ -8,7 +8,7 @@ import re
 
 # Flask class for the apps
 class Service(Flask):
-    def __init__(self, import_name,template_folder=None, static_folder=None):
+    def __init__(self, import_name, template_folder=None, static_folder=None):
         super().__init__(import_name, template_folder=template_folder, static_folder=static_folder)
         self.configure_app()
         self.configure_cors()
