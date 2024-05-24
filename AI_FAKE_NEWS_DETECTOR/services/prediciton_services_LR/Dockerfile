@@ -2,16 +2,13 @@
 FROM python:3.11-slim AS builder
 # Set working directory
 WORKDIR /LRapp
-# Copy only the requirements file to optimize caching
 COPY requirements.txt .
-# Install required packages for building dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
         python3-dev \
         && \
     rm -rf /var/lib/apt/lists/*
-# Install Python dependencies
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 FROM python:3.11-slim
