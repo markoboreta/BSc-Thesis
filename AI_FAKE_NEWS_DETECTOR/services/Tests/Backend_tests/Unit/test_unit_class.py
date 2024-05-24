@@ -3,6 +3,8 @@ import json
 import importlib
 from unittest.mock import patch, mock_open
 from flask import jsonify
+import sys
+
 
 app_modules = {
     "LRApp": "prediciton_services_LR.app",
