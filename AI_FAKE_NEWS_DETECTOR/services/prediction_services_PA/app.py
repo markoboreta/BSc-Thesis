@@ -1,18 +1,10 @@
 import os
-import logging
-import json
 import re
-from flask import Flask, render_template, request, jsonify
-from flask import  request, Blueprint, send_from_directory, Response
-from flask_cors import CORS
-from flask import request, jsonify
-from flask import request, render_template, abort
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictNB, PredictLR
 from flask_restful import Api
-import requests
-#from prediction_services_PA.PA import PAModel
-from PA import PAModel
+from prediction_services_PA.PA import PAModel
+#from PA import PAModel
 from flask import request, render_template, jsonify
 from common.classes.class_service.service import Service
 
