@@ -3,7 +3,7 @@
 services:
   service1:
     build:
-      context: ./mainApp
+      context: ./main_app
     container_name: app
     ports:
       - "5000:5000"  

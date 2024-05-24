@@ -1,8 +1,6 @@
 import pytest
-import json
-import importlib
 import os
-from mainApp.app import mainPage, base_dir
+from main_app.app import mainPage, base_dir
 
 @pytest.fixture(scope="module")
 def main_page_client():
@@ -13,9 +11,6 @@ def main_page_client():
     return client
 
 def test_main_page_home(main_page_client):
-    """
-    Test that the home page of the main app loads correctly.
-    """
     response = main_page_client.get("/")
     assert response.status_code == 200
     assert "Detector" in response.get_data(as_text=True)

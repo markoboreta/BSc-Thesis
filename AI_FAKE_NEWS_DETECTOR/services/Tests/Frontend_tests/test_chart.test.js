@@ -4,8 +4,6 @@ const $ = require("jquery");
 global.$ = global.jQuery = $;
 const { JSDOM } = require("jsdom");
 const { setupChartToggle } = require("../../common/static/ajaxScript");
-const { drawChart } = require("../../common/static/ChartScripts");
-
 const { Chart } = require("chart.js");
 let mockChartInstance;
 $.ajax = jest.fn().mockResolvedValue({ success: true });

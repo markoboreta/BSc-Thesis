@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, mock_open
 from flask import jsonify
 import json
-from mainApp.app import base_dir, mainPage # Ensure this imports correctly
+from main_app.app import base_dir, mainPage # Ensure this imports correctly
 import json
 import os
 
