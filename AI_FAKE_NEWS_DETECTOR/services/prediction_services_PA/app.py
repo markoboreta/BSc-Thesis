@@ -45,7 +45,8 @@ class PAApp(Service):
             else:
                 print("Method not allowed.")
                 return jsonify(error="Method not allowed."), 405
-        
+
+        # get the data from json files for the graphs
         @self.route('/getPAData')
         def get_graph_data():
             if request.method == "GET":

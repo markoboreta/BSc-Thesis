@@ -35,11 +35,6 @@
         <!-- Main content -->
         <div class="main-content">
             <h1>Logistic Regression</h1>
-            <h2>Dataset</h2>
-            <p>This dataset was used for the process of training this model. It has both real and fake news articles and
-                titles carefully labelled.</p>
-            <p>If you wish to explore this dataset link is <a
-                    href="https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification">Here</a></p>
             <h3>Enter your article below:</h3>
             <form id="lrForm" method="post">
                 <textarea name="message" id="LRarea" placeholder="Enter your suspicious article here..." maxlength="3000" minlength="900"></textarea>
@@ -70,13 +65,10 @@
             <div class="additional">
                 <h3>About the model:</h3>
                 <p>Logistic regression is a supervised machine learning model used for classification of data.</p>
-                <p>This specific iteration of the model is best used for smaller news articles between 3500 and 4000
-                    characters, preferably about politics, and specifically about Donald Trump since the training data
-                    was focused on this topic.</p>
+                <p>This specific iteration of the model is best used for smaller news articles between 900 and 3000
+                    characters, preferably about politics and every-day topics.</p>
                 <p>The submitted data is not stored anywhere; it is only preprocessed, and the output is displayed to
-                    the user. Refreshing the page will clear the data.</p>
-                <p>The model is Logistic Regression, trained on vectorized data for research purposes, which may limit
-                    its application.</p>
+                    the user.</p>
                 <div class="data-rep" id="dashboard">
                     <h3>DATA REPRESENTATION</h3>
                     <p>This visual representation shows the data used to train the model. The x-axis represents the
@@ -87,14 +79,14 @@
                         <button type="button" id="countPlotBtn" class="submit-button">Generate Class Ratio</button>
                         <div id="optional-graphs" class="graph">
                             <canvas id="myChart" width="380" height="400"></canvas>
-                            <p id="data-context">This is how the fake and real classes are distributed, in the dataset.</p>
+                            <p id="data-context-tf">This is how the fake and real classes are distributed, in the dataset.</p>
                         </div>
                     </div>
                     <div>
                         <button type="button" id="wordCountBtn" class="submit-button">Generate Mean Word Count</button>
                         <div id="optional-mean" class="graph">
                             <canvas id="wcChart" width="380" height="400"></canvas>
-                            <p id="data-context">This is the mean word count per real and fake news class.</p>
+                            <p id="data-context-wc">This is the mean word count per real and fake news class.</p>
                         </div>
                     </div>
                 </div>

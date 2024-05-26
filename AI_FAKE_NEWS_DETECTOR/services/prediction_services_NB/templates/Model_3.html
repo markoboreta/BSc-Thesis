@@ -30,11 +30,6 @@
 
         <div class="main-content">
             <h1>Naive Bayes</h1>
-            <h2>Dataset</h2>
-            <p>This dataset was used for the process of training this model. It has both real and fake news articles and
-                titles carefully labelled.</p>
-            <p>If you wish to explore this dataset link is <a
-                    href="https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification">Here</a></p>
             <h3>Enter your text below:</h3>
 
             <form id="lrForm" method="post">
@@ -88,20 +83,18 @@
                         NEWS).</p>
                     <div class="chart-container">
                         <div>
-                            <button type="button" id="countPlotBtn" class="submit-button" >Generate
-                                Graph</button>
+                            <button type="button" id="countPlotBtn" class="submit-button">Generate Class Ratio</button>
                             <div id="optional-graphs">
                                 <canvas id="myChart" width="400" height="400"></canvas>
-                                <p id="data-context"></p>
+                                <p id="data-context-tf">This is how the fake and real classes are distributed, in the dataset.</p>
                             </div>
                         </div>
                         <div>
-                            <button type="button" id="wordCountBtn" class="submit-button" id="wcBtn">Generate Word
-                                Cloud</button>
+                            <button type="button" id="wordCountBtn" class="submit-button" id="wcBtn">Generate Mean Word Count</button>
                             <p></p>
                             <div id="optional-mean">
                                 <canvas id="wcChart" width="400" height="400"></canvas>
-                                <p id="data-context"></p>
+                                <p id="data-context-wc">This is the mean word count per real and fake news class.</p>
                             </div>
                         </div>
                     </div>

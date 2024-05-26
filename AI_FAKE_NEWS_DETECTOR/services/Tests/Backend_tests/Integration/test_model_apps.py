@@ -2,7 +2,6 @@ import pytest
 import json
 import importlib
 
-# Assuming all apps follow a similar structure in their respective directories
 app_classes = {
     "LRApp": "prediciton_services_LR.app",
     "NBApp": "prediction_services_NB.app",

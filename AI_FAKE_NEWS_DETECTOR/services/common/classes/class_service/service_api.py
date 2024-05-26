@@ -38,13 +38,13 @@ class PredictNB(API_Class):
 #url = 'http://PAapp:5003/predict_PA'
 class PredictPA(API_Class):
     def __init__(self):
-        super().__init__('http://PAapp:5003/predict_PA')
+        super().__init__("http://PAapp:5003/predict_PA")
   
 # Rettrieve verdict from the predict_LR
 #url = "http://127.0.0.1:5001/predict_LR"
 #url = 'http://LRapp:5001/predict_LR'
 class PredictLR(API_Class):
     def __init__(self):
-        super().__init__('http://LRapp:5001/predict_LR')
+        super().__init__("http://LRapp:5001/predict_LR")
         
 

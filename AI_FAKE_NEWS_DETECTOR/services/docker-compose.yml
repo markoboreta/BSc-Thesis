@@ -6,7 +6,7 @@ services:
       context: ./main_app
     container_name: app
     ports:
-      - "5000:5000"  
+      - "127.0.0.1:5000:5000" 
     networks:
       - main_network
     volumes:
@@ -25,7 +25,7 @@ services:
       context: ./prediciton_services_LR
     container_name: LRapp
     ports:
-      - "5001:5001"  
+      - "127.0.0.1:5001:5001"
     networks:
       - main_network
     volumes:
@@ -44,7 +44,7 @@ services:
       context: ./prediction_services_NB
     container_name: NBapp
     ports:
-      - "5002:5002"  
+      - "127.0.0.1:5002:5002" 
     networks:
       - main_network
     volumes:
@@ -62,7 +62,7 @@ services:
       context: ./prediction_services_PA
     container_name: PAapp
     ports:
-      - "5003:5003"  
+      - "127.0.0.1:5003:5003"  
     networks:
       - main_network
     volumes:

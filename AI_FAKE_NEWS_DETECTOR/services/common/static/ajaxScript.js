@@ -121,6 +121,7 @@ async function fetchChartData(endpointUrl) {
   }
 }
 
+// Showing optional results, will expand when pressed
 async function showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo)
 {
   try{
@@ -231,7 +232,7 @@ async function handleSubmit(event, mainurl, formData, mainResult) {
     console.error("Error:", error);
   }
 }
-
+// handle closing of pop up window
 function handleCLosePopUp(dialog,optionalContent,expandResultBtn,mainResult,optOne,optTwo) {
   if (dialog && typeof dialog.close === "function") {
     // close the optional if open
@@ -276,6 +277,7 @@ async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generate
         myChart = drawChart(data, chartId);
         console.log("drawing charts");
         optionalContent.toggleClass("expanded");
+        countPlotBtn.text(hideText);
         optionalContent.show();
       }
       else

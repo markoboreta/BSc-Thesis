@@ -17,12 +17,12 @@ nltk.download("stopwords")
 class Model:
     def __init__(self, model_path:str, vect_path:str):
         self.lemmatizer = WordNetLemmatizer()
-        self.model = self.load_model(model_path)
-        self.vect = self.load_vect(vect_path)
+        self.model = self.load_pickle(model_path)
+        self.vect = self.load_pickle(vect_path)
         self.stop_words = set(stopwords.words('english'))
 
 
-    def load_model(self, model_path:str):
+    def load_pickle(self, model_path):
         if model_path.endswith('.pkl'):
             try:
                 with open(model_path, "rb") as f:
@@ -32,19 +32,7 @@ class Model:
                 print("Error opening this file.")
         else:
             print('Model not pickeled file!')
-            
-    
-    def load_vect(self, vect_path:str): 
-        if vect_path.endswith('.pkl'):
-            try:
-                with open(vect_path, "rb") as f:
-                    vect = pickle.load(f)
-                return vect
-            except:
-                print("Error opening this file.")
-        else:
-            print('Vector not pickeled file!')
-        
+
 
     def remove_special(self, text):
         if isinstance(text, str):
@@ -55,7 +43,7 @@ class Model:
             text = re.sub(r'\W+', ' ', text)
             text = text.replace('\n', ' ')
             return text.strip()
-        return # ""
+        return ""
 
     # Remove special characters, tokenize and remove stop words
     def preprocess_text(self, text):

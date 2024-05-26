@@ -175,15 +175,15 @@ dialog
 }
 
 .optional-content {
-  display: none; /* Hide the collapsible content by default */
+  display: none; 
 }
 
 .collapsed .optional-content {
-  display: none; /* Hide the content when collapsed */
+  display: none;
 }
 
 .expanded .optional-content {
-  display: block; /* Show the content when expanded */
+  display: block;
 }
 
 
