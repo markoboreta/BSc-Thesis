@@ -13,10 +13,12 @@ $(document).ready(function () {
   let area = $("#NBarea");
   let char = $("#char")[0];
   
-  area.on("input", function () {
+ /*area.on("input", function () {
     let content = this.value.trim();
     char.textContent = content.length + " Characters";
-  });
+  });*/
+
+  countCharacters(area, char);
 
   // Event listener for submit button click
   $("#submit").on("click", async function (event) {

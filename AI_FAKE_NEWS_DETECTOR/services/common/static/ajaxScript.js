@@ -1,4 +1,4 @@
-//import { drawChart } from './ChartScripts';
+
 // Function for navigation buttons
 function navigateToPage(url) {
   console.log("Navigating to: ", url);
@@ -314,7 +314,11 @@ function countCharacters(area, char) {
   });
 }
 
-/*export {
+
+
+/*
+import { drawChart } from './ChartScripts';
+export {
   handleSubmit,
   handleOptional,
   fetchChartData,
@@ -324,4 +328,5 @@ function countCharacters(area, char) {
   handleOpenPopUp,
   setupChartToggle,
   showOptionalResults,
+  countCharacters,
 };*/

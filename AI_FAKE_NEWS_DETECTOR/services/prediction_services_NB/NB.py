@@ -17,7 +17,7 @@ class NB(Model):
            return "Error: Not good return on verdict"
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
-model_path = os.path.join(base_dir, 'model_and_vect', 'naive_model_new.pkl')
-vect_path = os.path.join(base_dir, 'model_and_vect', 'count_vectorizer.pkl')
+model_path = os.path.join(base_dir, 'model_and_vect', 'last_naive_model_final.pkl')
+vect_path = os.path.join(base_dir, 'model_and_vect', 'last_count_vectorizer_NB_final.pkl')
 
 NB_model = NB(model_path, vect_path)

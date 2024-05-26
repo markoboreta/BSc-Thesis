@@ -9,6 +9,9 @@ from flask import request, render_template, abort
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictPA, PredictLR
 from flask_restful import Api
+"""
+Comment code below for docker to run
+"""
 #from prediction_services_NB.NB import NB_model
 from NB import NB_model
 from common.classes.class_service.service import Service

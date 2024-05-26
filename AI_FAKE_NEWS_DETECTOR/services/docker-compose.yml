@@ -6,7 +6,7 @@ services:
       context: ./main_app
     container_name: app
     ports:
-      - "127.0.0.1:5000:5000" 
+      - "127.0.0.1:5000:5000"  # Set to run on localhost
     networks:
       - main_network
     volumes:
@@ -31,9 +31,9 @@ services:
     volumes:
       - ./common:/app/common  
     environment:
-      PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
-      COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory
-      COMMON_STATIC_DIR: "/app/common/static"  # Set path to common static directory
+      PYTHONPATH: "/app:/app/common"  
+      COMMON_TEMPLATES_DIR: "/app/common/templates"  
+      COMMON_STATIC_DIR: "/app/common/static" 
     deploy:
       resources:
         limits:
@@ -50,9 +50,9 @@ services:
     volumes:
       - ./common:/app/common 
     environment:
-      PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
-      COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory
-      COMMON_STATIC_DIR: "/app/common/static"  # Set path to common static directory
+      PYTHONPATH: "/app:/app/common"  
+      COMMON_TEMPLATES_DIR: "/app/common/templates"  
+      COMMON_STATIC_DIR: "/app/common/static"  
     deploy:
       resources:
         limits:
@@ -66,11 +66,11 @@ services:
     networks:
       - main_network
     volumes:
-      - ./common:/app/common  # Mount common directory into the container
+      - ./common:/app/common  
     environment:
-      PYTHONPATH: "/app:/app/common"  # Set PYTHONPATH to include the common directory
-      COMMON_TEMPLATES_DIR: "/app/common/templates"  # Set path to common templates directory
-      COMMON_STATIC_DIR: "/app/common/static"  # Set path to common static directory
+      PYTHONPATH: "/app:/app/common"  
+      COMMON_TEMPLATES_DIR: "/app/common/templates"  
+      COMMON_STATIC_DIR: "/app/common/static"  
     deploy:
       resources:
         limits:

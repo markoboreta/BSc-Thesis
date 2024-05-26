@@ -15,10 +15,12 @@ $(document).ready(function () {
   let area = $("#PA_area");
   let char = $("#char")[0];
 
-  area.on("input", function () {
+  /*area.on("input", function () {
     let content = this.value.trim();
     char.textContent = content.length + " Characters";
-  });
+  });*/
+
+  countCharacters(area, char);
 
   // Event listener for submit button click
   $("#PAsubmitBtn").on("click", async function (event) {

@@ -3,6 +3,9 @@ import re
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictNB, PredictLR
 from flask_restful import Api
+"""
+Comment code below for docker to run
+"""
 #from prediction_services_PA.PA import PA_Model
 from PA import PA_Model
 from flask import request, render_template, jsonify

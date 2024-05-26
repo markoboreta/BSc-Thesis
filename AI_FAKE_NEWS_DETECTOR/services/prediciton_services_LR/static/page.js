@@ -1,3 +1,5 @@
+//import { countCharacters } from "../../common/static/ajaxScript";
+
 $(document).ready(function () {
   const resultPopup = $("#LRresultPopup");
   const dialog = $("#LRresultPopup")[0];
@@ -13,10 +15,12 @@ $(document).ready(function () {
   let area = $("#LRarea");
   let char = $("#char")[0];
 
-  area.on("input", function () {
+  /*area.on("input", function () {
     let content = this.value.trim();
     char.textContent = content.length + " Characters";
-  });
+  });*/
+
+    countCharacters(area, char);
 
   // Event listener for submit button click
   $("#submit").on("click", async function (event) {

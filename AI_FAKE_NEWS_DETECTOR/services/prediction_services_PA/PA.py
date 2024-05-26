@@ -17,8 +17,8 @@ class PA(Model):
         
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
-model_path = os.path.join(base_dir, 'model_and_vect', 'PA_model.pkl')
-vect_path = os.path.join(base_dir, 'model_and_vect', 'PA_Tfidf.pkl')
+model_path = os.path.join(base_dir, 'model_and_vect', 'PA_model_new_prec_last.pkl')
+vect_path = os.path.join(base_dir, 'model_and_vect', 'PA_Tfidf_new_prec_last.pkl')
 
 
 PA_Model = PA(model_path, vect_path)
