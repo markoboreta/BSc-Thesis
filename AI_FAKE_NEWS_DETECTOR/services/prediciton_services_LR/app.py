@@ -2,8 +2,11 @@ import json
 import re
 import os
 from flask import Flask, render_template, request, jsonify
-from prediciton_services_LR.LR import LRModel 
-#from LR import LRModel 
+"""
+Comment code below for docker to run
+"""
+#from prediciton_services_LR.LR import LR_model 
+from LR import LR_model 
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictPA, PredictNB
 from flask_restful import Api
@@ -50,7 +53,7 @@ class LRApp(Service):
                     return (jsonify(error="Invalid input. Please provide a message."), 415)
                 try:
                     # Process the received data
-                    processed_result = LRModel.predict_news_article(data)
+                    processed_result = LR_model.predict_news_article(data)
                     print(processed_result)
                     return jsonify(result=processed_result), 200
                 except Exception as e:

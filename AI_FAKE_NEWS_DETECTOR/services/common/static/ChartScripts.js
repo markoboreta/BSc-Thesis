@@ -1,10 +1,12 @@
+// function to draw a chart
+
 function drawChart(data, canvasID) {
   if (!data) {
       console.error("No data provided to drawChart");
       return;
   }
-  const labels = Object.keys(data);
-  const values = Object.values(data).map(Number); 
+  const labels = Object.keys(data); // labels of chart
+  const values = Object.values(data).map(Number); // values of chart
 
   const dataset = {
       labels: labels, 
@@ -32,8 +34,20 @@ function drawChart(data, canvasID) {
       options: {
           responsive: false,
           scales: {
+              x: {
+                title:{
+                    display:true,
+                    text: "Label",
+                    color: "Black"
+                }
+              },
               y: {
-                  beginAtZero: true
+                    title:{
+                        display:true,
+                        text: "Count",
+                        color: "Black"
+                    },
+                    beginAtZero: true
               }
           }
       }

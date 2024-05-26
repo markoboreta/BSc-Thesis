@@ -9,7 +9,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-
 #char
 {
   color: rgb(74, 71, 172);
@@ -54,12 +53,6 @@ li {
   object-fit: cover;
 }
 
-.dataImage {
-  margin-top: 1ch;
-  width: 3ch;
-  height: 3ch;
-  object-fit: cover;
-}
 
 h1 {
   margin-bottom: 200px;
@@ -182,15 +175,15 @@ dialog
 }
 
 .optional-content {
-  display: none; /* Hide the collapsible content by default */
+  display: none; 
 }
 
 .collapsed .optional-content {
-  display: none; /* Hide the content when collapsed */
+  display: none;
 }
 
 .expanded .optional-content {
-  display: block; /* Show the content when expanded */
+  display: block;
 }
 
 
@@ -267,7 +260,7 @@ dialog
   animation: fadeOut 0.5s ease forwards; /* Apply fade-out animation */
 }
 
-.navButton
+.navigation
 {
   background-color: rgb(74, 71, 172);
   color: rgb(228, 88, 209);
@@ -285,7 +278,7 @@ dialog
 
 }
 
-.active, .navButton:hover
+.active, .navigation:hover
 {
   background-color: rgb(43, 41, 97);
 }

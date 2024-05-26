@@ -9,8 +9,11 @@ from flask import request, render_template, abort
 from common.classes.class_service.service import Service
 from common.classes.class_service.service_api import PredictPA, PredictLR
 from flask_restful import Api
-from prediction_services_NB.NB import NBModel
-#from NB import NBModel
+"""
+Comment code below for docker to run
+"""
+#from prediction_services_NB.NB import NB_model
+from NB import NB_model
 from common.classes.class_service.service import Service
 import re
 
@@ -54,7 +57,7 @@ class NBApp(Service):
                     return (jsonify(error="Invalid input. Please provide a message."), 415)
                 try:
                     # Process the received data
-                    processed_result = NBModel.predict_news_article(data)
+                    processed_result = NB_model.predict_news_article(data)
                     print(processed_result)
                     return jsonify(result=processed_result), 200
                 except Exception as e:
@@ -75,7 +78,7 @@ class NBApp(Service):
                 predict_pa = PredictPA()
                 is_any_text = re.search('[a-zA-Z]', data)
                 if not data or not is_any_text:
-                    return jsonify(error="Error: Invalid input. Please provide a 'message' field in JSON format."), 415
+                   return jsonify(error="Invalid input. Please provide a message."), 415
                 try:
                     pa_response = predict_pa.post({"message" : data})
                     lr_response = predict_lr.post({"message" : data})

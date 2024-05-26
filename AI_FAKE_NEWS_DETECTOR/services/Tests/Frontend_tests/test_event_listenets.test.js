@@ -8,10 +8,9 @@ const {
   handleCLosePopUp,
   handleOptional,
   handleSubmit,
-  fetchDataAndDrawChart,
   showOptionalResults,
-  setupChartToggle,
   navigateToPage,
+  countCharacters,
 } = require("../../common/static/ajaxScript");
 const { drawChart } = require("../../common/static/ChartScripts");
 const { Chart } = require("chart.js");
@@ -28,6 +27,7 @@ describe("Unit Test Event Listeners with jQuery", () => {
     $("body").html(`
     <button class="navButton" id="lrPageBtn">LR</button>
       <textarea id="area"></textarea>
+      <span id="char">0 Characters</span>
       <div id="error-message"></div>
       <input type="submit" id="submitBtn" class="submit-button" value="Submit">
       <dialog id="resultPopup" class="popup">
@@ -81,6 +81,7 @@ describe("Unit Test Event Listeners with jQuery", () => {
     jest.clearAllMocks();
   });
 
+    // test submission
   test("handleSubmit triggers on submit button click with correct form data", async () => {
     const formData = new FormData();
     formData.append("message", testArticle.trim());
@@ -104,18 +105,43 @@ describe("Unit Test Event Listeners with jQuery", () => {
         data: formData,
       })
     );
-    expect($("#main-result").text()).toBe(mockResponse.result); // correct rendering of text
+    expect($("#main-result").text()).toBe(mockResponse.result); // mock correct text
   });
 
-  test("handleOptional triggers on submit button click with correct form data", async () => {
+  
+
+  test("handleOpenPopUp is triggered when submit is successful", async () => {
+    $("#submitBtn").click();
+    await new Promise((r) => setTimeout(r, 100));
+    expect($("#resultPopup")[0].showModal).toHaveBeenCalled();
+  });
+
+  test("handleSubmit triggers on submit button click with incorrect form data", async () => {
     const formData = new FormData();
-    formData.append("message", testArticle.trim());
-    $("#expand-result").on("click", (e) => {
-      handleOptional(e, "http://127.0.0.1:5001/LR/get_result", formData);
+    $.ajax = jest.fn().mockImplementation(() => Promise.reject(new Error("Text needs to be between 900 and 3000 characters long.")));
+    formData.append("message", wrongArticle.trim());
+
+    $("#submitBtn").on("click", async (e) => {
+      await handleSubmit(e, "http://127.0.0.1:5001/predict_LR", formData);
+    });
+    $("#submitBtn").trigger("click");
+    await new Promise(process.nextTick); // Ensure all promises resolve
+    expect($("#error-message").text()).toContain(
+      "Text needs to be between 900 and 3000 characters long."
+    );
+  });
+
+
+  // mock handle optional error
+  test("handleOptional triggers on submit button click with incorrect form data", async () => {
+    const formData = new FormData();
+    formData.append("message", " ");
+    $.ajax = jest.fn().mockImplementation(() => Promise.reject(new Error("An error occurred while processing the data.")));
+    $("#expand-result").on("click", async (e) => {
+      await handleOptional(e, "http://127.0.0.1:5001/LR/get_result", formData);
     });
     $("#expand-result").trigger("click");
-    await new Promise(process.nextTick); // Ensure all promises resolve
-
+    await new Promise(process.nextTick);
     expect($.ajax).toHaveBeenCalledWith(
       expect.objectContaining({
         url: "http://127.0.0.1:5001/LR/get_result",
@@ -123,33 +149,16 @@ describe("Unit Test Event Listeners with jQuery", () => {
         data: formData,
       })
     );
-  });
-
-  test("handleOpenPopUp is triggered when submit is successful", async () => {
-    $("#submitBtn").click();
-    await new Promise((r) => setTimeout(r, 100));
-
-    expect($("#resultPopup")[0].showModal).toHaveBeenCalled();
-  });
-
-  test("handleSubmit triggers on submit button click with incorrect form data", async () => {
-    const formData = new FormData();
-    formData.append("message", wrongArticle.trim());
-
-    $("#submitBtn").on("click", (e) => {
-      handleSubmit(e, "http://127.0.0.1:5001/predict_LR", formData);
-    });
-    $("#submitBtn").trigger("click");
-    await new Promise(process.nextTick); // Ensure all promises resolve
-    expect($("#error-message").text()).toContain(
-      "Text needs to be between 900 and 3000 characters long."
+    expect($("#error-message-optional").text()).toContain(
+      "An error occurred while processing the data."
     );
   });
 
-  test("handleSubmit triggers on submit button click with incorrect form data", async () => {
+  
+  test("handleSubmit triggers on submit button click with incorrect numerical form data", async () => {
     const formData = new FormData();
     formData.append("message", wrongArticle2.trim());
-
+    $.ajax = jest.fn().mockImplementation(() => Promise.reject(new Error("An error occurred while processing the data.")));
     $("#submitBtn").on("click", (e) => {
       handleSubmit(e, "http://127.0.0.1:5001/predict_LR", formData);
     });
@@ -160,20 +169,6 @@ describe("Unit Test Event Listeners with jQuery", () => {
     );
   });
 
-  test("handleSubmit triggers on submit button click with incorrect form data in numbers", async () => {
-    $("#area").val("1 1 1 1 1 1 1 1 1 1");
-    const formData = new FormData();
-    formData.append("message", $("#area").val().trim());
-
-    $("#submitBtn").on("click", (e) => {
-      handleSubmit(e, "http://127.0.0.1:5001/predict_LR", formData);
-    });
-    $("#submitBtn").trigger("click");
-    await new Promise(process.nextTick); // Ensure all promises resolve
-    expect($("#error-message").text()).toContain(
-      "Text needs to be between 900 and 3000 characters long."
-    );
-  });
 
   test("handleCLosePopUp is triggered when close button is clicked", async () => {
     $(".close-popup").trigger("click");
@@ -199,7 +194,6 @@ describe("Unit Test Event Listeners with jQuery", () => {
     };
     // Mock setup for the first click to show results
     $.ajax = jest.fn().mockResolvedValue(mockResponseShow);
-
     $("#expand-result").on("click", async (event) => {
       const URL = "http://127.0.0.1:5001/LR/get_result";
       const optionalContent = $("#optional");
@@ -214,7 +208,6 @@ describe("Unit Test Event Listeners with jQuery", () => {
         "#optional2"
       );
     });
-
     // First click to show results
     $("#expand-result").trigger("click");
     await new Promise((r) => setTimeout(r, 500)); // Ensure all promises resolve
@@ -226,10 +219,8 @@ describe("Unit Test Event Listeners with jQuery", () => {
       })
     );
     expect($("#optional1").text()).toBe("Some result message");
-
     // Change mock for the second click to hide results
     $.ajax.mockResolvedValue(mockResponseHide); // Adjust if necessary based on actual behavior
-
     // Second click to hide results
     $("#expand-result").trigger("click");
     await new Promise((r) => setTimeout(r, 500)); // Ensure all actions complete
@@ -285,4 +276,15 @@ describe("Unit Test Event Listeners with jQuery", () => {
     );
     consoleSpy.mockRestore();
   });
+
+
+  test("countCharacters updates character count on text input", () => {
+    const textInput = "This is my app";
+    const area = $("#area");
+    const char = $("#char")[0];
+    countCharacters(area, char);
+    $("#area").val(textInput).trigger("input"); 
+    expect($("#char").text()).toBe(textInput.length + " Characters");
+  });
+
 });

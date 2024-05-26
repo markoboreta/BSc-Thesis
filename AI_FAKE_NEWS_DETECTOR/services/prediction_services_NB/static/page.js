@@ -1,28 +1,30 @@
 $(document).ready(function () {
-  const resultPopup = $("#NB_resultPopup");
+  const resultPopup = $("#NBresultPopup");
   const closePopupBtn = $(".close-popup");
   const expandResultBtn = $("#expand-result");
   const optionalContent = $("#optional");
-  const dialog = $("#NB_resultPopup")[0];
+  const dialog = $("#NBresultPopup")[0];
   let optOne = "#optional1";
   let optTwo = "#optional2";
   let mainResult = "#NB-main-result";
-  const submitBtn = $("#submitBtn");
+  const submitBtn = $("#submit");
   let cntBtn = 0;
   let wcBtn = 0;
-  let area = $("#NB_area");
+  let area = $("#NBarea");
   let char = $("#char")[0];
   
-  area.on("input", function () {
+ /*area.on("input", function () {
     let content = this.value.trim();
     char.textContent = content.length + " Characters";
-  });
+  });*/
+
+  countCharacters(area, char);
 
   // Event listener for submit button click
-  $("#submitBtn").on("click", async function (event) {
+  $("#submit").on("click", async function (event) {
     event.preventDefault();
     const LRformData = new FormData();      
-    LRformData.append('message', $("#NB_area").val().trim());
+    LRformData.append('message', $("#NBarea").val().trim());
     storeFormData(submitBtn, 'NBformData', LRformData);
     if(await handleSubmit(event, "http://127.0.0.1:5002/predict_NB", LRformData, "#NB-main-result"))
    { 
@@ -41,7 +43,7 @@ $(document).ready(function () {
 
   expandResultBtn.on("click", async function (event) {
     const formData = retrieveFormData(submitBtn, "NBformData");
-    URL = "http://127.0.0.1:5002/NB/get_result";
+    const URL = "http://127.0.0.1:5002/NB/get_result";
     console.log(formData);
     showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo)
   });

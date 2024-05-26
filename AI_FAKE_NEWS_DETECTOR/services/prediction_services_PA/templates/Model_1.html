@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Passive Agressive Classifier</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static_bp.get_styles', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 </head>
 
 <body>
@@ -21,21 +22,17 @@
         <!-- Sidebar navigation -->
         <div class="sidebar">
             <!-- Navigation buttons -->
-            <form class="SVM_Button">
-                <button class="navButton" id="mainPageBtn">Home</button>
-                <button class="navButton" id="lrPageBtn">LR</button>
-                <button class="navButton" id="nbPageBtn">NB</button>
-                <button class="navButton" id="paPageBtn">PA</button>
+            <form class="nav-buttons">
+                <button class="navigation" id="mainPageBtn">Home</button>
+                <button class="navigation" id="lrPageBtn">LR</button>
+                <button class="navigation" id="nbPageBtn">NB</button>
+                <button class="navigation" id="paPageBtn">PA</button>
+            </form>
         </div>
 
         <!-- Main content -->
         <div class="main-content">
             <h1>Passive Agressive Classifier</h1>
-            <h2>Dataset</h2>
-            <p>This dataset was used for the process of training this model. It has both real and fake news articles and
-                titles carefully labelled.</p>
-            <p>If you wish to explore this dataset link is <a
-                    href="https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification">Here</a></p>
             <h3>Enter your text below:</h3>
             <form id="paForm" method="post">
                 <textarea name="message" id="PA_area" placeholder="Enter your suspicious article here..."
@@ -78,19 +75,17 @@
 
                     <div class="chart-container">
                         <div>
-                            <button type="button" id="countPlotBtn" class="submit-button" id="tfGraph">Generate
-                                Graph</button>
+                            <button type="button" id="countPlotBtn" class="submit-button" id="tfGraph">Generate Class Ratio</button>
                             <div id="optional-graphs">
                                 <canvas id="myChart" width="400" height="400"></canvas>
-                                <p id="data-context"></p>
+                                <p id="data-context-tf">This is how the fake and real classes are distributed, in the dataset.</p>
                             </div>
                         </div>
                         <div>
-                            <button type="button" id="wordCountBtn" class="submit-button" id="wcBtn">Generate Word
-                                Cloud</button>
+                            <button type="button" id="wordCountBtn" class="submit-button" id="wcBtn">Generate Mean Word Count</button>
                             <div id="optional-mean">
                                 <canvas id="wcChart" width="400" height="400"></canvas>
-                                <p id="data-context"></p>
+                                <p id="data-context-wc">This is the mean word count per real and fake news class.</p>
                             </div>
                         </div>
                     </div>
@@ -101,18 +96,6 @@
             </div>
         </div>
     </div>
-    <script>
-        // Character count script
-        /*let area = $('#PA_area');
-        let char = $('#char')[0];
-        area.on('input', function () {
-            let content = this.value.trim();
-            char.textContent = content.length + " Characters";
-        });*/
-
-
-
-    </script>
 
 </body>
 

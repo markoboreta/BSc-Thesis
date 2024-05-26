@@ -15,10 +15,12 @@ $(document).ready(function () {
   let area = $("#PA_area");
   let char = $("#char")[0];
 
-  area.on("input", function () {
+  /*area.on("input", function () {
     let content = this.value.trim();
     char.textContent = content.length + " Characters";
-  });
+  });*/
+
+  countCharacters(area, char);
 
   // Event listener for submit button click
   $("#PAsubmitBtn").on("click", async function (event) {
@@ -66,7 +68,7 @@ $(document).ready(function () {
   // Event listener for expand/collapse button click
   expandResultBtn.on("click", async function (event) {
     const formData = retrieveFormData(submitBtn, "PAformData");
-    URL = "http://127.0.0.1:5003/PA/get_result";
+    const URL = "http://127.0.0.1:5003/PA/get_result";
     showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo);
   });
 

@@ -7,19 +7,18 @@ class PA(Model):
 
     def predict_news_article(self, article):
         try:
-            print("text received: ", article)
             prediction = self.verdict(article)
             if prediction[0] == 0:
                 return "The news article is highly likely to be fake according to PA."
             else:
                 return "The news article is highly likely to be real according to PA."
         except Exception as e:
-            return ValueError("Not good return on verdict")
+            return "Error: Not good return on verdict"
         
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
-model_path = os.path.join(base_dir, 'model_and_vect', 'PA_model.pkl')
-vect_path = os.path.join(base_dir, 'model_and_vect', 'PA_Tfidf.pkl')
+model_path = os.path.join(base_dir, 'model_and_vect', 'PA_model_new_prec_last.pkl')
+vect_path = os.path.join(base_dir, 'model_and_vect', 'PA_Tfidf_new_prec_last.pkl')
 
 
-PAModel = PA(model_path, vect_path)
+PA_Model = PA(model_path, vect_path)

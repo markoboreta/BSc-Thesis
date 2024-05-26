@@ -1,7 +1,7 @@
 from flask_restful import Resource, Api, reqparse
 import requests
 
-# Flask-Restful API for communication between the backend services 
+# Flask RESTful API for communication between the backend services 
 
 class API_Class(Resource):
 
@@ -21,26 +21,30 @@ class API_Class(Resource):
         except requests.exceptions.RequestException as e:
             return {'error': str(e)}, 500
 
-# Rettrieve data from the predict_NB
+"""
+!!!!!!!!!!!! USE BOTTOM URL FOR DOCKER !!!!!!!!!!!! 
+"""
+
+# Rettrieve verdict from the predict_NB
 #url = "http://127.0.0.1:5002/predict_NB" #test env url
 #url = "http://NBapp:5002/predict_NB"
 class PredictNB(API_Class):
     def __init__(self):
-        super().__init__("http://127.0.0.1:5002/predict_NB")
+        super().__init__("http://NBapp:5002/predict_NB")
 
 
-# Rettrieve data from the predict_PA
+# Rettrieve verdict from the predict_PA
 #url = "http://127.0.0.1:5003/predict_PA"
 #url = 'http://PAapp:5003/predict_PA'
 class PredictPA(API_Class):
     def __init__(self):
-        super().__init__('http://127.0.0.1:5003/predict_PA')
+        super().__init__("http://PAapp:5003/predict_PA")
   
-# Rettrieve data from the predict_LR
+# Rettrieve verdict from the predict_LR
 #url = "http://127.0.0.1:5001/predict_LR"
 #url = 'http://LRapp:5001/predict_LR'
 class PredictLR(API_Class):
     def __init__(self):
-        super().__init__('http://127.0.0.1:5001/predict_LR')
+        super().__init__("http://LRapp:5001/predict_LR")
         
 

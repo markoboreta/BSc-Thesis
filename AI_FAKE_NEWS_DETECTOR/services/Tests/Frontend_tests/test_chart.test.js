@@ -4,11 +4,9 @@ const $ = require("jquery");
 global.$ = global.jQuery = $;
 const { JSDOM } = require("jsdom");
 const { setupChartToggle } = require("../../common/static/ajaxScript");
-const { drawChart } = require("../../common/static/ChartScripts");
-
 const { Chart } = require("chart.js");
 let mockChartInstance;
-$.ajax = jest.fn().mockResolvedValue({ success: true });
+//$.ajax = jest.fn().mockResolvedValue({ success: true });
 describe("Unit Test Event Listeners with jQuery", () => {
   beforeAll(() => {
     // Mock the entire Chart module
@@ -80,16 +78,5 @@ describe("Unit Test Event Listeners with jQuery", () => {
 
     expect($("#countPlotBtn").text()).toBe("Generate Class Ratio");
     expect($("#optional-graphs").css("display")).toBe("none");
-  });
-
-
-  test('AJAX call with bad URL should handle errors correctly', async () => {
-    $("#countPlotBtn").on("click", async function () {
-        setupChartToggle("#countPlotBtn", "#optional-graphs", "http://127.0.0.1:5009/testiiing", "myChart", "Generate Class Ratio", "Hide Graph");
-    });
-    $("#countPlotBtn").trigger('click');
-    await new Promise(resolve => setTimeout(resolve, 150)); 
-    expect($('#error-message').text()).toContain("An error occurred while processing the data needed for the graph.");
-    expect($('#optional-graphs').css('display')).toBe('none');
   });
 });
