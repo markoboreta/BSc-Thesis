@@ -8,17 +8,11 @@ $(document).ready(function () {
   let optTwo = "#optional2";
   let mainResult = "#PA-main-result";
   const submitBtn = $("#PAsubmitBtn");
-  
   let cntBtn = 0;
   let wcBtn = 0;
-
   let area = $("#PA_area");
   let char = $("#char")[0];
 
-  /*area.on("input", function () {
-    let content = this.value.trim();
-    char.textContent = content.length + " Characters";
-  });*/
 
   countCharacters(area, char);
 

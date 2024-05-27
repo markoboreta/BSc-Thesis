@@ -54,7 +54,7 @@ class Service(Flask):
             return render_template("error.html", data=error_message), getattr(e, 'code', 404)
         self.register_blueprint(errors_bp)
 
-    
+    # blueprint for the static files, CSS and JS
     def configure_blueprint_for_templates(self):
         common_static_dir = os.getenv('COMMON_STATIC_DIR')
         #common_static_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'common', 'static')

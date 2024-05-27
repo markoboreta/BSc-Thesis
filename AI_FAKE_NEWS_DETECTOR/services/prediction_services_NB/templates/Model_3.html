@@ -67,25 +67,17 @@
                 <p>The basis of the Naive Bayes classifier is in Bayes' Theorem, an example of probabilistic theory.
                     This theorem calculates the likelihood of an event based on past knowledge of possible event-related
                     situations. </p>
-                <p>To utilize this model in the best way possible, the input article should be between 4000 and 6000
-                    characters. It will work on the smaller or bigger number of character but not as accurately, and if
-                    possible provide articles title speratated with "-".</p>
-                <p>This means that, in terms of text classification, the likelihood that a given text belongs in a
-                    specific category (in our case, "fake" or "real" news) is ascertained by looking at its frequency
-                    and word distribution. </p>
-                <p>The word "naive" is employed since it is thought that the features that comprise the model are
-                    independent of one other. Put differently, modifying the value of a single feature does not directly
-                    affect the values of any other features that the algorithm utilizes. </p>
+                    <p>Minimum number of characters required for submission is 900 and maximum is 3000.</p>
+                    <p>The submitted data is not stored anywhere; it is only preprocessed, and the output is displayed to
+                        the user.</p>
                 <div class="dataRep" id="dashboard">
                     <h3>DATA REPRESENTATION</h3>
-                    <p>This visual representation shows the data used to train the model. The x-axis represents the
-                        number of words in the article, and the y-axis represents the label (0 for FAKE NEWS, 1 for REAL
-                        NEWS).</p>
+                    <p>This visual representation shows the data used to train the model. The Y-axis represents the count in the article, and the x-axis represents the label (0 for FAKE NEWS, 1 for REAL NEWS).</p>
                     <div class="chart-container">
                         <div>
                             <button type="button" id="countPlotBtn" class="submit-button">Generate Class Ratio</button>
                             <div id="optional-graphs">
-                                <canvas id="myChart" width="400" height="400"></canvas>
+                                <canvas id="myChart" width="380" height="400"></canvas>
                                 <p id="data-context-tf">This is how the fake and real classes are distributed, in the dataset.</p>
                             </div>
                         </div>
@@ -93,7 +85,7 @@
                             <button type="button" id="wordCountBtn" class="submit-button" id="wcBtn">Generate Mean Word Count</button>
                             <p></p>
                             <div id="optional-mean">
-                                <canvas id="wcChart" width="400" height="400"></canvas>
+                                <canvas id="wcChart" width="380" height="400"></canvas>
                                 <p id="data-context-wc">This is the mean word count per real and fake news class.</p>
                             </div>
                         </div>

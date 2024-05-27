@@ -4,12 +4,19 @@ from unittest.mock import patch, mock_open, Mock
 from flask import Response, jsonify
 
 # Importing Flask app instances directly
+from main_app.app import app as mainApp
 from prediciton_services_LR.app import app as LRApp
 from prediction_services_NB.app import app as NBApp
 from prediction_services_PA.app import app as PAApp
 
-# Test configurations for each of the apps using direct references to the Flask app instances
+# mock setup for testing pytest and unittest combination
+
+
 app_configs = {
+    "mainApp":{
+        "client_app": mainApp,
+        "home_page_url": "/"
+    },
     "LRApp": {
         "client_app": LRApp,
         "base_url": "/predict_LR",
@@ -57,7 +64,9 @@ app_param = [
     ("PAApp", PAApp, app_configs["PAApp"])
 ]
 
-@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
+
+# test the page of the model
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"]), (mainApp, app_configs["mainApp"])])
 def test_home_page(app_instance, config):
     with patch('werkzeug.test.Client.open', return_value=Response(response="Homepage", status=200)):
         client = app_instance.test_client()
@@ -65,7 +74,15 @@ def test_home_page(app_instance, config):
         assert response.status_code == 200
         assert response.data.decode('utf-8') == "Homepage"
 
+# error of the model page
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"]), (mainApp, app_configs["mainApp"])])
+def test_home_page(app_instance, config):
+    with patch('werkzeug.test.Client.open', return_value=Mock(status_code=404, data=json.dumps({'error': 'Page not found'}))):
+        client = app_instance.test_client()
+        response = client.get('/aaaaaaa')
+        assert response.status_code == 404
 
+# retrieve JSON data
 @pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
 def test_get_graph_data(app_instance, config):
     client = app_instance.test_client()
@@ -76,6 +93,7 @@ def test_get_graph_data(app_instance, config):
         assert data == {'data': [1, 2, 3]}
 
 
+# correct prediction
 @pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
 def test_predict_valid_input(app_instance, config):
     client = app_instance.test_client()
@@ -85,6 +103,8 @@ def test_predict_valid_input(app_instance, config):
         result = json.loads(response.data)
         assert result['result'] == 'Prediction'
 
+
+# predcition for the API communication test
 @pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
 def test_predict_together_valid_input(app_instance, config):
     client = app_instance.test_client()
@@ -95,6 +115,7 @@ def test_predict_together_valid_input(app_instance, config):
             result = json.loads(response.data)
             assert result['result'] == {'result1': {'result': 'LR result'}, 'result2': {'result': 'NB result'}}
 
+# empty article error test
 @pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
 def test_predict_no_input(app_instance, config):
     client = app_instance.test_client()
@@ -104,6 +125,7 @@ def test_predict_no_input(app_instance, config):
         result = json.loads(response.data)
         assert 'error' in result
 
+# incorrect method, non post test 
 @pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
 def test_predict_invalid_method(app_instance, config):
     client = app_instance.test_client()
@@ -113,6 +135,7 @@ def test_predict_invalid_method(app_instance, config):
         result = json.loads(response.data)
         assert 'error' in result
 
+# random error on the model side, returns 500
 @pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
 def test_predict_exception_handling(app_instance, config):
     client = app_instance.test_client()
@@ -122,6 +145,7 @@ def test_predict_exception_handling(app_instance, config):
         result = json.loads(response.data)
         assert 'error' in result
 
+# JSON file not existant
 @pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
 def test_file_not_found_error(app_instance, config):
     client = app_instance.test_client()
@@ -132,7 +156,7 @@ def test_file_not_found_error(app_instance, config):
         result = json.loads(response.data)
         assert 'error' in result
 
-
+# incorrect file
 @pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
 def test_json_decode_error(app_instance, config):
     client = app_instance.test_client()

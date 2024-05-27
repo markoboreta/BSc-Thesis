@@ -56,7 +56,7 @@ $(document).ready(function () {
   }
 });
 
-// Function to handle prediction button, this will send artticle and get result
+// handle AJAX for predcition 
 async function makePrediction(endpointUrl, formData) {
   const timeout = 15000; // 15 seconds
   try {
@@ -156,18 +156,6 @@ function openDialog(dialogElement) {
   }
 }
 
-// Function to close the PopUp
-function closeDialog(dialogElement) {
-  if (dialogElement && typeof dialogElement.close === "function") {
-    dialogElement.close(); // Close the dialog
-  } else {
-    console.error("The close method is not supported.");
-    // Fallback to hide the dialog
-    if (dialogElement) {
-      dialogElement.style.display = "none";
-    }
-  }
-}
 
 // Function to reset dialog content
 function resetDialogContent(idName) {
@@ -175,7 +163,7 @@ function resetDialogContent(idName) {
   $(idName).text("");
 }
 
-// Function to handle the optional button
+// Function to handle the optional result button
 async function handleOptional(event, optionalURL, formData, optOne, optTwo) {
   event.preventDefault();
   let activeRequests = 0;

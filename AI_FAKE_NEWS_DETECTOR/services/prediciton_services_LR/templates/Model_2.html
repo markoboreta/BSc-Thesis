@@ -19,7 +19,6 @@
     <script type='text/javascript' src="{{ url_for('static', filename='page.js') }}"></script>
     
     
-
     <div class="container">
         <!-- Sidebar navigation -->
         <div class="sidebar">
@@ -53,6 +52,7 @@
                     <!--Optional to view-->
                     <button class="expand-result" id="LRexpand">View how other models have responded</button>
                     <div id="LRoptional">
+                        <p></p>
                         <div id="optional1" class="optional-content"></div>
                         <div id="optional2" class="optional-content"></div>
                         <p>
@@ -65,15 +65,12 @@
             <div class="additional">
                 <h3>About the model:</h3>
                 <p>Logistic regression is a supervised machine learning model used for classification of data.</p>
-                <p>This specific iteration of the model is best used for smaller news articles between 900 and 3000
-                    characters, preferably about politics and every-day topics.</p>
+                <p>Minimum number of characters required for submission is 900 and maximum is 3000.</p>
                 <p>The submitted data is not stored anywhere; it is only preprocessed, and the output is displayed to
                     the user.</p>
                 <div class="data-rep" id="dashboard">
                     <h3>DATA REPRESENTATION</h3>
-                    <p>This visual representation shows the data used to train the model. The x-axis represents the
-                        number of words in the article, and the y-axis represents the label (0 for FAKE NEWS, 1 for REAL
-                        NEWS).</p>
+                    <p>This visual representation shows the data used to train the model. The Y-axis represents the count in the article, and the x-axis represents the label (0 for FAKE NEWS, 1 for REAL NEWS).</p>
                 <div class="chart-container">
                     <div>
                         <button type="button" id="countPlotBtn" class="submit-button">Generate Class Ratio</button>

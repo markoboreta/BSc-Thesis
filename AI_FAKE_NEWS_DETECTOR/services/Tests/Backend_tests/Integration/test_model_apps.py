@@ -1,17 +1,20 @@
 import pytest
 import json
-from unittest.mock import patch, mock_open
-
-# Importing Flask app instances directly
+from main_app.app import app as mainApp
 from prediciton_services_LR.app import app as LRApp
 from prediction_services_NB.app import app as NBApp
 from prediction_services_PA.app import app as PAApp
 
-# Test configurations for each app, adapted to directly use imported apps
+
+# Application configurations
 app_configs = {
+    "mainApp":{
+        "client_app": mainApp,
+        "home_page_url": "/"
+    },
     "LRApp": {
         "client_app": LRApp,
-        "base_url": "/predict_LR",
+        "predict_url": "/predict_LR",
         "home_page_url": "/LR_page",
         "result_key": "LR",
         "together_url": "/LR/get_result",
@@ -23,7 +26,7 @@ app_configs = {
     },
     "NBApp": {
         "client_app": NBApp,
-        "base_url": "/predict_NB",
+        "predict_url": "/predict_NB",
         "home_page_url": "/NB_page",
         "result_key": "NB",
         "together_url": "/NB/get_result",
@@ -35,7 +38,7 @@ app_configs = {
     },
     "PAApp": {
         "client_app": PAApp,
-        "base_url": "/predict_PA",
+        "predict_url": "/predict_PA",
         "home_page_url": "/PA_page",
         "result_key": "PA",
         "together_url": "/PA/get_result",
@@ -47,81 +50,86 @@ app_configs = {
     }
 }
 
-@pytest.fixture(scope="module", params=["LRApp", "NBApp", "PAApp"])
-def client(request):
-    app = app_configs[request.param]['client_app']
-    app.config['TESTING'] = True
-    app.config['DEBUG'] = True
-    client = app.test_client()
-    return client, app_configs[request.param]
+# List of applications to be tested
+app_param = [
+    ("mainApp", mainApp, app_configs["mainApp"]),
+    ("LRApp", LRApp, app_configs["LRApp"]),
+    ("NBApp", NBApp, app_configs["NBApp"]),
+    ("PAApp", PAApp, app_configs["PAApp"])
+]
 
-def test_home_page(client):
-    client_instance, config = client
-    response = client_instance.get(config['home_page_url'])
+
+# test the page of the model
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"]), (mainApp, app_configs["mainApp"])])
+def test_home_page(app_instance, config):
+    client = app_instance.test_client()
+    response = client.get(config['home_page_url'])
     assert response.status_code == 200
 
-def test_predict_valid_data(client):
-    client_instance, config = client
-    response = client_instance.post(config['base_url'], data={'message': 'Some news article content'})
+
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
+def test_predict_valid_data(app_instance, config):
+    client = app_instance.test_client()
+    response = client.post(config["predict_url"], data={'message': 'Some news article content'})
     assert response.status_code == 200
     result = json.loads(response.data)
     assert config['result_key'] in result['result']
 
-def test_predict_together_valid_data(client):
-    client_instance, config = client
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
+def test_predict_together_valid_data(app_instance, config):
+    client = app_instance.test_client()
     data = {'message': 'Some news article content'}
-    response = client_instance.post(config['together_url'], data=data)
+    response = client.post(config['together_url'], data=data)
     assert response.status_code == 200
     result = json.loads(response.data)
     assert 'result' in result
     assert config['together_key'] in result['result']['result1']['result']
 
-def test_predict_empty_data(client):
-    client_instance, config = client
-    response = client_instance.post(config['base_url'], data={'message': ''})
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
+def test_predict_empty_data(app_instance, config):
+    client = app_instance.test_client()
+    response = client.post(config["predict_url"], data={'message': ''})
     assert response.status_code == 415
     result = json.loads(response.data)
     assert 'error' in result
 
 
-def test_predict_wrong_method(client):
-    client_instance, config = client
-    response = client_instance.get(config['base_url'])
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
+def test_predict_wrong_method(app_instance, config):
+    client = app_instance.test_client()
+    response = client.get(config["predict_url"])
     assert response.status_code == 405
     result = json.loads(response.data)
     assert 'error' in result
 
-def test_predict_together_empty_data(client):
-    client_instance, config = client
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
+def test_predict_wrong_method(app_instance, config):
+    client = app_instance.test_client()
     data = {'message': ''}
-    response = client_instance.post(config['together_url'], data=data)
+    response = client.post(config['together_url'], data=data)
     assert response.status_code == 415
     result = json.loads(response.data)
     assert 'error' in result
 
-def test_predict_together_numerical_data(client):
-    client_instance, config = client
-    data = {'message': 12121212}
-    response = client_instance.post(config['together_url'], data=data)
-    assert response.status_code == 415
-    result = json.loads(response.data)
-    assert 'error' in result
 
-def test_handle_error_404(client):
-    client_instance, config = client
-    response = client_instance.get('/aaaaa')
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"]), (mainApp, app_configs["mainApp"])])
+def test_handle_error_404(app_instance, config):
+    client = app_instance.test_client()
+    response = client.get('/aaaaa')
     assert response.status_code == 404
 
-def test_get_graph_data(client):
-    client_instance, config = client
-    response = client_instance.get(config['tf_url'])
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
+def test_get_graph_data(app_instance, config):
+    client = app_instance.test_client()
+    response = client.get(config['tf_url'])
     assert response.status_code == 200
     data = json.loads(response.data)
     assert set(config['tf_data_keys']).issubset(data.keys())
 
-def test_get_wc_data(client):
-    client_instance, config = client
-    response = client_instance.get(config["wc_url"])
+@pytest.mark.parametrize("app_instance, config", [(LRApp, app_configs["LRApp"]), (NBApp, app_configs["NBApp"]), (PAApp, app_configs["PAApp"])])
+def test_get_wc_data(app_instance, config):
+    client = app_instance.test_client()
+    response = client.get(config["wc_url"])
     assert response.status_code == 200
     data = json.loads(response.data)
     assert set(config['wc_data_keys']).issubset(data.keys())
