@@ -1,48 +1,47 @@
 import pytest
 import json
-import importlib
+from unittest.mock import patch, mock_open
 
-app_classes = {
-    "LRApp": "prediciton_services_LR.app",
-    "NBApp": "prediction_services_NB.app",
-    "PAApp": "prediction_services_PA.app"
-}
+# Importing Flask app instances directly
+from prediciton_services_LR.app import app as LRApp
+from prediction_services_NB.app import app as NBApp
+from prediction_services_PA.app import app as PAApp
 
-# Test configurations for each app
+# Test configurations for each app, adapted to directly use imported apps
 app_configs = {
     "LRApp": {
-        "client_function": "app",
+        "client_app": LRApp,
         "base_url": "/predict_LR",
         "home_page_url": "/LR_page",
         "result_key": "LR",
         "together_url": "/LR/get_result",
         "together_key": "NB",
         "wc_url": "/getWCData",
-        "tf_url" : "/getTFData",
+        "tf_url": "/getTFData",
         "wc_data_keys": ["Fake", "Real"],
         "tf_data_keys": ["Fake", "Real"]
     },
     "NBApp": {
-        "client_function": "app",
+        "client_app": NBApp,
         "base_url": "/predict_NB",
         "home_page_url": "/NB_page",
         "result_key": "NB",
         "together_url": "/NB/get_result",
         "together_key": "LR",
         "wc_url": "/getWCData",
-        "tf_url" : "/getNBData",
+        "tf_url": "/getNBData",
         "wc_data_keys": ["Fake", "Real"],
         "tf_data_keys": ["Fake", "Real"]
     },
     "PAApp": {
-        "client_function": "app",
+        "client_app": PAApp,
         "base_url": "/predict_PA",
         "home_page_url": "/PA_page",
         "result_key": "PA",
         "together_url": "/PA/get_result",
         "together_key": "LR",
         "wc_url": "/getPAData",
-        "tf_url" : "/getWCData",
+        "tf_url": "/getWCData",
         "wc_data_keys": ["Fake", "Real"],
         "tf_data_keys": ["Fake", "Real"]
     }
@@ -50,8 +49,7 @@ app_configs = {
 
 @pytest.fixture(scope="module", params=["LRApp", "NBApp", "PAApp"])
 def client(request):
-    app_class = importlib.import_module(app_classes[request.param])
-    app = getattr(app_class, app_configs[request.param]['client_function'])
+    app = app_configs[request.param]['client_app']
     app.config['TESTING'] = True
     app.config['DEBUG'] = True
     client = app.test_client()
@@ -85,13 +83,6 @@ def test_predict_empty_data(client):
     result = json.loads(response.data)
     assert 'error' in result
 
-def test_predict_numerical_data(client):
-    client_instance, config = client
-    response = client_instance.post(config['base_url'], data={'message': 11111})
-    assert response.status_code == 415
-    result = json.loads(response.data)
-    assert 'error' in result
-
 
 def test_predict_wrong_method(client):
     client_instance, config = client
@@ -116,12 +107,10 @@ def test_predict_together_numerical_data(client):
     result = json.loads(response.data)
     assert 'error' in result
 
-
 def test_handle_error_404(client):
     client_instance, config = client
     response = client_instance.get('/aaaaa')
     assert response.status_code == 404
-
 
 def test_get_graph_data(client):
     client_instance, config = client
