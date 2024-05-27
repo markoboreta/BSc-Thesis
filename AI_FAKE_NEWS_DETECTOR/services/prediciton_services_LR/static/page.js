@@ -15,12 +15,9 @@ $(document).ready(function () {
   let area = $("#LRarea");
   let char = $("#char")[0];
 
-  /*area.on("input", function () {
-    let content = this.value.trim();
-    char.textContent = content.length + " Characters";
-  });*/
 
-    countCharacters(area, char);
+  // count characters for user
+  countCharacters(area, char);
 
   // Event listener for submit button click
   $("#submit").on("click", async function (event) {
@@ -51,15 +48,17 @@ $(document).ready(function () {
       const URL = "http://127.0.0.1:5001/LR/get_result";
       showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo);
   });
- 
+  
+  // class ratio chart
   $("#countPlotBtn").on("click", async function (event) {
     setupChartToggle("#countPlotBtn","#optional-graphs", "http://127.0.0.1:5001/getTFData", "myChart", "Generate Class Ratio", "Hide graph", countBtn);
     countBtn+=1;
     //console.log(countBtn);
   });
   
+  // Word count chart
   $("#wordCountBtn").on("click", async function (event) {
-    setupChartToggle("#wordCountBtn","#optional-mean", "http://127.0.0.1:5001/getWCData", "wcChart", "Generate Word Count", "Hide graph", wcBtn);
+    setupChartToggle("#wordCountBtn","#optional-mean", "http://127.0.0.1:5001/getWCData", "wcChart", "Generate Mean Word Count", "Hide graph", wcBtn);
     wcBtn+=1;
   });
 });

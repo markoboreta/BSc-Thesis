@@ -22,7 +22,7 @@ const wrongArticle2 = "11 11 11 11";
 // Mocks and setups specific to jQuery
 $.ajax = jest.fn().mockResolvedValue({ success: true });
 describe("Unit Test Event Listeners with jQuery", () => {
-  beforeEach(() => {
+  beforeEach(() => { // set up the following operations before each test
     // Set up the HTML structure for the tests
     $("body").html(`
     <button class="navButton" id="lrPageBtn">LR</button>
@@ -50,8 +50,8 @@ describe("Unit Test Event Listeners with jQuery", () => {
     `);
     const dialogElement = $("#resultPopup")[0];
     // Mock console.log and console.error
-    console.log = jest.fn();
-    console.error = jest.fn();
+    console.log = jest.fn(); // mocking console .log
+    console.error = jest.fn(); 
     $.ajax = jest.fn(() => $.Deferred().resolve());
     console.log.mockClear();
     console.error.mockClear();
@@ -65,15 +65,20 @@ describe("Unit Test Event Listeners with jQuery", () => {
     };
     global.drawChart = jest.fn();
 
+    // what to do on submission
     $("#submitBtn").on("click", function () {
       handleOpenPopUp($("#resultPopup")[0]);
     });
 
+    // close pop up button on click
     $(".close-popup").on("click", function () {
       handleCLosePopUp(
         $("#resultPopup")[0],
         $("#optional"),
-        $("#expand-result")[0]
+        $("#expand-result")[0],
+        $("#main-result"),
+        "#optional1",
+        "#optional2"
       );
     });
   });

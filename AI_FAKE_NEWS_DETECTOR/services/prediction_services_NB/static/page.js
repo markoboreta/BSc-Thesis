@@ -13,10 +13,6 @@ $(document).ready(function () {
   let area = $("#NBarea");
   let char = $("#char")[0];
   
- /*area.on("input", function () {
-    let content = this.value.trim();
-    char.textContent = content.length + " Characters";
-  });*/
 
   countCharacters(area, char);
 
@@ -48,13 +44,14 @@ $(document).ready(function () {
     showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo)
   });
 
+  // drawing the graphs
   $("#countPlotBtn").on("click", async function (event) {
     setupChartToggle("#countPlotBtn","#optional-graphs", "http://127.0.0.1:5002/getNBData", "myChart", "Generate Class Ratio", "Hide graph", cntBtn);
     cntBtn+=1;
   });
   
   $("#wordCountBtn").on("click", async function (event) {
-    setupChartToggle("#wordCountBtn","#optional-mean", "http://127.0.0.1:5002/getWCData", "wcChart", "Generate Word Count", "Hide graph", wcBtn);
+    setupChartToggle("#wordCountBtn","#optional-mean", "http://127.0.0.1:5002/getWCData", "wcChart", "Generate Mean Word Count", "Hide graph", wcBtn);
     wcBtn+=1;
   });
 });

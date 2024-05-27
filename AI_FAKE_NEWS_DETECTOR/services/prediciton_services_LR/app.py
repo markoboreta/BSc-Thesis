@@ -18,17 +18,18 @@ class LRApp(Service):
         super().__init__(import_name, template_folder=template, static_folder=static)
         self.set_up_routes()
         self.api = Api(self)
-        self.api.add_resource(PredictNB, '/api/predict_nb')
+        self.api.add_resource(PredictNB, '/api/predict_nb') # register API
         self.api.add_resource(PredictPA, '/api/predict_pa')
         
     def set_up_routes(self):
 
-        # route for the main page of the 
+        # route for the main page of the model
         @self.route("/LR_page", methods=["GET"])
         def LR_page():
             if request.method == "POST" or request.method == "GET":
                 return render_template("Model_2.html")
         
+        # get the json data
         @self.route('/getTFData')
         def get_graph_data():
             if request.method == "GET":
@@ -43,6 +44,7 @@ class LRApp(Service):
                 file_path = os.path.join(this_dir, 'static', 'WC.json')
                 return self.load_json_data(file_path)
 
+        # make predicition for a single model
         @self.route("/predict_LR", methods=["POST", "GET"])
         def predict_LR():
             if request.method == "POST":
@@ -63,6 +65,7 @@ class LRApp(Service):
                 print("Method not allowed.")
                 return jsonify(error="Method not allowed."), 405
 
+        # retrieve verdicts with API
         @self.route("/LR/get_result", methods=["POST", "GET"])
         def predict_toegther():
             if request.method == "POST":

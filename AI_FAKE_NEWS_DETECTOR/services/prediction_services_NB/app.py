@@ -1,12 +1,9 @@
 import os
-import json
-import requests
 from flask import Flask, render_template, request, jsonify
-from flask import  request, Blueprint, send_from_directory, Response
+from flask import  request
 from flask_cors import CORS
 from flask import request, jsonify
-from flask import request, render_template, abort
-from common.classes.class_service.service import Service
+from flask import request, render_template
 from common.classes.class_service.service_api import PredictPA, PredictLR
 from flask_restful import Api
 """
@@ -47,6 +44,7 @@ class NBApp(Service):
                 file_path = os.path.join(this_dir, 'static', 'WC.json')
                 return self.load_json_data(file_path)
         
+        # predicition of the NB
         @self.route("/predict_NB", methods=["POST", "GET"])
         def predict_NB():
             if request.method == "POST":
@@ -68,7 +66,7 @@ class NBApp(Service):
                 return jsonify(error="Method not allowed."), 405
 
         
-
+        # get the results from API
         @self.route("/NB/get_result", methods=["POST", "GET"])
         def predict_toegther():
             if request.method == "POST":

@@ -13,8 +13,8 @@ function drawChart(data, canvasID) {
       datasets: [{
           label: 'Count', 
           data: values, 
-          backgroundColor: [
-            labels[0] === "Fake" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)",
+          backgroundColor: [ // set colors for the 
+            labels[0] === "Fake" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)", 
             labels[1] === "Fake" ? "rgba(255, 99, 132, 0.6)" : "rgba(75, 192, 192, 0.6)", 
           ],
           borderColor: [
@@ -24,13 +24,13 @@ function drawChart(data, canvasID) {
           borderWidth: 1
       }]
   };
-  const canvas = document.getElementById(canvasID);
-  const ctx = canvas.getContext("2d"); 
+  const canvas = document.getElementById(canvasID); 
+  const ctx = canvas.getContext("2d"); // canvas element
 
   // Create new chart instance
   myChart = new Chart(ctx, {
-      type: "bar",
-      data: dataset,
+      type: "bar", // bar plot type
+      data: dataset, // data from dataset
       options: {
           responsive: false,
           scales: {
@@ -53,7 +53,7 @@ function drawChart(data, canvasID) {
       }
   });
 
-  return myChart;
+  return myChart; // return chart
 }
 
 //export{ drawChart }
