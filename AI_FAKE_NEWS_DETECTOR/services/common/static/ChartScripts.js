@@ -28,7 +28,7 @@ function drawChart(data, canvasID) {
   const ctx = canvas.getContext("2d"); 
 
   // Create new chart instance
-  window.myChart = new Chart(ctx, {
+  myChart = new Chart(ctx, {
       type: "bar",
       data: dataset,
       options: {
@@ -53,7 +53,7 @@ function drawChart(data, canvasID) {
       }
   });
 
-  return window.myChart;
+  return myChart;
 }
 
 //export{ drawChart }
