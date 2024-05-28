@@ -32,7 +32,7 @@ class PAApp(Service):
             if request.method == "POST":
                 data = request.form.get("message", "")
                 is_any_text = re.search('[a-zA-Z]', data)
-                print(is_any_text)
+                #print(is_any_text)
                 if not data or not is_any_text: 
                     # If message data is missing or invalid, return an error response
                     return jsonify(error="Invalid input. Please provide a message."), 415
@@ -55,7 +55,7 @@ class PAApp(Service):
             if request.method == "GET":
                 this_dir = os.path.abspath(os.path.dirname(__file__))
                 file_path = os.path.join(this_dir, 'static', 'TF.json')
-                print(file_path)
+                #print(file_path)
                 return self.load_json_data(file_path)
         
         @self.route('/getWCData')
@@ -67,7 +67,7 @@ class PAApp(Service):
 
         @self.route("/PA/get_result", methods=["POST", "GET"])
         def predict_toegther():
-            print('here')
+            #print('here')
             # Check if the request method is POST
             if request.method == "POST":
                 data = request.form.get("message", "")

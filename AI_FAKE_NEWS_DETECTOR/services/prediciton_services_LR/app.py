@@ -56,7 +56,7 @@ class LRApp(Service):
                 try:
                     # Process the received data
                     processed_result = LR_model.predict_news_article(data)
-                    print(processed_result)
+                    #print(processed_result)
                     return jsonify(result=processed_result), 200
                 except Exception as e:
                     error_message = f"Error occurred while processing data: {str(e)}"

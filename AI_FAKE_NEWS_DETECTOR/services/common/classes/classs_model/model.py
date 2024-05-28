@@ -48,13 +48,13 @@ class Model:
     # Remove special characters, tokenize and remove stop words
     def preprocess_text(self, text):
         try:
-            print("text type received: ", type(text))
+            #print("text type received: ", type(text))
             text = self.remove_special(text)
-            print("after removing special", text)
+            #print("after removing special", text)
             if text:
                 tokenized = word_tokenize(text)
-                print("tokenized ", tokenized)
-                print("joined ", ' '.join([self.lemmatizer.lemmatize(w) for w in tokenized if w not in self.stop_words]))                
+                #print("tokenized ", tokenized)
+                #print("joined ", ' '.join([self.lemmatizer.lemmatize(w) for w in tokenized if w not in self.stop_words]))                
                 return ' '.join([self.lemmatizer.lemmatize(w) for w in tokenized if w not in self.stop_words])
         except:
             print("Error, data is not textual most likely")
@@ -68,7 +68,7 @@ class Model:
                 print("Invalid input - article is empty or not provided.")
                 return -1
             preprocessed_article = self.preprocess_text(text)
-            print(preprocessed_article)
+            #print(preprocessed_article)
             if not preprocessed_article or preprocessed_article.isspace():
                 return -1
             article_vector = self.vect.transform([preprocessed_article])

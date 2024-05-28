@@ -224,8 +224,7 @@ describe("Unit Test Event Listeners with jQuery", () => {
       })
     );
     expect($("#optional1").text()).toBe("Some result message");
-    // Change mock for the second click to hide results
-    $.ajax.mockResolvedValue(mockResponseHide); // Adjust if necessary based on actual behavior
+    $.ajax.mockResolvedValue(mockResponseHide); 
     // Second click to hide results
     $("#expand-result").trigger("click");
     await new Promise((r) => setTimeout(r, 500)); // Ensure all actions complete
@@ -275,7 +274,6 @@ describe("Unit Test Event Listeners with jQuery", () => {
         type: "GET",
       })
     );
-    // Verify that the error handling function was called
     expect(consoleSpy).toHaveBeenCalledWith(
       "Error occurred while making the request."
     );

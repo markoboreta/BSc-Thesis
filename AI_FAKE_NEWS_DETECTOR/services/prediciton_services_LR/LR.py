@@ -11,7 +11,7 @@ class LR(Model):
     # will return the verdict as a readable user output
     def predict_news_article(self, article):
         try:
-            print("text received: ", article)
+            #print("text received: ", article)
             prediction = self.verdict(article)
             if prediction[0] == 0:
                 return "The news article is highly likely to be fake according to LR."
