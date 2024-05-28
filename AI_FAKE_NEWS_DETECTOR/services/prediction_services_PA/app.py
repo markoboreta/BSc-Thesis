@@ -54,14 +54,15 @@ class PAApp(Service):
         def get_graph_data():
             if request.method == "GET":
                 this_dir = os.path.abspath(os.path.dirname(__file__))
-                file_path = os.path.join(this_dir, 'static', 'WC.json')
+                file_path = os.path.join(this_dir, 'static', 'TF.json')
+                print(file_path)
                 return self.load_json_data(file_path)
         
         @self.route('/getWCData')
         def get_WC_data():
              if request.method == "GET":
                 this_dir = os.path.abspath(os.path.dirname(__file__))
-                file_path = os.path.join(this_dir, 'static', 'TF.json')
+                file_path = os.path.join(this_dir, 'static', 'WC.json')
                 return self.load_json_data(file_path)
 
         @self.route("/PA/get_result", methods=["POST", "GET"])
