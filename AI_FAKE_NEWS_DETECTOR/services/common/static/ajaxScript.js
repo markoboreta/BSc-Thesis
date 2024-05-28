@@ -127,11 +127,11 @@ async function showOptionalResults(event, optionalContent, expandResultBtn, URL,
   try{
     optionalContent.toggleClass("expanded");
     if (optionalContent.hasClass("expanded")) {
-      console.log("I am in expanded")
+      //console.log("I am in expanded")
       expandResultBtn.text("Hide other model responses");
       await handleOptional(event, URL, formData, optOne, optTwo);
     } else {
-      console.log("Not expanded")
+      //console.log("Not expanded")
       expandResultBtn.text("View how other models have responded");
       
     }
@@ -159,7 +159,7 @@ function openDialog(dialogElement) {
 
 // Function to reset dialog content
 function resetDialogContent(idName) {
-  console.log("resetting diagonal");
+  //console.log("resetting diagonal");
   $(idName).text("");
 }
 
@@ -167,7 +167,7 @@ function resetDialogContent(idName) {
 async function handleOptional(event, optionalURL, formData, optOne, optTwo) {
   event.preventDefault();
   let activeRequests = 0;
-  console.log("Handling optional", formData);
+  //console.log("Handling optional", formData);
   if (activeRequests > 0) {
     return;
   }
@@ -187,7 +187,7 @@ async function handleOptional(event, optionalURL, formData, optOne, optTwo) {
   } finally {
     activeRequests -= 1;
   }
-  console.log(activeRequests);
+  //console.log(activeRequests);
 }
 
 // Fucntion to handle submit button
@@ -196,7 +196,7 @@ async function handleSubmit(event, mainurl, formData, mainResult) {
   const minLength = 900;
   const maxLength = 3000;
   const text = formData.get("message");
-  console.log("Handling submit", formData);
+ // console.log("Handling submit", formData);
   if (text.length < minLength || text.length > maxLength) {
     event.preventDefault();
     displayAlert(
@@ -209,7 +209,7 @@ async function handleSubmit(event, mainurl, formData, mainResult) {
   try {
     const [newResult] = await Promise.all([makePrediction(mainurl, formData)]);
     $(mainResult).text(newResult.result);
-    console.log("Result ", newResult);
+    //console.log("Result ", newResult);
     return newResult;
   } catch (error) {
     displayAlert(
@@ -261,9 +261,9 @@ async function setupChartToggle(buttonId, contentId, fetchUrl, chartId, generate
     if(btnCnt == 0)
       {
         let data = await fetchChartData(fetchUrl);
-        console.log("data ", data)
+        //console.log("data ", data)
         myChart = drawChart(data, chartId);
-        console.log("drawing charts");
+        //console.log("drawing charts");
         optionalContent.toggleClass("expanded");
         countPlotBtn.text(hideText);
         optionalContent.show();

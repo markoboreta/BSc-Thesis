@@ -50,7 +50,7 @@ class Service(Flask):
         @errors_bp.app_errorhandler(500)
         def handle_error(e):
             error_message = f"You have reached the error {getattr(e, 'code', 'unknown')} page :("
-            print(common_templates_dir)
+            #print(common_templates_dir)
             return render_template("error.html", data=error_message), getattr(e, 'code', 404)
         self.register_blueprint(errors_bp)
 

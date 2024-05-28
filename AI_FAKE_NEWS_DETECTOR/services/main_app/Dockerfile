@@ -1,4 +1,4 @@
-# Use a Python 3.8 slim base image for the build stage
+# image for docker to build
 FROM python:3.11-slim AS builder
 WORKDIR /mainapp
 COPY requirements.txt .

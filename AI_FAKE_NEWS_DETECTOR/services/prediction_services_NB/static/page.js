@@ -19,10 +19,10 @@ $(document).ready(function () {
   // Event listener for submit button click
   $("#submit").on("click", async function (event) {
     event.preventDefault();
-    const LRformData = new FormData();      
-    LRformData.append('message', $("#NBarea").val().trim());
-    storeFormData(submitBtn, 'NBformData', LRformData);
-    if(await handleSubmit(event, "http://127.0.0.1:5002/predict_NB", LRformData, "#NB-main-result"))
+    const NBformData = new FormData();      
+    NBformData.append('message', $("#NBarea").val().trim());
+    storeFormData(submitBtn, 'NBformData', NBformData);
+    if(await handleSubmit(event, "http://127.0.0.1:5002/predict_NB", NBformData, "#NB-main-result"))
    { 
       handleOpenPopUp(dialog);
     }
@@ -40,7 +40,7 @@ $(document).ready(function () {
   expandResultBtn.on("click", async function (event) {
     const formData = retrieveFormData(submitBtn, "NBformData");
     const URL = "http://127.0.0.1:5002/NB/get_result";
-    console.log(formData);
+    //console.log(formData);
     showOptionalResults(event, optionalContent, expandResultBtn, URL, formData, optOne, optTwo)
   });
 
