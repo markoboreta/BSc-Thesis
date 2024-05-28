@@ -33,7 +33,7 @@ class Model:
         else:
             print('Model not pickeled file!')
 
-
+    # remove special characters
     def remove_special(self, text):
         if isinstance(text, str):
             text = text.lower()
