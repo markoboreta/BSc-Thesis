@@ -138,7 +138,7 @@ async function showOptionalResults(event, optionalContent, expandResultBtn, URL,
   }
   catch(error)
   {
-    console.log("Issue showing data, check your button again.")
+    console.log("Issue showing data, check button again.")
   }
   
 }
