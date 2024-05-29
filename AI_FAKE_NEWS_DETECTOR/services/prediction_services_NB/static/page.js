@@ -51,7 +51,7 @@ $(document).ready(function () {
   });
   
   $("#wordCountBtn").on("click", async function (event) {
-    setupChartToggle("#wordCountBtn","#optional-mean", "http://127.0.0.1:5002/getWCData", "wcChart", "Generate Mean Word Count", "Hide graph", wcBtn);
+    setupChartToggle("#wordCountBtn","#optional-mean", "http://127.0.0.1:5002/getWCData", "wcChart", "Generate Mean Character Count", "Hide graph", wcBtn);
     wcBtn+=1;
   });
 });
