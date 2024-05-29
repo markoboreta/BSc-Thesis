@@ -86,7 +86,7 @@ $(document).ready(function () {
       "#optional-mean",
       "http://127.0.0.1:5003/getWCData",
       "wcChart",
-      "Generate Word Count",
+      "Generate Mean Character Count",
       "Hide graph", wcBtn
     );
     wcBtn+=1;
