@@ -42,7 +42,7 @@ class PAApp(Service):
                     print(processed_result)
                     return jsonify(result=processed_result), 200
                 except Exception as e:
-                    # Handle any exceptions (e.g., model prediction error) and return an error response
+                    # Handle any exceptions and return an error response
                     error_message = f"Error occurred while processing data: {str(e)}"
                     return jsonify(error=error_message), 500
             else:
