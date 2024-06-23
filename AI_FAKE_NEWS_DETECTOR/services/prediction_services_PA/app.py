@@ -39,7 +39,7 @@ class PAApp(Service):
                 try:
                     # Process the received data
                     processed_result = PA_Model.predict_news_article(data)
-                    print(processed_result)
+                    #print(processed_result)
                     return jsonify(result=processed_result), 200
                 except Exception as e:
                     # Handle any exceptions and return an error response
@@ -100,4 +100,4 @@ class PAApp(Service):
 base_dir = os.path.abspath(os.path.dirname(__file__))
 app = PAApp(__name__, os.path.join(base_dir, 'templates'), os.path.join(base_dir, 'static'))
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5003, debug=True)
+    app.run(host="0.0.0.0", port=5003, debug=False)
