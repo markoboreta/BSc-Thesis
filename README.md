@@ -105,5 +105,3 @@ Having issues? Here are some common fixes:
 
 **Marko Boreta**  
 [LinkedIn](https://www.linkedin.com/in/marko-boreta-9b63a4268/)
-Thesis project
-"""
