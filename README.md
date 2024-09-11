@@ -2,7 +2,7 @@
 
 ### Created by **Marko Boreta**
 
-Welcome to the repository of my **Thesis Web App**! This project is a web application built using **Flask** and **jQuery**, and it leverages **Machine Learning Models** for various functionalities. The training and data analysis methodologies are documented in the notebooks available in the `training` folder.
+Welcome to the repository of my **Fake News Detector Web App**! This project is a web application built using **Flask** and **jQuery**, and it leverages **Machine Learning Models** for fake news detction. The training and data analysis methodologies are documented in the notebooks available in the `training` folder.
 
 🚀 The app uses **Docker** to run containers as part of a microservice architecture with **Docker Compose**.
 
@@ -61,14 +61,14 @@ Here’s a quick overview of the important folders in the repository:
 ## 🧠 Machine Learning Integration
 
 This web app integrates **Machine Learning Models** to provide intelligent insights and predictions. You can find all the training and data analysis materials in the `training` folder, where I’ve documented the methodologies used to train these models.
-
+Three models have been used, **Naive Bayes**, **Passive Agressive Classifier** and **Logisitc Regression**.
 ---
 
 ## 📦 Microservices Architecture
 
 The application is structured using a **microservices architecture**. Each component runs in its own container, ensuring scalability and modularity.
 
-- **Flask**: Web framework to serve the frontend.
+- **Flask**: Web framework to serve the frontend, each model and welcoming page are containarized and can communiczte with each other.
 - **Machine Learning Models**: Backend models for predictions and analysis.
 
 All services are managed through **Docker Compose**.
@@ -92,12 +92,6 @@ All services are managed through **Docker Compose**.
 
 ---
 
-## 💡 Contributing
-
-Feel free to fork this repository and contribute! Pull requests are welcome.
-
----
-
 ## 🔧 Troubleshooting
 
 Having issues? Here are some common fixes:
@@ -110,6 +104,6 @@ Having issues? Here are some common fixes:
 ## 👨‍💻 Author
 
 **Marko Boreta**  
-[LinkedIn](https://www.linkedin.com/) | [GitHub](https://github.com/)  
+[LinkedIn](https://www.linkedin.com/in/marko-boreta-9b63a4268/)
 Thesis project
 """
